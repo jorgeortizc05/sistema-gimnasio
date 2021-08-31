@@ -19,15 +19,18 @@ import javax.swing.UnsupportedLookAndFeelException;
  */
 public class VentanaPrincipal extends javax.swing.JFrame {
 
-    CategoryView categoryView;
-    TypePersonView typePersonView;
+    private CategoryView categoryView;
+    private TypePersonView typePersonView;
+    private TypeVoucherView typeVoucherView;
     
     public VentanaPrincipal() {
         initComponents();
         categoryView = new CategoryView();
         typePersonView = new TypePersonView();
+        typeVoucherView = new TypeVoucherView();
         jTabbedPane1.add(categoryView);
         jTabbedPane1.add(typePersonView);
+        jTabbedPane1.add(typeVoucherView);
         
     }
 
@@ -46,6 +49,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         miNuevoCategoria = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         miTypePerson = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        miTypeVoucher = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("GIMNASIOSOLIZ");
@@ -77,6 +82,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu2);
 
+        jMenu3.setText("Ventas");
+
+        miTypeVoucher.setText("Tipo de Comprobante");
+        miTypeVoucher.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miTypeVoucherActionPerformed(evt);
+            }
+        });
+        jMenu3.add(miTypeVoucher);
+
+        jMenuBar1.add(jMenu3);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -103,6 +120,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         jTabbedPane1.setSelectedComponent(typePersonView);
     }//GEN-LAST:event_miTypePersonActionPerformed
+
+    private void miTypeVoucherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miTypeVoucherActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane1.setSelectedComponent(typeVoucherView);
+    }//GEN-LAST:event_miTypeVoucherActionPerformed
 
     /**
      * @param args the command line arguments
@@ -155,9 +177,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JMenuItem miNuevoCategoria;
     private javax.swing.JMenuItem miTypePerson;
+    private javax.swing.JMenuItem miTypeVoucher;
     // End of variables declaration//GEN-END:variables
 }

@@ -6,12 +6,12 @@
 package org.casaortiz.model;
 
 /**
- * Model Type Person
+ * Model TypeVoucher
  * @author Ing. Jorge Luis Ortiz Cáceres
  * @since 31/08/2021
  * @version 0.0.1
  */
-public class TypePerson {
+public class TypeVoucher {
     private int id;
     private String name;
     private String description;

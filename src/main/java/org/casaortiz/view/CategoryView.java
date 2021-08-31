@@ -6,10 +6,13 @@
 package org.casaortiz.view;
 
 import java.awt.Color;
+import java.awt.Image;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.casaortiz.dao.CategoryDao;
@@ -24,15 +27,45 @@ import org.casaortiz.model.Category;
  */
 public class CategoryView extends javax.swing.JPanel {
 
-    CategoryDao catDao;
-    Category category;
+    private CategoryDao catDao;
+    private Category category;
     public CategoryView() {
         initComponents();
         catDao = new CategoryDao();
         loadCategories();
         btnSaveChanges.setVisible(false);
+        btnDelete.setVisible(false);
+        addImageButtons();
     }
+    
+    private void addImageButtons(){
+        ImageIcon iconBtnDelete = createImageIcon("/icons/system/delete.png", "boton eliminar");
+        ImageIcon iconBtnSave = createImageIcon("/icons/system/diskette.png", "boton guardar");
+        ImageIcon iconBtnCleanForm = createImageIcon("/icons/system/clean.png", "boton CleanForm");
+        ImageIcon iconBtnSaveChanges = createImageIcon("/icons/system/edit.png", "boton SaveChanges");
+        ImageIcon iconLblBuscar = createImageIcon("/icons/system/search.png", "label lblBuscar");
 
+        btnDelete.setIcon(iconBtnDelete);
+        btnSave.setIcon(iconBtnSave);
+        btnCleanForm.setIcon(iconBtnCleanForm);
+        btnSaveChanges.setIcon(iconBtnSaveChanges);
+        lblSearch.setIcon(iconLblBuscar);
+    }
+    
+    protected ImageIcon createImageIcon(String path,
+                                           String description) {
+        URL imgURL = getClass().getResource(path);
+        
+        if (imgURL != null) {
+            Image img = new ImageIcon(imgURL).getImage();
+            System.out.println("imgURL = " + imgURL.getPath());
+            return new ImageIcon(img.getScaledInstance(30, 30, Image.SCALE_SMOOTH), description);
+        } else {
+            System.err.println("Couldn't find file: " + path);
+            System.out.println("imgURL = " + imgURL.getPath());
+            return null;
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -50,14 +83,15 @@ public class CategoryView extends javax.swing.JPanel {
         tListCategories = new javax.swing.JTable();
         btnSave = new javax.swing.JButton();
         btnSaveChanges = new javax.swing.JButton();
-        btnDelete = new javax.swing.JButton();
         txtSearch = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         lblID = new javax.swing.JLabel();
         btnCleanForm = new javax.swing.JButton();
         lblWarning = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        lblSearch = new javax.swing.JLabel();
+        btnDelete = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(255, 255, 255));
         setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "CATEGORIA"));
 
         label1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
@@ -119,13 +153,6 @@ public class CategoryView extends javax.swing.JPanel {
             }
         });
 
-        btnDelete.setText("Eliminar");
-        btnDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteActionPerformed(evt);
-            }
-        });
-
         txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtSearchKeyReleased(evt);
@@ -143,7 +170,16 @@ public class CategoryView extends javax.swing.JPanel {
             }
         });
 
-        jLabel2.setText("Buscar:");
+        lblWarning.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "Advertencia"));
+
+        lblSearch.setPreferredSize(new java.awt.Dimension(30, 30));
+
+        btnDelete.setText("Eliminar");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -152,71 +188,70 @@ public class CategoryView extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 554, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(1, 1, 1)
+                        .addComponent(lblSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 345, Short.MAX_VALUE))
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel1)
                                     .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(22, 22, 22)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblID, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(txtCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(lblWarning, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(txtCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblID, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnSave)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnSaveChanges)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnDelete)
+                                .addComponent(btnCleanForm)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnCleanForm))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 554, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 187, Short.MAX_VALUE)))
+                                .addComponent(btnDelete)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblWarning, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtCategory)
-                            .addComponent(lblWarning, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnCleanForm)
-                    .addComponent(btnDelete)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnSaveChanges)
-                        .addComponent(btnSave)))
-                .addGap(8, 8, 8)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(12, 12, 12)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnSaveChanges)
+                            .addComponent(btnSave)
+                            .addComponent(btnCleanForm)
+                            .addComponent(btnDelete)))
+                    .addComponent(lblWarning, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 396, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -268,6 +303,7 @@ public class CategoryView extends javax.swing.JPanel {
         if(fila == -1){
             JOptionPane.showMessageDialog(this, "Debe seleccionar una fila");
         }else{
+            btnDelete.setVisible(true);
             btnSave.setVisible(false);
             btnSaveChanges.setVisible(true);
             try {
@@ -318,12 +354,18 @@ public class CategoryView extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnSaveChangesActionPerformed
     
+   
     /**
-     * Call CategoryDao.delete(idCategory)
-     * Elimina un registro de category
-     * @param evt - ActionPerformed: Al hacer clic en btnDelete
+     * Limpia el formulario del jPanel
+     * @param evt - ActionPerformed: Click en btnCleanForm
      */
+    private void btnCleanFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCleanFormActionPerformed
+        // TODO add your handling code here:
+        cleanForm();
+    }//GEN-LAST:event_btnCleanFormActionPerformed
+
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
         try {
             int fila = tListCategories.getSelectedRow();
             if(fila == -1){
@@ -347,15 +389,6 @@ public class CategoryView extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(btnDelete, "Error al eliminar la categoria: " + category +" Error: "+ex.getMessage());
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
-    
-    /**
-     * Limpia el formulario del jPanel
-     * @param evt - ActionPerformed: Click en btnCleanForm
-     */
-    private void btnCleanFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCleanFormActionPerformed
-        // TODO add your handling code here:
-        cleanForm();
-    }//GEN-LAST:event_btnCleanFormActionPerformed
     
     /**
      * Vacia datos del jTable tListCategories
@@ -422,6 +455,7 @@ public class CategoryView extends javax.swing.JPanel {
         txtDescription.setText("");
         btnSave.setVisible(true);
         btnSaveChanges.setVisible(false);
+        btnDelete.setVisible(false);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -430,11 +464,11 @@ public class CategoryView extends javax.swing.JPanel {
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSaveChanges;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private java.awt.Label label1;
     private java.awt.Label label2;
     private javax.swing.JLabel lblID;
+    private javax.swing.JLabel lblSearch;
     private javax.swing.JLabel lblWarning;
     private javax.swing.JTable tListCategories;
     private javax.swing.JTextField txtCategory;
