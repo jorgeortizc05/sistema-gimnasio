@@ -20,11 +20,14 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class VentanaPrincipal extends javax.swing.JFrame {
 
     CategoryView categoryView;
+    TypePersonView typePersonView;
     
     public VentanaPrincipal() {
         initComponents();
         categoryView = new CategoryView();
+        typePersonView = new TypePersonView();
         jTabbedPane1.add(categoryView);
+        jTabbedPane1.add(typePersonView);
         
     }
 
@@ -42,6 +45,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         miNuevoCategoria = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        miTypePerson = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("GIMNASIOSOLIZ");
@@ -61,7 +65,16 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edit");
+        jMenu2.setText("Clientes");
+
+        miTypePerson.setText("Tipo de Clientes");
+        miTypePerson.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miTypePersonActionPerformed(evt);
+            }
+        });
+        jMenu2.add(miTypePerson);
+
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -85,6 +98,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jTabbedPane1.setSelectedComponent(categoryView);
         
     }//GEN-LAST:event_miNuevoCategoriaActionPerformed
+
+    private void miTypePersonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miTypePersonActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane1.setSelectedComponent(typePersonView);
+    }//GEN-LAST:event_miTypePersonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -140,5 +158,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JMenuItem miNuevoCategoria;
+    private javax.swing.JMenuItem miTypePerson;
     // End of variables declaration//GEN-END:variables
 }

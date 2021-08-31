@@ -12,42 +12,42 @@ import java.util.ArrayList;
 import java.util.List;
 import oracle.jdbc.OracleTypes;
 import org.casaortiz.db.ConnectionDBOracle;
-import org.casaortiz.model.Category;
+import org.casaortiz.model.TypePerson;
 
 /**
- * CRUD a Category
+ * CRUD a TypePerson
  * @author Ing. Jorge Luis Ortiz Cáceres
  * @since 31/08/2021
  * @version 0.0.1
  */
-public class CategoryDao {
+public class TypePersonDao {
     ConnectionDBOracle connectionDBOracle;
     
-    public CategoryDao(){
+    public TypePersonDao(){
         connectionDBOracle = new ConnectionDBOracle();
     }
 
     /**
-     * Call procedure CATEGORY_API.INS(p_name, p_description):
-     * Inserta un registro a categoria
-     * @param item Category
+     * Call procedure TYPE_PERSON_API.INS(p_name, p_description):
+     * Inserta un registro a typeperson
+     * @param item TypePerson
      * @throws SQLException
      * @throws Exception 
      */
-    public void insert(Category item) throws SQLException, Exception{
+    public void insert(TypePerson item) throws SQLException, Exception{
         Connection conn = null;
         CallableStatement cstmt = null;
         conn = connectionDBOracle.getConnection();
         try {
             
-            cstmt = conn.prepareCall("{call CATEGORY_API.INS(?,?)}");
+            cstmt = conn.prepareCall("{call TYPE_PERSON_API.INS(?,?)}");
             cstmt.setString(1, item.getName());
             cstmt.setString(2, item.getDescription());
             cstmt.execute();
         } catch (Exception e ) {
             cstmt.close();
             connectionDBOracle.closeConnection(conn);
-            throw new Exception("Error al insertar Category: \n" + e.getMessage());
+            throw new Exception("Error al insertar TypePerson: \n" + e.getMessage());
         }finally{
             cstmt.close();
             connectionDBOracle.closeConnection(conn);
@@ -55,19 +55,19 @@ public class CategoryDao {
     }
     
     /**
-     * Call procedure CATEGORY_API.UPD(p_id, p_name, p_description)
-     * Actualiza un registro de la category
-     * @param item Category
+     * Call procedure TYPE_PERSON_API.UPD(p_id, p_name, p_description)
+     * Actualiza un registro de la TypePerson
+     * @param item TypePerson
      * @throws SQLException
      * @throws Exception 
      */
-    public void update(Category item) throws SQLException, Exception{
+    public void update(TypePerson item) throws SQLException, Exception{
         Connection conn = null;
         CallableStatement cstmt = null;
         
         try {
             conn = connectionDBOracle.getConnection();
-            cstmt = conn.prepareCall("{call CATEGORY_API.UPD(?,?,?)}");
+            cstmt = conn.prepareCall("{call Type_Person_API.UPD(?,?,?)}");
             cstmt.setInt(1, item.getId());
             cstmt.setString(2, item.getName());
             cstmt.setString(3, item.getDescription());
@@ -75,7 +75,7 @@ public class CategoryDao {
         } catch (Exception e) {
             cstmt.close();
             connectionDBOracle.closeConnection(conn);
-            throw new Exception("Error al actualizar Category: \n" + e.getMessage());
+            throw new Exception("Error al actualizar: \n" + e.getMessage());
         }finally{
             cstmt.close();
             connectionDBOracle.closeConnection(conn);
@@ -83,9 +83,9 @@ public class CategoryDao {
     }
     
     /**
-     * Call procedure CATEGORY_API.DEL(p_id)
-     * Elimina un registro de la category
-     * @param id - Id de la category
+     * Call procedure TYPE_PERSON_API.DEL(p_id)
+     * Elimina un registro de la TypePerson
+     * @param id - Id de la TypePerson
      * @throws SQLException
      * @throws Exception 
      */
@@ -94,7 +94,7 @@ public class CategoryDao {
         CallableStatement cstmt = null;
         try {
             conn = connectionDBOracle.getConnection();
-            cstmt = conn.prepareCall("{call CATEGORY_API.DEL(?)}");
+            cstmt = conn.prepareCall("{call Type_Person_API.DEL(?)}");
             cstmt.setInt(1, id);
             cstmt.execute();
         } catch (Exception e) {
@@ -108,39 +108,39 @@ public class CategoryDao {
     }
     
     /**
-     * Call procedure CATEGORY_API.getcategory(p_id, category_c)
+     * Call procedure TYPE_PERSON_API.getTypePerson(p_id, Type_Person_c)
      * Obtengo un registro a partir del id
-     * @param id - Id Category
-     * @return Category
+     * @param id - Id TypePerson
+     * @return TypePerson
      * @throws SQLException
      * @throws Exception 
      */
-    public Category getCategory(int id) throws SQLException, Exception{
+    public TypePerson getTypePerson(int id) throws SQLException, Exception{
         Connection conn = null;
         CallableStatement cs = null;
         ResultSet rs = null;
-        Category category = null;
+        TypePerson typePerson = null;
         try {
             conn = connectionDBOracle.getConnection();
-            cs = conn.prepareCall("{call CATEGORY_API.getcategory(?,?)}");
+            cs = conn.prepareCall("{call Type_Person_API.getTypePerson(?,?)}");
             cs.setInt(1, id);
             cs.registerOutParameter(2, OracleTypes.CURSOR);
             cs.execute();
             rs = (ResultSet) cs.getObject(2);
             while(rs.next()){
-                category = new Category();
-                category.setId(rs.getInt("id"));
-                category.setName(rs.getString("name"));
-                category.setDescription(rs.getString("description"));
+                typePerson = new TypePerson();
+                typePerson.setId(rs.getInt("id"));
+                typePerson.setName(rs.getString("name"));
+                typePerson.setDescription(rs.getString("description"));
             }
             
-            return category;
+            return typePerson;
         } catch (Exception e) {
-            System.out.println("Error al obtener la categoria: " + e.getMessage());
+            System.out.println("Error al obtener la TypePerson: " + e.getMessage());
             rs.close();
             cs.close();
             connectionDBOracle.closeConnection(conn);
-            throw new Exception("Error al obtener la categoria: \n" +e.getMessage());
+            throw new Exception("Error al obtener la TypePerson: \n" +e.getMessage());
         }finally{
             rs.close();
             cs.close();
@@ -149,40 +149,40 @@ public class CategoryDao {
     }
     
     /**
-     * call procedure CATEGORY_API.LIST(category_c)
-     * Recupero una lista de categories
-     * @return List<Category>
+     * call procedure TYPE_PERSON_API.LIST(Type_Person_c)
+     * Recupero una lista de TypePeople
+     * @return List<TypePerson>
      * @throws SQLException
      * @throws Exception 
      */
-    public List<Category> getCategories() throws SQLException, Exception{
+    public List<TypePerson> getTypePeople() throws SQLException, Exception{
         Connection conn = null;
         CallableStatement cs = null;
         ResultSet rs = null;
-        List<Category> categories;
-        Category category;
+        List<TypePerson> typePeople;
+        TypePerson typePerson;
         try {
-            categories = new ArrayList<Category>();
+            typePeople = new ArrayList<TypePerson>();
             conn = connectionDBOracle.getConnection();
-            cs = conn.prepareCall("{call CATEGORY_API.LIST(?)}");
+            cs = conn.prepareCall("{call Type_Person_API.LIST(?)}");
             cs.registerOutParameter(1, OracleTypes.CURSOR);
             cs.execute();
             rs = (ResultSet) cs.getObject(1);
             while(rs.next()){
-                category = new Category();
-                category.setId(rs.getInt("id"));
-                category.setName(rs.getString("name"));
-                category.setDescription(rs.getString("description"));
-                categories.add(category);
+                typePerson = new TypePerson();
+                typePerson.setId(rs.getInt("id"));
+                typePerson.setName(rs.getString("name"));
+                typePerson.setDescription(rs.getString("description"));
+                typePeople.add(typePerson);
             }
             rs.close();
-            return categories;
+            return typePeople;
         } catch (Exception e) {
-            System.out.println("Error al obtener categorias: " + e.getMessage());
+            System.out.println("Error al obtener TypePerson: " + e.getMessage());
             rs.close();
             cs.close();
             connectionDBOracle.closeConnection(conn);
-            throw new Exception("Error al obtener categorias: \n" + e.getMessage());
+            throw new Exception("Error al obtener TypePerson: \n" + e.getMessage());
         }finally{
             rs.close();
             cs.close();
@@ -191,40 +191,40 @@ public class CategoryDao {
     }
     
     /**
-     * call procedure CATEGORY_API.SEARCH(texto)
-     * Para realizar busquedas en los registros category
+     * call procedure TYPE_PERSON_API.SEARCH(texto)
+     * Para realizar busquedas en los registros TypePerson
      * @param texto - Lo que va a buscar
-     * @return List<Category>
+     * @return List<TypePerson>
      * @throws Exception 
      */
-    public List<Category> searchCategories(String texto) throws Exception{
+    public List<TypePerson> searchTypePeople(String texto) throws Exception{
         Connection conn = null;
         CallableStatement cs = null;
         ResultSet rs = null;
-        List<Category> categories;
-        Category category;
+        List<TypePerson> typePeople;
+        TypePerson typePerson;
         try {
-            categories = new ArrayList<Category>();
+            typePeople = new ArrayList<TypePerson>();
             conn = connectionDBOracle.getConnection();
-            cs = conn.prepareCall("{call CATEGORY_API.SEARCH(?,?)}");
+            cs = conn.prepareCall("{call Type_Person_API.SEARCH(?,?)}");
             cs.setString(1, texto);
             cs.registerOutParameter(2, OracleTypes.CURSOR);
             cs.execute();
             rs = (ResultSet) cs.getObject(2);
             while(rs.next()){
-                category = new Category();
-                category.setId(rs.getInt("id"));
-                category.setName(rs.getString("name"));
-                category.setDescription(rs.getString("description"));
-                categories.add(category);
+                typePerson = new TypePerson();
+                typePerson.setId(rs.getInt("id"));
+                typePerson.setName(rs.getString("name"));
+                typePerson.setDescription(rs.getString("description"));
+                typePeople.add(typePerson);
             }
-            return categories;
+            return typePeople;
         } catch (Exception e) {
-            System.out.println("Error al obtener categorias: " + e.getMessage());
+            System.out.println("Error al obtener TypePeople: " + e.getMessage());
             rs.close();
             cs.close();
             connectionDBOracle.closeConnection(conn);
-            throw new Exception("Error al buscar categorias: \n" + e.getMessage());
+            throw new Exception("Error al buscar TypePeople: \n" + e.getMessage());
         }finally{
             rs.close();
             cs.close();
