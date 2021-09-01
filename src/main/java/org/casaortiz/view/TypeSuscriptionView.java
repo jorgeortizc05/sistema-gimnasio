@@ -12,27 +12,29 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import org.casaortiz.dao.TypeVoucherDao;
-import org.casaortiz.model.TypeVoucher;
+import org.casaortiz.dao.TypeSuscriptionDao;
+import org.casaortiz.model.TypeSuscription;
 
 /**
- * JPanel TypeVoucherView
- * Para manejar el CRUD de TypeVoucher
+ * JPanel TypeSuscriptionView
+ * Para manejar el CRUD de TypeSuscription
  * @author Ing. Jorge Luis Ortiz Cáceres
  * @since 31/08/2021
  * @version 0.0.1
  */
-public class TypeVoucherView extends javax.swing.JPanel {
+public class TypeSuscriptionView extends javax.swing.JPanel {
 
-    private TypeVoucherDao typeVoucherDao;
-    private TypeVoucher typeVoucher;
-    public TypeVoucherView() {
+    private TypeSuscriptionDao typeSuscriptionDao;
+    private TypeSuscription typeSuscription;
+    public TypeSuscriptionView() {
         initComponents();
-        typeVoucherDao = new TypeVoucherDao();
-        loadTypeVouchers();
+        typeSuscriptionDao = new TypeSuscriptionDao();
+        loadTypeSuscription();
         btnSaveChanges.setVisible(false);
         btnDelete.setVisible(false);
         addImageButtons();
@@ -76,7 +78,7 @@ public class TypeVoucherView extends javax.swing.JPanel {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tListTypeVoucher = new javax.swing.JTable();
+        tListTypeSuscriptions = new javax.swing.JTable();
         txtSearch = new javax.swing.JTextField();
         lblSearch = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
@@ -84,32 +86,37 @@ public class TypeVoucherView extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         lblID = new javax.swing.JLabel();
         label1 = new java.awt.Label();
-        txtTypeVoucher = new javax.swing.JTextField();
+        txtTypeSuscription = new javax.swing.JTextField();
         label2 = new java.awt.Label();
         txtDescription = new javax.swing.JTextField();
         btnSave = new javax.swing.JButton();
         btnSaveChanges = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         btnCleanForm = new javax.swing.JButton();
+        label3 = new java.awt.Label();
+        txtNumDays = new javax.swing.JTextField();
+        label4 = new java.awt.Label();
+        txtPrice = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         lblWarning = new javax.swing.JTextArea();
 
         setBackground(new java.awt.Color(240, 242, 245));
-        setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "CATEGORIA"));
+        setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "TIPO SUSCRIPCIÓN"));
 
-        tListTypeVoucher.setModel(new javax.swing.table.DefaultTableModel(
+        tListTypeSuscriptions.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID", "Categoría", "Descripción"
+                "ID", "Tipo de Suscripción", "No. días", "Precio", "Descripción"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, true, true, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -120,20 +127,20 @@ public class TypeVoucherView extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        tListTypeVoucher.getTableHeader().setReorderingAllowed(false);
-        tListTypeVoucher.addMouseListener(new java.awt.event.MouseAdapter() {
+        tListTypeSuscriptions.getTableHeader().setReorderingAllowed(false);
+        tListTypeSuscriptions.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tListTypeVoucherMouseClicked(evt);
+                tListTypeSuscriptionsMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tListTypeVoucher);
-        if (tListTypeVoucher.getColumnModel().getColumnCount() > 0) {
-            tListTypeVoucher.getColumnModel().getColumn(0).setResizable(false);
-            tListTypeVoucher.getColumnModel().getColumn(0).setPreferredWidth(5);
-            tListTypeVoucher.getColumnModel().getColumn(1).setResizable(false);
-            tListTypeVoucher.getColumnModel().getColumn(1).setPreferredWidth(300);
-            tListTypeVoucher.getColumnModel().getColumn(2).setResizable(false);
-            tListTypeVoucher.getColumnModel().getColumn(2).setPreferredWidth(300);
+        jScrollPane1.setViewportView(tListTypeSuscriptions);
+        if (tListTypeSuscriptions.getColumnModel().getColumnCount() > 0) {
+            tListTypeSuscriptions.getColumnModel().getColumn(0).setResizable(false);
+            tListTypeSuscriptions.getColumnModel().getColumn(0).setPreferredWidth(5);
+            tListTypeSuscriptions.getColumnModel().getColumn(1).setResizable(false);
+            tListTypeSuscriptions.getColumnModel().getColumn(1).setPreferredWidth(300);
+            tListTypeSuscriptions.getColumnModel().getColumn(4).setResizable(false);
+            tListTypeSuscriptions.getColumnModel().getColumn(4).setPreferredWidth(300);
         }
 
         txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -152,7 +159,7 @@ public class TypeVoucherView extends javax.swing.JPanel {
         lblID.setPreferredSize(new java.awt.Dimension(5, 20));
 
         label1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        label1.setText("Tipo de Comprobante:");
+        label1.setText("Tipo de Suscripción:");
 
         label2.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         label2.setText("Descripción:");
@@ -192,6 +199,23 @@ public class TypeVoucherView extends javax.swing.JPanel {
             }
         });
 
+        label3.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        label3.setText("Numero de días:");
+
+        txtNumDays.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtNumDays.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtNumDaysKeyReleased(evt);
+            }
+        });
+
+        label4.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        label4.setText("Precio:");
+
+        txtPrice.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+
+        jLabel2.setText("$");
+
         lblWarning.setColumns(20);
         lblWarning.setLineWrap(true);
         lblWarning.setRows(5);
@@ -203,55 +227,82 @@ public class TypeVoucherView extends javax.swing.JPanel {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(label3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel1))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 339, Short.MAX_VALUE)
                             .addComponent(lblID, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtTypeVoucher)))
+                            .addComponent(txtTypeSuscription, javax.swing.GroupLayout.DEFAULT_SIZE, 339, Short.MAX_VALUE)
+                            .addComponent(txtNumDays, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnSave)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSaveChanges)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDelete)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCleanForm)))
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnSave)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnSaveChanges)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnDelete)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnCleanForm))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(label4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 314, Short.MAX_VALUE)
+                                .addComponent(jLabel2)
+                                .addGap(1, 1, 1)
+                                .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(133, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(49, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(12, 12, 12))
+                        .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(lblID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtTypeVoucher, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(txtTypeSuscription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(label3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNumDays, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(label4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSaveChanges)
                     .addComponent(btnSave)
                     .addComponent(btnCleanForm)
-                    .addComponent(btnDelete))
-                .addGap(0, 26, Short.MAX_VALUE))
-            .addComponent(jScrollPane2)
+                    .addComponent(btnDelete)))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jScrollPane2)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -279,36 +330,36 @@ public class TypeVoucherView extends javax.swing.JPanel {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
     
     /**
-     * Call TypeVoucherDao.insert()
-     * Envia datos para guardar una TypeVoucher
+     * Call TypeSuscriptionDao.insert()
+     * Envia datos para guardar una TypeSuscription
      * @param evt - ActionPerformed: Al hacer clic en btnSave
      */
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
-        
-        
         try {
-            if(!txtTypeVoucher.getText().equals("")){
-                TypeVoucher cat = new TypeVoucher();
-                cat.setName(txtTypeVoucher.getText());
-                cat.setDescription(txtDescription.getText());
-                typeVoucherDao.insert(cat);
+            if(!txtTypeSuscription.getText().equals("")){
+                TypeSuscription ts = new TypeSuscription();
+                ts.setName(txtTypeSuscription.getText());
+                ts.setNum_days(Integer.parseInt(txtNumDays.getText()));
+                ts.setPrice(Double.parseDouble(txtPrice.getText()));
+                ts.setDescription(txtDescription.getText());
+                typeSuscriptionDao.insert(ts);
                 JOptionPane.showMessageDialog(btnSave, "Guardado correctamente");
                 cleanForm();
-                loadTypeVouchers();
+                loadTypeSuscription();
             }else{
-                lblWarning.setText("TypeVoucher no puede estar vacio");
+                lblWarning.setText("Tipo de Suscripción no puede estar vacio");
                 lblWarning.setForeground(Color.red);
             }
             
@@ -322,18 +373,18 @@ public class TypeVoucherView extends javax.swing.JPanel {
     }//GEN-LAST:event_btnSaveActionPerformed
     
     /**
-     * Call loadSearchTypeVouchers(txt)
+     * Call loadSearchTypeSuscriptions(txt)
      * Carga datos segun la busqueda
      * @param evt - KeyReleased: despues de escribir en el teclado busca
      */
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
         // TODO add your handling code here:
-        loadSearchTypeVouchers(txtSearch.getText());
+        loadSearchTypeSuscriptions(txtSearch.getText());
     }//GEN-LAST:event_txtSearchKeyReleased
     
-    private void tListTypeVoucherMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tListTypeVoucherMouseClicked
+    private void tListTypeSuscriptionsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tListTypeSuscriptionsMouseClicked
         // TODO add your handling code here:
-        int fila = tListTypeVoucher.getSelectedRow();
+        int fila = tListTypeSuscriptions.getSelectedRow();
         if(fila == -1){
             JOptionPane.showMessageDialog(this, "Debe seleccionar una fila");
         }else{
@@ -341,51 +392,56 @@ public class TypeVoucherView extends javax.swing.JPanel {
             btnSave.setVisible(false);
             btnSaveChanges.setVisible(true);
             try {
-                typeVoucher = typeVoucherDao.getTypeVoucher(Integer.parseInt(tListTypeVoucher.getValueAt(fila, 0).toString()));
-                lblID.setText(String.valueOf(typeVoucher.getId()));
-                txtTypeVoucher.setText(typeVoucher.getName());
-                txtDescription.setText(typeVoucher.getDescription());
+                typeSuscription = typeSuscriptionDao.getTypeSuscription(Integer.parseInt(tListTypeSuscriptions.getValueAt(fila, 0).toString()));
+                lblID.setText(String.valueOf(typeSuscription.getId()));
+                txtTypeSuscription.setText(typeSuscription.getName());
+                txtNumDays.setText(String.valueOf(typeSuscription.getNum_days()));
+                txtPrice.setText(String.valueOf(typeSuscription.getPrice()));
+                txtDescription.setText(typeSuscription.getDescription());
             } catch (SQLException ex) {
-                Logger.getLogger(TypeVoucherView.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(TypeSuscriptionView.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(this, "Error al eliminar: " +ex.getMessage());
             } catch (Exception ex) {
-                Logger.getLogger(TypeVoucherView.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(TypeSuscriptionView.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(this, "Error al eliminar: " +ex.getMessage());
             }
             
             
         }
-    }//GEN-LAST:event_tListTypeVoucherMouseClicked
+    }//GEN-LAST:event_tListTypeSuscriptionsMouseClicked
     
     /**
-     * Call TypeVoucherDao.update(TypeVoucher cat)
-     * Envia datos para actualizar una TypeVoucher
+     * Call TypeSuscriptionDao.update(TypeSuscription cat)
+     * Envia datos para actualizar una TypeSuscription
      * @param evt - ActionPerformed: Al hacer clic en btnSaveChanges
      */
     private void btnSaveChangesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveChangesActionPerformed
         // TODO add your handling code here:
-        
         try {
-            if(!txtTypeVoucher.getText().equals("")){
-                TypeVoucher cat = new TypeVoucher();
-                cat.setId(Integer.parseInt(lblID.getText()));
-                cat.setName(txtTypeVoucher.getText());
-                cat.setDescription(txtDescription.getText());
-                typeVoucherDao.update(cat);
+            if(!txtTypeSuscription.getText().equals("")){
+                TypeSuscription ts = new TypeSuscription();
+                ts.setId(Integer.parseInt(lblID.getText()));
+                ts.setName(txtTypeSuscription.getText());
+                ts.setNum_days(Integer.parseInt(txtNumDays.getText()));
+                ts.setPrice(Double.parseDouble(txtPrice.getText()));
+                ts.setDescription(txtDescription.getText());
+                typeSuscriptionDao.update(ts);
                 JOptionPane.showMessageDialog(btnSave, "Cambios guardados correctamente");
                 cleanForm();
-                loadTypeVouchers();
+                loadTypeSuscription();
             }else{
-                lblWarning.setText("TypeVoucher no puede estar vacio");
+                lblWarning.setText("Tipo de Suscripción no puede estar vacio");
                 lblWarning.setForeground(Color.red);
             }
             
         } catch (SQLException ex) {
-            Logger.getLogger(TypeVoucherView.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TypeSuscriptionView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(btnSave, "Error al guardar los cambios: "+ex.getMessage());
+            lblWarning.setText(ex.getMessage());
         } catch (Exception ex) {
-            Logger.getLogger(TypeVoucherView.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TypeSuscriptionView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(btnSave, "Error al guardar los cambios: "+ex.getMessage());
+            lblWarning.setText("Numero de días y precio solo aceptan números: \n" +ex.getMessage());
         }
     }//GEN-LAST:event_btnSaveChangesActionPerformed
     
@@ -402,82 +458,104 @@ public class TypeVoucherView extends javax.swing.JPanel {
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
         try {
-            int fila = tListTypeVoucher.getSelectedRow();
+            int fila = tListTypeSuscriptions.getSelectedRow();
             if(fila == -1){
-                JOptionPane.showConfirmDialog(tListTypeVoucher, "Debe seleccionar una fila");
+                JOptionPane.showConfirmDialog(tListTypeSuscriptions, "Debe seleccionar una fila");
             }else{
                 int estadoEliminacionDialog = JOptionPane.showConfirmDialog(btnDelete, 
-                        "Seguro que desea eliminar "+typeVoucher.getName()+" ?",
+                        "Seguro que desea eliminar "+typeSuscription.getName()+" ?",
                         "Confirmar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if(estadoEliminacionDialog == 0){
-                    typeVoucherDao.delete(typeVoucher.getId());
-                    JOptionPane.showMessageDialog(btnDelete, "Se elimino correctamente la TypeVoucher: " + typeVoucher);
-                    loadTypeVouchers();
+                    typeSuscriptionDao.delete(typeSuscription.getId());
+                    JOptionPane.showMessageDialog(btnDelete, "Se elimino correctamente la TypeSuscription: " + typeSuscription);
+                    loadTypeSuscription();
                     cleanForm();
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(TypeVoucherView.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(btnDelete, "Error al eliminar la TypeVoucher: " + typeVoucher +" Error: "+ex.getMessage());
+            Logger.getLogger(TypeSuscriptionView.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(btnDelete, "Error al eliminar la TypeSuscription: " + typeSuscription +" Error: "+ex.getMessage());
         } catch (Exception ex) {
-            Logger.getLogger(TypeVoucherView.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(btnDelete, "Error al eliminar la TypeVoucher: " + typeVoucher +" Error: "+ex.getMessage());
+            Logger.getLogger(TypeSuscriptionView.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(btnDelete, "Error al eliminar la TypeSuscription: " + typeSuscription +" Error: "+ex.getMessage());
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void txtNumDaysKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumDaysKeyReleased
+        // TODO add your handling code here:
+        soloNumeros("Numero de días");
+        
+    }//GEN-LAST:event_txtNumDaysKeyReleased
     
-    /**
-     * Vacia datos del jTable tListTypeVoucher
-     */
-    private void cleanTable(){
-        DefaultTableModel modelo = (DefaultTableModel) tListTypeVoucher.getModel();
-        modelo.setRowCount(0);
-        tListTypeVoucher.setModel(modelo);
-    }
-    
-    /**
-     * Call TypeVoucherDao.getTypeVoucher()
-     * Recupera datos TypeVoucher y lo carga al jTable
-     */
-    private void loadTypeVouchers(){
-        try {
-            loadTable(typeVoucherDao.getTypeVouchers());
-        } catch (Exception ex) {
-            Logger.getLogger(TypeVoucherView.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, "Error al obtener datos de TypeVoucher: " +ex.getMessage());
+    private void soloNumeros(String label){
+        lblWarning.setText("");
+        Pattern regexNumero = Pattern.compile("^[0-9]+([.][0-9]+)?$");
+        Matcher mat;
+        String texto = txtNumDays.getText();
+        mat = regexNumero.matcher(texto);
+        
+        if(mat.matches()){
+            
+        }else{
+            lblWarning.setText(label+": Solo acepta numeros");
         }
     }
     
     /**
-     * Obtiene datos de TypeVoucherDao.searchTypeVouchers(text) y lo 
+     * Vacia datos del jTable tListTypeSuscription
+     */
+    private void cleanTable(){
+        DefaultTableModel modelo = (DefaultTableModel) tListTypeSuscriptions.getModel();
+        modelo.setRowCount(0);
+        tListTypeSuscriptions.setModel(modelo);
+    }
+    
+    /**
+     * Call TypeSuscriptionDao.getTypeSuscription()
+     * Recupera datos TypeSuscription y lo carga al jTable
+     */
+    public void loadTypeSuscription(){
+        try {
+            loadTable(typeSuscriptionDao.getTypeSuscriptions());
+        } catch (Exception ex) {
+            Logger.getLogger(TypeSuscriptionView.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Error al obtener datos de TypeSuscription: " +ex.getMessage());
+        }
+    }
+    
+    /**
+     * Obtiene datos de TypeSuscriptionDao.searchTypeSuscriptions(text) y lo 
      * carga al jTable
      * @param text 
      */
-    private void loadSearchTypeVouchers(String text){
+    private void loadSearchTypeSuscriptions(String text){
         try {
-            loadTable(typeVoucherDao.searchTypeVouchers(text));
+            loadTable(typeSuscriptionDao.searchTypeSuscriptions(text));
         } catch (Exception ex) {
-            Logger.getLogger(TypeVoucherView.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TypeSuscriptionView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "Error al buscar: " +ex.getMessage());
         }
     }
     
     /**
-     * Template para cargar datos al jTable tListTypeVoucher
-     * @param List<TypeVoucher>
+     * Template para cargar datos al jTable tListTypeSuscriptions
+     * @param List<TypeSuscription>
      */
-    private void loadTable(List<TypeVoucher> typeVouchers){
+    private void loadTable(List<TypeSuscription> typeSuscriptions){
         cleanTable();
-        DefaultTableModel modelo = (DefaultTableModel) tListTypeVoucher.getModel();
-        List<TypeVoucher> items = typeVouchers;
-        Object rowData[] = new Object[3];
-        for(TypeVoucher c: items){
-            System.out.println(c);
-            rowData[0] = c.getId();
-            rowData[1] = c.getName();
-            rowData[2] = c.getDescription();
+        DefaultTableModel modelo = (DefaultTableModel) tListTypeSuscriptions.getModel();
+        List<TypeSuscription> items = typeSuscriptions;
+        Object rowData[] = new Object[5];
+        for(TypeSuscription ts: items){
+            System.out.println(ts);
+            rowData[0] = ts.getId();
+            rowData[1] = ts.getName();
+            rowData[2] = ts.getNum_days();
+            rowData[3] = ts.getPrice();
+            rowData[4] = ts.getDescription();
             modelo.addRow(rowData);
         }
-        tListTypeVoucher.setModel(modelo);
+        tListTypeSuscriptions.setModel(modelo);
     }
     
     /**
@@ -486,7 +564,7 @@ public class TypeVoucherView extends javax.swing.JPanel {
     private void cleanForm(){
         lblID.setText("");
         lblWarning.setText("");
-        txtTypeVoucher.setText("");
+        txtTypeSuscription.setText("");
         txtDescription.setText("");
         btnSave.setVisible(true);
         btnSaveChanges.setVisible(false);
@@ -499,18 +577,23 @@ public class TypeVoucherView extends javax.swing.JPanel {
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSaveChanges;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private java.awt.Label label1;
     private java.awt.Label label2;
+    private java.awt.Label label3;
+    private java.awt.Label label4;
     private javax.swing.JLabel lblID;
     private javax.swing.JLabel lblSearch;
     private javax.swing.JTextArea lblWarning;
-    private javax.swing.JTable tListTypeVoucher;
+    private javax.swing.JTable tListTypeSuscriptions;
     private javax.swing.JTextField txtDescription;
+    private javax.swing.JTextField txtNumDays;
+    private javax.swing.JTextField txtPrice;
     private javax.swing.JTextField txtSearch;
-    private javax.swing.JTextField txtTypeVoucher;
+    private javax.swing.JTextField txtTypeSuscription;
     // End of variables declaration//GEN-END:variables
 }

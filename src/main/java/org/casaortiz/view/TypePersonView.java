@@ -19,8 +19,8 @@ import org.casaortiz.dao.TypePersonDao;
 import org.casaortiz.model.TypePerson;
 
 /**
- * JPanel TypePersonView
- * Para manejar el CRUD de TypePerson
+ * JPanel TypePersonView Para manejar el CRUD de TypePerson
+ *
  * @author Ing. Jorge Luis Ortiz Cáceres
  * @since 31/08/2021
  * @version 0.0.1
@@ -29,6 +29,7 @@ public class TypePersonView extends javax.swing.JPanel {
 
     private TypePersonDao typePersonDao;
     private TypePerson typePerson;
+
     public TypePersonView() {
         initComponents();
         typePersonDao = new TypePersonDao();
@@ -37,8 +38,8 @@ public class TypePersonView extends javax.swing.JPanel {
         btnDelete.setVisible(false);
         addImageButtons();
     }
-    
-    private void addImageButtons(){
+
+    private void addImageButtons() {
         ImageIcon iconBtnDelete = createImageIcon("/icons/system/delete.png", "boton eliminar");
         ImageIcon iconBtnSave = createImageIcon("/icons/system/diskette.png", "boton guardar");
         ImageIcon iconBtnCleanForm = createImageIcon("/icons/system/clean.png", "boton CleanForm");
@@ -51,11 +52,11 @@ public class TypePersonView extends javax.swing.JPanel {
         btnSaveChanges.setIcon(iconBtnSaveChanges);
         lblSearch.setIcon(iconLblBuscar);
     }
-    
+
     protected ImageIcon createImageIcon(String path,
-                                           String description) {
+            String description) {
         URL imgURL = getClass().getResource(path);
-        
+
         if (imgURL != null) {
             Image img = new ImageIcon(imgURL).getImage();
             System.out.println("imgURL = " + imgURL.getPath());
@@ -66,6 +67,7 @@ public class TypePersonView extends javax.swing.JPanel {
             return null;
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -81,7 +83,6 @@ public class TypePersonView extends javax.swing.JPanel {
         lblSearch = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jPanel1 = new javax.swing.JPanel();
-        lblWarning = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         lblID = new javax.swing.JLabel();
         label1 = new java.awt.Label();
@@ -92,6 +93,8 @@ public class TypePersonView extends javax.swing.JPanel {
         btnSaveChanges = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         btnCleanForm = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        lblWarning = new javax.swing.JTextArea();
 
         setBackground(new java.awt.Color(240, 242, 245));
         setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "CATEGORIA"));
@@ -146,8 +149,6 @@ public class TypePersonView extends javax.swing.JPanel {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
 
-        lblWarning.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "Advertencia"));
-
         jLabel1.setText("ID:");
 
         lblID.setPreferredSize(new java.awt.Dimension(5, 20));
@@ -193,6 +194,12 @@ public class TypePersonView extends javax.swing.JPanel {
             }
         });
 
+        lblWarning.setColumns(20);
+        lblWarning.setLineWrap(true);
+        lblWarning.setRows(5);
+        lblWarning.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "Advertencia"));
+        jScrollPane2.setViewportView(lblWarning);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -218,13 +225,12 @@ public class TypePersonView extends javax.swing.JPanel {
                             .addComponent(txtDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 339, Short.MAX_VALUE)
                             .addComponent(lblID, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtTypePerson))))
-                .addGap(38, 38, 38)
-                .addComponent(lblWarning, javax.swing.GroupLayout.PREFERRED_SIZE, 416, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(182, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(lblWarning, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -239,13 +245,14 @@ public class TypePersonView extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSaveChanges)
                     .addComponent(btnSave)
                     .addComponent(btnCleanForm)
                     .addComponent(btnDelete))
                 .addGap(0, 26, Short.MAX_VALUE))
+            .addComponent(jScrollPane2)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -258,7 +265,7 @@ public class TypePersonView extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 900, Short.MAX_VALUE)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 554, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -278,58 +285,56 @@ public class TypePersonView extends javax.swing.JPanel {
                     .addComponent(lblSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-    
+
     /**
-     * Call TypePersonDao.insert()
-     * Envia datos para guardar una TypePerson
+     * Call TypePersonDao.insert() Envia datos para guardar una TypePerson
+     *
      * @param evt - ActionPerformed: Al hacer clic en btnSave
      */
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
-        TypePerson cat = new TypePerson();
-        cat.setName(txtTypePerson.getText());
-        cat.setDescription(txtDescription.getText());
-        
+
         try {
-            if(!txtTypePerson.getText().equals("")){
+            if (!txtTypePerson.getText().equals("")) {
+                TypePerson cat = new TypePerson();
+                cat.setName(txtTypePerson.getText());
+                cat.setDescription(txtDescription.getText());
                 typePersonDao.insert(cat);
                 JOptionPane.showMessageDialog(btnSave, "Guardado correctamente");
                 cleanForm();
                 loadTypePeople();
-            }else{
+            } else {
                 lblWarning.setText("TypePerson no puede estar vacio");
                 lblWarning.setForeground(Color.red);
             }
-            
-            
-            
+
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(btnSave, "SQLException: Error al guardar: "+ex.toString());
-        }catch(Exception e){
-           JOptionPane.showMessageDialog(btnSave, "Exception: Error al guardar: "+e.getMessage()); 
+            JOptionPane.showMessageDialog(btnSave, "SQLException: Error al guardar: " + ex.toString());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(btnSave, "Exception: Error al guardar: " + e.getMessage());
         }
     }//GEN-LAST:event_btnSaveActionPerformed
-    
+
     /**
-     * Call loadSearchTypePeople(txt)
-     * Carga datos segun la busqueda
+     * Call loadSearchTypePeople(txt) Carga datos segun la busqueda
+     *
      * @param evt - KeyReleased: despues de escribir en el teclado busca
      */
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
         // TODO add your handling code here:
         loadSearchTypePeople(txtSearch.getText());
     }//GEN-LAST:event_txtSearchKeyReleased
-    
+
     private void tListTypePeopleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tListTypePeopleMouseClicked
         // TODO add your handling code here:
         int fila = tListTypePeople.getSelectedRow();
-        if(fila == -1){
+        if (fila == -1) {
             JOptionPane.showMessageDialog(this, "Debe seleccionar una fila");
-        }else{
+        } else {
             btnDelete.setVisible(true);
             btnSave.setVisible(false);
             btnSaveChanges.setVisible(true);
@@ -340,50 +345,50 @@ public class TypePersonView extends javax.swing.JPanel {
                 txtDescription.setText(typePerson.getDescription());
             } catch (SQLException ex) {
                 Logger.getLogger(TypePersonView.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(this, "Error al eliminar: " +ex.getMessage());
+                JOptionPane.showMessageDialog(this, "Error al eliminar: " + ex.getMessage());
             } catch (Exception ex) {
                 Logger.getLogger(TypePersonView.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(this, "Error al eliminar: " +ex.getMessage());
+                JOptionPane.showMessageDialog(this, "Error al eliminar: " + ex.getMessage());
             }
-            
-            
+
         }
     }//GEN-LAST:event_tListTypePeopleMouseClicked
-    
+
     /**
-     * Call TypePersonDao.update(TypePerson cat)
-     * Envia datos para actualizar una TypePerson
+     * Call TypePersonDao.update(TypePerson cat) Envia datos para actualizar una
+     * TypePerson
+     *
      * @param evt - ActionPerformed: Al hacer clic en btnSaveChanges
      */
     private void btnSaveChangesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveChangesActionPerformed
         // TODO add your handling code here:
-        TypePerson cat = new TypePerson();
-        cat.setId(Integer.parseInt(lblID.getText()));
-        cat.setName(txtTypePerson.getText());
-        cat.setDescription(txtDescription.getText());
         try {
-            if(!txtTypePerson.getText().equals("")){
+            if (!txtTypePerson.getText().equals("")) {
+                TypePerson cat = new TypePerson();
+                cat.setId(Integer.parseInt(lblID.getText()));
+                cat.setName(txtTypePerson.getText());
+                cat.setDescription(txtDescription.getText());
                 typePersonDao.update(cat);
                 JOptionPane.showMessageDialog(btnSave, "Cambios guardados correctamente");
                 cleanForm();
                 loadTypePeople();
-            }else{
+            } else {
                 lblWarning.setText("TypePerson no puede estar vacio");
                 lblWarning.setForeground(Color.red);
             }
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(TypePersonView.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(btnSave, "Error al guardar los cambios: "+ex.getMessage());
+            JOptionPane.showMessageDialog(btnSave, "Error al guardar los cambios: " + ex.getMessage());
         } catch (Exception ex) {
             Logger.getLogger(TypePersonView.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(btnSave, "Error al guardar los cambios: "+ex.getMessage());
+            JOptionPane.showMessageDialog(btnSave, "Error al guardar los cambios: " + ex.getMessage());
         }
     }//GEN-LAST:event_btnSaveChangesActionPerformed
-    
-   
+
     /**
      * Limpia el formulario del jPanel
+     *
      * @param evt - ActionPerformed: Click en btnCleanForm
      */
     private void btnCleanFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCleanFormActionPerformed
@@ -395,13 +400,13 @@ public class TypePersonView extends javax.swing.JPanel {
         // TODO add your handling code here:
         try {
             int fila = tListTypePeople.getSelectedRow();
-            if(fila == -1){
+            if (fila == -1) {
                 JOptionPane.showConfirmDialog(tListTypePeople, "Debe seleccionar una fila");
-            }else{
-                int estadoEliminacionDialog = JOptionPane.showConfirmDialog(btnDelete, 
-                        "Seguro que desea eliminar "+typePerson.getName()+" ?",
+            } else {
+                int estadoEliminacionDialog = JOptionPane.showConfirmDialog(btnDelete,
+                        "Seguro que desea eliminar " + typePerson.getName() + " ?",
                         "Confirmar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                if(estadoEliminacionDialog == 0){
+                if (estadoEliminacionDialog == 0) {
                     typePersonDao.delete(typePerson.getId());
                     JOptionPane.showMessageDialog(btnDelete, "Se elimino correctamente la TypePerson: " + typePerson);
                     loadTypePeople();
@@ -410,59 +415,61 @@ public class TypePersonView extends javax.swing.JPanel {
             }
         } catch (SQLException ex) {
             Logger.getLogger(TypePersonView.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(btnDelete, "Error al eliminar la TypePerson: " + typePerson +" Error: "+ex.getMessage());
+            JOptionPane.showMessageDialog(btnDelete, "Error al eliminar la TypePerson: " + typePerson + " Error: " + ex.getMessage());
         } catch (Exception ex) {
             Logger.getLogger(TypePersonView.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(btnDelete, "Error al eliminar la TypePerson: " + typePerson +" Error: "+ex.getMessage());
+            JOptionPane.showMessageDialog(btnDelete, "Error al eliminar la TypePerson: " + typePerson + " Error: " + ex.getMessage());
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
-    
+
     /**
      * Vacia datos del jTable tListTypePeople
      */
-    private void cleanTable(){
+    private void cleanTable() {
         DefaultTableModel modelo = (DefaultTableModel) tListTypePeople.getModel();
         modelo.setRowCount(0);
         tListTypePeople.setModel(modelo);
     }
-    
+
     /**
-     * Call TypePersonDao.getTypePeople()
-     * Recupera datos TypePeople y lo carga al jTable
+     * Call TypePersonDao.getTypePeople() Recupera datos TypePeople y lo carga
+     * al jTable
      */
-    private void loadTypePeople(){
+    private void loadTypePeople() {
         try {
             loadTable(typePersonDao.getTypePeople());
         } catch (Exception ex) {
             Logger.getLogger(TypePersonView.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, "Error al obtener datos de TypePerson: " +ex.getMessage());
+            JOptionPane.showMessageDialog(this, "Error al obtener datos de TypePerson: " + ex.getMessage());
         }
     }
-    
+
     /**
-     * Obtiene datos de TypePersonDao.searchTypePeople(text) y lo 
-     * carga al jTable
-     * @param text 
+     * Obtiene datos de TypePersonDao.searchTypePeople(text) y lo carga al
+     * jTable
+     *
+     * @param text
      */
-    private void loadSearchTypePeople(String text){
+    private void loadSearchTypePeople(String text) {
         try {
             loadTable(typePersonDao.searchTypePeople(text));
         } catch (Exception ex) {
             Logger.getLogger(TypePersonView.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, "Error al buscar: " +ex.getMessage());
+            JOptionPane.showMessageDialog(this, "Error al buscar: " + ex.getMessage());
         }
     }
-    
+
     /**
      * Template para cargar datos al jTable tListTypePeople
+     *
      * @param List<TypePerson>
      */
-    private void loadTable(List<TypePerson> typePeople){
+    private void loadTable(List<TypePerson> typePeople) {
         cleanTable();
         DefaultTableModel modelo = (DefaultTableModel) tListTypePeople.getModel();
         List<TypePerson> items = typePeople;
         Object rowData[] = new Object[3];
-        for(TypePerson c: items){
+        for (TypePerson c : items) {
             System.out.println(c);
             rowData[0] = c.getId();
             rowData[1] = c.getName();
@@ -471,11 +478,11 @@ public class TypePersonView extends javax.swing.JPanel {
         }
         tListTypePeople.setModel(modelo);
     }
-    
+
     /**
      * Limpia todo el formulario del jPanel
      */
-    private void cleanForm(){
+    private void cleanForm() {
         lblID.setText("");
         lblWarning.setText("");
         txtTypePerson.setText("");
@@ -493,12 +500,13 @@ public class TypePersonView extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private java.awt.Label label1;
     private java.awt.Label label2;
     private javax.swing.JLabel lblID;
     private javax.swing.JLabel lblSearch;
-    private javax.swing.JLabel lblWarning;
+    private javax.swing.JTextArea lblWarning;
     private javax.swing.JTable tListTypePeople;
     private javax.swing.JTextField txtDescription;
     private javax.swing.JTextField txtSearch;

@@ -19,8 +19,8 @@ import org.casaortiz.dao.CategoryDao;
 import org.casaortiz.model.Category;
 
 /**
- * JPanel CategoryView
- * Para manejar el CRUD de category
+ * JPanel CategoryView Para manejar el CRUD de category
+ *
  * @author Ing. Jorge Luis Ortiz Cáceres
  * @since 31/08/2021
  * @version 0.0.1
@@ -29,6 +29,7 @@ public class CategoryView extends javax.swing.JPanel {
 
     private CategoryDao catDao;
     private Category category;
+
     public CategoryView() {
         initComponents();
         catDao = new CategoryDao();
@@ -37,8 +38,8 @@ public class CategoryView extends javax.swing.JPanel {
         btnDelete.setVisible(false);
         addImageButtons();
     }
-    
-    private void addImageButtons(){
+
+    private void addImageButtons() {
         ImageIcon iconBtnDelete = createImageIcon("/icons/system/delete.png", "boton eliminar");
         ImageIcon iconBtnSave = createImageIcon("/icons/system/diskette.png", "boton guardar");
         ImageIcon iconBtnCleanForm = createImageIcon("/icons/system/clean.png", "boton CleanForm");
@@ -51,11 +52,11 @@ public class CategoryView extends javax.swing.JPanel {
         btnSaveChanges.setIcon(iconBtnSaveChanges);
         lblSearch.setIcon(iconLblBuscar);
     }
-    
+
     protected ImageIcon createImageIcon(String path,
-                                           String description) {
+            String description) {
         URL imgURL = getClass().getResource(path);
-        
+
         if (imgURL != null) {
             Image img = new ImageIcon(imgURL).getImage();
             System.out.println("imgURL = " + imgURL.getPath());
@@ -66,6 +67,7 @@ public class CategoryView extends javax.swing.JPanel {
             return null;
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -81,7 +83,6 @@ public class CategoryView extends javax.swing.JPanel {
         lblSearch = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jPanel1 = new javax.swing.JPanel();
-        lblWarning = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         lblID = new javax.swing.JLabel();
         label1 = new java.awt.Label();
@@ -92,6 +93,8 @@ public class CategoryView extends javax.swing.JPanel {
         btnSaveChanges = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         btnCleanForm = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        lblWarning = new javax.swing.JTextArea();
 
         setBackground(new java.awt.Color(240, 242, 245));
         setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "CATEGORIA"));
@@ -146,8 +149,6 @@ public class CategoryView extends javax.swing.JPanel {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
 
-        lblWarning.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "Advertencia"));
-
         jLabel1.setText("ID:");
 
         lblID.setPreferredSize(new java.awt.Dimension(5, 20));
@@ -193,6 +194,12 @@ public class CategoryView extends javax.swing.JPanel {
             }
         });
 
+        lblWarning.setColumns(20);
+        lblWarning.setLineWrap(true);
+        lblWarning.setRows(5);
+        lblWarning.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "Advertencia"));
+        jScrollPane2.setViewportView(lblWarning);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -200,6 +207,14 @@ public class CategoryView extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnSave)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSaveChanges)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnDelete)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCleanForm))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -211,22 +226,13 @@ public class CategoryView extends javax.swing.JPanel {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnSave)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSaveChanges)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDelete)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCleanForm)))
+                        .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblWarning, javax.swing.GroupLayout.PREFERRED_SIZE, 416, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 133, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(lblWarning, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -248,6 +254,7 @@ public class CategoryView extends javax.swing.JPanel {
                     .addComponent(btnCleanForm)
                     .addComponent(btnDelete))
                 .addGap(0, 26, Short.MAX_VALUE))
+            .addComponent(jScrollPane2)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -260,7 +267,7 @@ public class CategoryView extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 900, Short.MAX_VALUE)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 554, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -284,54 +291,53 @@ public class CategoryView extends javax.swing.JPanel {
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-    
+
     /**
-     * Call CategoryDao.insert()
-     * Envia datos para guardar una category
+     * Call CategoryDao.insert() Envia datos para guardar una category
+     *
      * @param evt - ActionPerformed: Al hacer clic en btnSave
      */
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
-        Category cat = new Category();
-        cat.setName(txtCategory.getText());
-        cat.setDescription(txtDescription.getText());
-        
         try {
-            if(!txtCategory.getText().equals("")){
+            if (!txtCategory.getText().equals("")) {
+                Category cat = new Category();
+                cat.setName(txtCategory.getText());
+                cat.setDescription(txtDescription.getText());
                 catDao.insert(cat);
                 JOptionPane.showMessageDialog(btnSave, "Guardado correctamente");
                 cleanForm();
                 loadCategories();
-            }else{
+            } else {
                 lblWarning.setText("Categoría no puede estar vacio");
                 lblWarning.setForeground(Color.red);
             }
-            
-            
-            
+
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(btnSave, "SQLException: Error al guardar: "+ex.toString());
-        }catch(Exception e){
-           JOptionPane.showMessageDialog(btnSave, "Exception: Error al guardar: "+e.getMessage()); 
+            JOptionPane.showMessageDialog(btnSave, "SQLException: Error al guardar: " + ex.toString());
+            lblWarning.setText("SQLException: Error al guardar: " + ex.toString());
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(btnSave, "Exception: Error al guardar: " + ex.getMessage());
+            lblWarning.setText("Exception: Error al guardar: " + ex.getMessage());
         }
     }//GEN-LAST:event_btnSaveActionPerformed
-    
+
     /**
-     * Call loadSearchCategories(txt)
-     * Carga datos segun la busqueda
+     * Call loadSearchCategories(txt) Carga datos segun la busqueda
+     *
      * @param evt - KeyReleased: despues de escribir en el teclado busca
      */
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
         // TODO add your handling code here:
         loadSearchCategories(txtSearch.getText());
     }//GEN-LAST:event_txtSearchKeyReleased
-    
+
     private void tListCategoriesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tListCategoriesMouseClicked
         // TODO add your handling code here:
         int fila = tListCategories.getSelectedRow();
-        if(fila == -1){
+        if (fila == -1) {
             JOptionPane.showMessageDialog(this, "Debe seleccionar una fila");
-        }else{
+        } else {
             btnDelete.setVisible(true);
             btnSave.setVisible(false);
             btnSaveChanges.setVisible(true);
@@ -342,50 +348,54 @@ public class CategoryView extends javax.swing.JPanel {
                 txtDescription.setText(category.getDescription());
             } catch (SQLException ex) {
                 Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(this, "Error al eliminar: " +ex.getMessage());
+                JOptionPane.showMessageDialog(this, "Error al eliminar: " + ex.getMessage());
+                lblWarning.setText("SQLException: Error al guardar: " + ex.toString());
             } catch (Exception ex) {
                 Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(this, "Error al eliminar: " +ex.getMessage());
+                JOptionPane.showMessageDialog(this, "Error al eliminar: " + ex.getMessage());
+                lblWarning.setText("Exception: Error al guardar: " + ex.toString());
             }
-            
-            
+
         }
     }//GEN-LAST:event_tListCategoriesMouseClicked
-    
+
     /**
-     * Call CategoryDao.update(Category cat)
-     * Envia datos para actualizar una category
+     * Call CategoryDao.update(Category cat) Envia datos para actualizar una
+     * category
+     *
      * @param evt - ActionPerformed: Al hacer clic en btnSaveChanges
      */
     private void btnSaveChangesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveChangesActionPerformed
         // TODO add your handling code here:
-        Category cat = new Category();
-        cat.setId(Integer.parseInt(lblID.getText()));
-        cat.setName(txtCategory.getText());
-        cat.setDescription(txtDescription.getText());
         try {
-            if(!txtCategory.getText().equals("")){
+            if (!txtCategory.getText().equals("")) {
+                Category cat = new Category();
+                cat.setId(Integer.parseInt(lblID.getText()));
+                cat.setName(txtCategory.getText());
+                cat.setDescription(txtDescription.getText());
                 catDao.update(cat);
                 JOptionPane.showMessageDialog(btnSave, "Cambios guardados correctamente");
                 cleanForm();
                 loadCategories();
-            }else{
+            } else {
                 lblWarning.setText("Categoría no puede estar vacio");
                 lblWarning.setForeground(Color.red);
             }
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(btnSave, "Error al guardar los cambios: "+ex.getMessage());
+            JOptionPane.showMessageDialog(btnSave, "Error al guardar los cambios: " + ex.getMessage());
+            lblWarning.setText("SQLException: Error al guardar los cambios: " + ex.toString());
         } catch (Exception ex) {
             Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(btnSave, "Error al guardar los cambios: "+ex.getMessage());
+            JOptionPane.showMessageDialog(btnSave, "Error al guardar los cambios: " + ex.getMessage());
+            lblWarning.setText("Exception: Error al guardar los cambios: " + ex.toString());
         }
     }//GEN-LAST:event_btnSaveChangesActionPerformed
-    
-   
+
     /**
      * Limpia el formulario del jPanel
+     *
      * @param evt - ActionPerformed: Click en btnCleanForm
      */
     private void btnCleanFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCleanFormActionPerformed
@@ -397,13 +407,13 @@ public class CategoryView extends javax.swing.JPanel {
         // TODO add your handling code here:
         try {
             int fila = tListCategories.getSelectedRow();
-            if(fila == -1){
+            if (fila == -1) {
                 JOptionPane.showConfirmDialog(tListCategories, "Debe seleccionar una fila");
-            }else{
-                int estadoEliminacionDialog = JOptionPane.showConfirmDialog(btnDelete, 
-                        "Seguro que desea eliminar "+category.getName()+" ?",
+            } else {
+                int estadoEliminacionDialog = JOptionPane.showConfirmDialog(btnDelete,
+                        "Seguro que desea eliminar " + category.getName() + " ?",
                         "Confirmar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                if(estadoEliminacionDialog == 0){
+                if (estadoEliminacionDialog == 0) {
                     catDao.delete(category.getId());
                     JOptionPane.showMessageDialog(btnDelete, "Se elimino correctamente la categoria: " + category);
                     loadCategories();
@@ -412,59 +422,64 @@ public class CategoryView extends javax.swing.JPanel {
             }
         } catch (SQLException ex) {
             Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(btnDelete, "Error al eliminar la categoria: " + category +" Error: "+ex.getMessage());
+            JOptionPane.showMessageDialog(btnDelete, "Error al eliminar la categoria: " + category + " Error: " + ex.getMessage());
+            lblWarning.setText("Error al eliminar la categoria: " + category + " Error: " + ex.getMessage());
         } catch (Exception ex) {
             Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(btnDelete, "Error al eliminar la categoria: " + category +" Error: "+ex.getMessage());
+            JOptionPane.showMessageDialog(btnDelete, "Error al eliminar la categoria: " + category + " Error: " + ex.getMessage());
+            lblWarning.setText("Error al eliminar la categoria: " + category + " Error: " + ex.getMessage());
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
-    
+
     /**
      * Vacia datos del jTable tListCategories
      */
-    private void cleanTable(){
+    private void cleanTable() {
         DefaultTableModel modelo = (DefaultTableModel) tListCategories.getModel();
         modelo.setRowCount(0);
         tListCategories.setModel(modelo);
     }
-    
+
     /**
-     * Call CategoryDao.getCategories()
-     * Recupera datos categories y lo carga al jTable
+     * Call CategoryDao.getCategories() Recupera datos categories y lo carga al
+     * jTable
      */
-    private void loadCategories(){
+    private void loadCategories() {
         try {
             loadTable(catDao.getCategories());
         } catch (Exception ex) {
             Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, "Error al obtener datos de categoria: " +ex.getMessage());
+            JOptionPane.showMessageDialog(this, "Error al obtener datos de categoria: " + ex.getMessage());
+            lblWarning.setText("Error al obtener datos de categoria: " + ex.getMessage());
         }
     }
-    
+
     /**
-     * Obtiene datos de CategoryDao.searchCategories(text) y lo 
-     * carga al jTable
-     * @param text 
+     * Obtiene datos de CategoryDao.searchCategories(text) y lo carga al jTable
+     *
+     * @param text
      */
-    private void loadSearchCategories(String text){
+    private void loadSearchCategories(String text) {
         try {
             loadTable(catDao.searchCategories(text));
         } catch (Exception ex) {
             Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, "Error al buscar: " +ex.getMessage());
+            JOptionPane.showMessageDialog(this, "Error al buscar: " + ex.getMessage());
+            lblWarning.setText("Error al buscar: " + ex.getMessage());
         }
     }
-    
+
     /**
      * Template para cargar datos al jTable tListCategories
+     *
      * @param List<Category>
      */
-    private void loadTable(List<Category> categories){
+    private void loadTable(List<Category> categories) {
         cleanTable();
         DefaultTableModel modelo = (DefaultTableModel) tListCategories.getModel();
         List<Category> items = categories;
         Object rowData[] = new Object[3];
-        for(Category c: items){
+        for (Category c : items) {
             System.out.println(c);
             rowData[0] = c.getId();
             rowData[1] = c.getName();
@@ -473,11 +488,11 @@ public class CategoryView extends javax.swing.JPanel {
         }
         tListCategories.setModel(modelo);
     }
-    
+
     /**
      * Limpia todo el formulario del jPanel
      */
-    private void cleanForm(){
+    private void cleanForm() {
         lblID.setText("");
         lblWarning.setText("");
         txtCategory.setText("");
@@ -495,12 +510,13 @@ public class CategoryView extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private java.awt.Label label1;
     private java.awt.Label label2;
     private javax.swing.JLabel lblID;
     private javax.swing.JLabel lblSearch;
-    private javax.swing.JLabel lblWarning;
+    private javax.swing.JTextArea lblWarning;
     private javax.swing.JTable tListCategories;
     private javax.swing.JTextField txtCategory;
     private javax.swing.JTextField txtDescription;

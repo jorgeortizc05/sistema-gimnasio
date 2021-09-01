@@ -22,15 +22,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private CategoryView categoryView;
     private TypePersonView typePersonView;
     private TypeVoucherView typeVoucherView;
+    private TypeSuscriptionView typeSuscriptionView;
     
     public VentanaPrincipal() {
         initComponents();
         categoryView = new CategoryView();
         typePersonView = new TypePersonView();
         typeVoucherView = new TypeVoucherView();
+        typeSuscriptionView = new TypeSuscriptionView();
         jTabbedPane1.add(categoryView);
         jTabbedPane1.add(typePersonView);
         jTabbedPane1.add(typeVoucherView);
+        jTabbedPane1.add(typeSuscriptionView);
         
     }
 
@@ -45,12 +48,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        miNuevoCategoria = new javax.swing.JMenuItem();
+        miInventario = new javax.swing.JMenu();
+        miCategoria = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         miTypePerson = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         miTypeVoucher = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("GIMNASIOSOLIZ");
@@ -58,17 +62,17 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.BOTTOM);
 
-        jMenu1.setText("Categoría");
+        miInventario.setText("Inventarios");
 
-        miNuevoCategoria.setText("Nuevo");
-        miNuevoCategoria.addActionListener(new java.awt.event.ActionListener() {
+        miCategoria.setText("Categoría");
+        miCategoria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miNuevoCategoriaActionPerformed(evt);
+                miCategoriaActionPerformed(evt);
             }
         });
-        jMenu1.add(miNuevoCategoria);
+        miInventario.add(miCategoria);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(miInventario);
 
         jMenu2.setText("Clientes");
 
@@ -92,6 +96,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         });
         jMenu3.add(miTypeVoucher);
 
+        jMenuItem1.setText("Tipo de Suscripción");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem1);
+
         jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
@@ -110,11 +122,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void miNuevoCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miNuevoCategoriaActionPerformed
+    private void miCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miCategoriaActionPerformed
         // TODO add your handling code here:
         jTabbedPane1.setSelectedComponent(categoryView);
         
-    }//GEN-LAST:event_miNuevoCategoriaActionPerformed
+    }//GEN-LAST:event_miCategoriaActionPerformed
 
     private void miTypePersonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miTypePersonActionPerformed
         // TODO add your handling code here:
@@ -125,6 +137,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         jTabbedPane1.setSelectedComponent(typeVoucherView);
     }//GEN-LAST:event_miTypeVoucherActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        typeSuscriptionView.loadTypeSuscription();
+        jTabbedPane1.setSelectedComponent(typeSuscriptionView);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -175,12 +193,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JMenuItem miNuevoCategoria;
+    private javax.swing.JMenuItem miCategoria;
+    private javax.swing.JMenu miInventario;
     private javax.swing.JMenuItem miTypePerson;
     private javax.swing.JMenuItem miTypeVoucher;
     // End of variables declaration//GEN-END:variables
