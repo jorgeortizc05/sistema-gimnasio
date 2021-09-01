@@ -17,14 +17,14 @@ import javax.swing.UnsupportedLookAndFeelException;
  * @since 31/08/2021
  * @version 0.0.1
  */
-public class VentanaPrincipal extends javax.swing.JFrame {
+public class MainView extends javax.swing.JFrame {
 
     private CategoryView categoryView;
     private TypePersonView typePersonView;
     private TypeVoucherView typeVoucherView;
     private TypeSuscriptionView typeSuscriptionView;
     
-    public VentanaPrincipal() {
+    public MainView() {
         initComponents();
         categoryView = new CategoryView();
         typePersonView = new TypePersonView();
@@ -164,14 +164,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VentanaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VentanaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VentanaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VentanaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
@@ -184,13 +185,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 catch (UnsupportedLookAndFeelException e) {
                    // handle exception
                 } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (InstantiationException ex) {
-                    Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IllegalAccessException ex) {
-                    Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                new VentanaPrincipal().setVisible(true);
+                new MainView().setVisible(true);
             }
         });
     }
