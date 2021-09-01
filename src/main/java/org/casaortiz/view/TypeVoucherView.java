@@ -6,15 +6,16 @@
 package org.casaortiz.view;
 
 import java.awt.Color;
+import java.awt.Image;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import org.casaortiz.dao.TypePersonDao;
 import org.casaortiz.dao.TypeVoucherDao;
-import org.casaortiz.model.TypePerson;
 import org.casaortiz.model.TypeVoucher;
 
 /**
@@ -31,11 +32,40 @@ public class TypeVoucherView extends javax.swing.JPanel {
     public TypeVoucherView() {
         initComponents();
         typeVoucherDao = new TypeVoucherDao();
-        loadTypePeople();
+        loadTypeVouchers();
         btnSaveChanges.setVisible(false);
         btnDelete.setVisible(false);
+        addImageButtons();
     }
+    
+    private void addImageButtons(){
+        ImageIcon iconBtnDelete = createImageIcon("/icons/system/delete.png", "boton eliminar");
+        ImageIcon iconBtnSave = createImageIcon("/icons/system/diskette.png", "boton guardar");
+        ImageIcon iconBtnCleanForm = createImageIcon("/icons/system/clean.png", "boton CleanForm");
+        ImageIcon iconBtnSaveChanges = createImageIcon("/icons/system/edit.png", "boton SaveChanges");
+        ImageIcon iconLblBuscar = createImageIcon("/icons/system/search.png", "label lblBuscar");
 
+        btnDelete.setIcon(iconBtnDelete);
+        btnSave.setIcon(iconBtnSave);
+        btnCleanForm.setIcon(iconBtnCleanForm);
+        btnSaveChanges.setIcon(iconBtnSaveChanges);
+        lblSearch.setIcon(iconLblBuscar);
+    }
+    
+    protected ImageIcon createImageIcon(String path,
+                                           String description) {
+        URL imgURL = getClass().getResource(path);
+        
+        if (imgURL != null) {
+            Image img = new ImageIcon(imgURL).getImage();
+            System.out.println("imgURL = " + imgURL.getPath());
+            return new ImageIcon(img.getScaledInstance(30, 30, Image.SCALE_SMOOTH), description);
+        } else {
+            System.err.println("Couldn't find file: " + path);
+            System.out.println("imgURL = " + imgURL.getPath());
+            return null;
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -45,31 +75,28 @@ public class TypeVoucherView extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tListTypeVoucher = new javax.swing.JTable();
+        txtSearch = new javax.swing.JTextField();
+        lblSearch = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jPanel1 = new javax.swing.JPanel();
+        lblWarning = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        lblID = new javax.swing.JLabel();
         label1 = new java.awt.Label();
-        txtTypeVaucher = new javax.swing.JTextField();
+        txtTypeVoucher = new javax.swing.JTextField();
         label2 = new java.awt.Label();
         txtDescription = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tListTypeVauchers = new javax.swing.JTable();
         btnSave = new javax.swing.JButton();
         btnSaveChanges = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
-        txtSearch = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        lblID = new javax.swing.JLabel();
         btnCleanForm = new javax.swing.JButton();
-        lblWarning = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
 
-        setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "TIPO DE COMPROBANTES"));
+        setBackground(new java.awt.Color(240, 242, 245));
+        setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "CATEGORIA"));
 
-        label1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        label1.setText("Tipo Comprobante:");
-
-        label2.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        label2.setText("Descripción:");
-
-        tListTypeVauchers.setModel(new javax.swing.table.DefaultTableModel(
+        tListTypeVoucher.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -92,42 +119,21 @@ public class TypeVoucherView extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        tListTypeVauchers.getTableHeader().setReorderingAllowed(false);
-        tListTypeVauchers.addMouseListener(new java.awt.event.MouseAdapter() {
+        tListTypeVoucher.getTableHeader().setReorderingAllowed(false);
+        tListTypeVoucher.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tListTypeVauchersMouseClicked(evt);
+                tListTypeVoucherMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tListTypeVauchers);
-        if (tListTypeVauchers.getColumnModel().getColumnCount() > 0) {
-            tListTypeVauchers.getColumnModel().getColumn(0).setResizable(false);
-            tListTypeVauchers.getColumnModel().getColumn(0).setPreferredWidth(5);
-            tListTypeVauchers.getColumnModel().getColumn(1).setResizable(false);
-            tListTypeVauchers.getColumnModel().getColumn(1).setPreferredWidth(300);
-            tListTypeVauchers.getColumnModel().getColumn(2).setResizable(false);
-            tListTypeVauchers.getColumnModel().getColumn(2).setPreferredWidth(300);
+        jScrollPane1.setViewportView(tListTypeVoucher);
+        if (tListTypeVoucher.getColumnModel().getColumnCount() > 0) {
+            tListTypeVoucher.getColumnModel().getColumn(0).setResizable(false);
+            tListTypeVoucher.getColumnModel().getColumn(0).setPreferredWidth(5);
+            tListTypeVoucher.getColumnModel().getColumn(1).setResizable(false);
+            tListTypeVoucher.getColumnModel().getColumn(1).setPreferredWidth(300);
+            tListTypeVoucher.getColumnModel().getColumn(2).setResizable(false);
+            tListTypeVoucher.getColumnModel().getColumn(2).setPreferredWidth(300);
         }
-
-        btnSave.setText("Guardar");
-        btnSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveActionPerformed(evt);
-            }
-        });
-
-        btnSaveChanges.setText("Guardar Cambios");
-        btnSaveChanges.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveChangesActionPerformed(evt);
-            }
-        });
-
-        btnDelete.setText("Eliminar");
-        btnDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteActionPerformed(evt);
-            }
-        });
 
         txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -135,10 +141,51 @@ public class TypeVoucherView extends javax.swing.JPanel {
             }
         });
 
+        lblSearch.setPreferredSize(new java.awt.Dimension(30, 30));
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+
+        lblWarning.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "Advertencia"));
+
         jLabel1.setText("ID:");
 
         lblID.setPreferredSize(new java.awt.Dimension(5, 20));
 
+        label1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        label1.setText("Tipo de Comprobante:");
+
+        label2.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        label2.setText("Descripción:");
+
+        btnSave.setBackground(new java.awt.Color(0, 128, 129));
+        btnSave.setForeground(new java.awt.Color(255, 255, 255));
+        btnSave.setText("Guardar");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
+
+        btnSaveChanges.setBackground(new java.awt.Color(53, 152, 219));
+        btnSaveChanges.setForeground(new java.awt.Color(255, 255, 255));
+        btnSaveChanges.setText("Guardar Cambios");
+        btnSaveChanges.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveChangesActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setBackground(new java.awt.Color(212, 105, 89));
+        btnDelete.setForeground(new java.awt.Color(255, 255, 255));
+        btnDelete.setText("Eliminar");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
+        btnCleanForm.setBackground(new java.awt.Color(252, 246, 214));
         btnCleanForm.setText("Limpiar Formulario");
         btnCleanForm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -146,78 +193,92 @@ public class TypeVoucherView extends javax.swing.JPanel {
             }
         });
 
-        jLabel2.setText("Buscar:");
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnSave)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSaveChanges)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnDelete)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCleanForm))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 339, Short.MAX_VALUE)
+                            .addComponent(lblID, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtTypeVoucher))))
+                .addGap(38, 38, 38)
+                .addComponent(lblWarning, javax.swing.GroupLayout.PREFERRED_SIZE, 416, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(lblWarning, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lblID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtTypeVoucher, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(12, 12, 12)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSaveChanges)
+                    .addComponent(btnSave)
+                    .addComponent(btnCleanForm)
+                    .addComponent(btnDelete))
+                .addGap(0, 26, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jSeparator1)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 900, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnSave)
+                                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 554, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnSaveChanges)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnDelete)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnCleanForm))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 554, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(2, 2, 2)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(txtTypeVaucher, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(32, 32, 32)
-                                        .addComponent(lblWarning, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(lblID, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(0, 136, Short.MAX_VALUE)))
+                                .addComponent(lblSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jScrollPane1))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtTypeVaucher)
-                            .addComponent(lblWarning, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnCleanForm)
-                    .addComponent(btnDelete)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnSaveChanges)
-                        .addComponent(btnSave)))
-                .addGap(8, 8, 8)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 396, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -230,19 +291,22 @@ public class TypeVoucherView extends javax.swing.JPanel {
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
         TypeVoucher cat = new TypeVoucher();
-        cat.setName(txtTypeVaucher.getText());
+        cat.setName(txtTypeVoucher.getText());
         cat.setDescription(txtDescription.getText());
         
         try {
-            if(!txtTypeVaucher.getText().equals("")){
+            if(!txtTypeVoucher.getText().equals("")){
                 typeVoucherDao.insert(cat);
                 JOptionPane.showMessageDialog(btnSave, "Guardado correctamente");
                 cleanForm();
-                loadTypePeople();
+                loadTypeVouchers();
             }else{
                 lblWarning.setText("TypeVoucher no puede estar vacio");
                 lblWarning.setForeground(Color.red);
             }
+            
+            
+            
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(btnSave, "SQLException: Error al guardar: "+ex.toString());
         }catch(Exception e){
@@ -251,7 +315,7 @@ public class TypeVoucherView extends javax.swing.JPanel {
     }//GEN-LAST:event_btnSaveActionPerformed
     
     /**
-     * Call loadSearchTypePeople(txt)
+     * Call loadSearchTypeVouchers(txt)
      * Carga datos segun la busqueda
      * @param evt - KeyReleased: despues de escribir en el teclado busca
      */
@@ -260,9 +324,9 @@ public class TypeVoucherView extends javax.swing.JPanel {
         loadSearchTypeVouchers(txtSearch.getText());
     }//GEN-LAST:event_txtSearchKeyReleased
     
-    private void tListTypeVauchersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tListTypeVauchersMouseClicked
+    private void tListTypeVoucherMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tListTypeVoucherMouseClicked
         // TODO add your handling code here:
-        int fila = tListTypeVauchers.getSelectedRow();
+        int fila = tListTypeVoucher.getSelectedRow();
         if(fila == -1){
             JOptionPane.showMessageDialog(this, "Debe seleccionar una fila");
         }else{
@@ -270,9 +334,9 @@ public class TypeVoucherView extends javax.swing.JPanel {
             btnSave.setVisible(false);
             btnSaveChanges.setVisible(true);
             try {
-                typeVoucher = typeVoucherDao.getTypeVoucher(Integer.parseInt(tListTypeVauchers.getValueAt(fila, 0).toString()));
+                typeVoucher = typeVoucherDao.getTypeVoucher(Integer.parseInt(tListTypeVoucher.getValueAt(fila, 0).toString()));
                 lblID.setText(String.valueOf(typeVoucher.getId()));
-                txtTypeVaucher.setText(typeVoucher.getName());
+                txtTypeVoucher.setText(typeVoucher.getName());
                 txtDescription.setText(typeVoucher.getDescription());
             } catch (SQLException ex) {
                 Logger.getLogger(TypeVoucherView.class.getName()).log(Level.SEVERE, null, ex);
@@ -284,7 +348,7 @@ public class TypeVoucherView extends javax.swing.JPanel {
             
             
         }
-    }//GEN-LAST:event_tListTypeVauchersMouseClicked
+    }//GEN-LAST:event_tListTypeVoucherMouseClicked
     
     /**
      * Call TypeVoucherDao.update(TypeVoucher cat)
@@ -295,14 +359,14 @@ public class TypeVoucherView extends javax.swing.JPanel {
         // TODO add your handling code here:
         TypeVoucher cat = new TypeVoucher();
         cat.setId(Integer.parseInt(lblID.getText()));
-        cat.setName(txtTypeVaucher.getText());
+        cat.setName(txtTypeVoucher.getText());
         cat.setDescription(txtDescription.getText());
         try {
-            if(!txtTypeVaucher.getText().equals("")){
+            if(!txtTypeVoucher.getText().equals("")){
                 typeVoucherDao.update(cat);
                 JOptionPane.showMessageDialog(btnSave, "Cambios guardados correctamente");
                 cleanForm();
-                loadTypePeople();
+                loadTypeVouchers();
             }else{
                 lblWarning.setText("TypeVoucher no puede estar vacio");
                 lblWarning.setForeground(Color.red);
@@ -317,28 +381,32 @@ public class TypeVoucherView extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnSaveChangesActionPerformed
     
+   
     /**
-     * Call TypeVoucherDao.delete(idTypeVoucher)
-     * Elimina un registro de TypeVoucher
-     * @param evt - ActionPerformed: Al hacer clic en btnDelete
+     * Limpia el formulario del jPanel
+     * @param evt - ActionPerformed: Click en btnCleanForm
      */
+    private void btnCleanFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCleanFormActionPerformed
+        // TODO add your handling code here:
+        cleanForm();
+    }//GEN-LAST:event_btnCleanFormActionPerformed
+
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
         try {
-            int fila = tListTypeVauchers.getSelectedRow();
+            int fila = tListTypeVoucher.getSelectedRow();
             if(fila == -1){
-                JOptionPane.showConfirmDialog(tListTypeVauchers, "Debe seleccionar una fila");
+                JOptionPane.showConfirmDialog(tListTypeVoucher, "Debe seleccionar una fila");
             }else{
-                // TODO add your handling code here:
                 int estadoEliminacionDialog = JOptionPane.showConfirmDialog(btnDelete, 
                         "Seguro que desea eliminar "+typeVoucher.getName()+" ?",
                         "Confirmar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if(estadoEliminacionDialog == 0){
                     typeVoucherDao.delete(typeVoucher.getId());
                     JOptionPane.showMessageDialog(btnDelete, "Se elimino correctamente la TypeVoucher: " + typeVoucher);
-                    loadTypePeople();
+                    loadTypeVouchers();
                     cleanForm();
                 }
-                
             }
         } catch (SQLException ex) {
             Logger.getLogger(TypeVoucherView.class.getName()).log(Level.SEVERE, null, ex);
@@ -350,28 +418,19 @@ public class TypeVoucherView extends javax.swing.JPanel {
     }//GEN-LAST:event_btnDeleteActionPerformed
     
     /**
-     * Limpia el formulario del jPanel
-     * @param evt - ActionPerformed: Click en btnCleanForm
-     */
-    private void btnCleanFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCleanFormActionPerformed
-        // TODO add your handling code here:
-        cleanForm();
-    }//GEN-LAST:event_btnCleanFormActionPerformed
-    
-    /**
-     * Vacia datos del jTable tListTypePeople
+     * Vacia datos del jTable tListTypeVoucher
      */
     private void cleanTable(){
-        DefaultTableModel modelo = (DefaultTableModel) tListTypeVauchers.getModel();
+        DefaultTableModel modelo = (DefaultTableModel) tListTypeVoucher.getModel();
         modelo.setRowCount(0);
-        tListTypeVauchers.setModel(modelo);
+        tListTypeVoucher.setModel(modelo);
     }
     
     /**
-     * Call TypeVoucherDao.getTypePeople()
+     * Call TypeVoucherDao.getTypeVoucher()
      * Recupera datos TypeVoucher y lo carga al jTable
      */
-    private void loadTypePeople(){
+    private void loadTypeVouchers(){
         try {
             loadTable(typeVoucherDao.getTypeVouchers());
         } catch (Exception ex) {
@@ -381,7 +440,7 @@ public class TypeVoucherView extends javax.swing.JPanel {
     }
     
     /**
-     * Obtiene datos de TypeVoucherDao.searchTypePeople(text) y lo 
+     * Obtiene datos de TypeVoucherDao.searchTypeVouchers(text) y lo 
      * carga al jTable
      * @param text 
      */
@@ -390,7 +449,7 @@ public class TypeVoucherView extends javax.swing.JPanel {
             loadTable(typeVoucherDao.searchTypeVouchers(text));
         } catch (Exception ex) {
             Logger.getLogger(TypeVoucherView.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, "Error al buscar en TypePerson: " +ex.getMessage());
+            JOptionPane.showMessageDialog(this, "Error al buscar: " +ex.getMessage());
         }
     }
     
@@ -400,7 +459,7 @@ public class TypeVoucherView extends javax.swing.JPanel {
      */
     private void loadTable(List<TypeVoucher> typeVouchers){
         cleanTable();
-        DefaultTableModel modelo = (DefaultTableModel) tListTypeVauchers.getModel();
+        DefaultTableModel modelo = (DefaultTableModel) tListTypeVoucher.getModel();
         List<TypeVoucher> items = typeVouchers;
         Object rowData[] = new Object[3];
         for(TypeVoucher c: items){
@@ -410,7 +469,7 @@ public class TypeVoucherView extends javax.swing.JPanel {
             rowData[2] = c.getDescription();
             modelo.addRow(rowData);
         }
-        tListTypeVauchers.setModel(modelo);
+        tListTypeVoucher.setModel(modelo);
     }
     
     /**
@@ -419,7 +478,7 @@ public class TypeVoucherView extends javax.swing.JPanel {
     private void cleanForm(){
         lblID.setText("");
         lblWarning.setText("");
-        txtTypeVaucher.setText("");
+        txtTypeVoucher.setText("");
         txtDescription.setText("");
         btnSave.setVisible(true);
         btnSaveChanges.setVisible(false);
@@ -432,15 +491,17 @@ public class TypeVoucherView extends javax.swing.JPanel {
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSaveChanges;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
     private java.awt.Label label1;
     private java.awt.Label label2;
     private javax.swing.JLabel lblID;
+    private javax.swing.JLabel lblSearch;
     private javax.swing.JLabel lblWarning;
-    private javax.swing.JTable tListTypeVauchers;
+    private javax.swing.JTable tListTypeVoucher;
     private javax.swing.JTextField txtDescription;
     private javax.swing.JTextField txtSearch;
-    private javax.swing.JTextField txtTypeVaucher;
+    private javax.swing.JTextField txtTypeVoucher;
     // End of variables declaration//GEN-END:variables
 }
