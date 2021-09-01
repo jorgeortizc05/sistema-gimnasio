@@ -229,3 +229,69 @@ create or replace NONEDITIONABLE PACKAGE BODY type_voucher_api AS
 
 END type_voucher_api;
 /
+CREATE OR REPLACE NONEDITIONABLE PACKAGE type_suscription_api AS
+  procedure ins (p_NAME in type_suscription.NAME%type, p_num_days in type_suscription.num_days%type, p_price in type_suscription.price%type,p_DESCRIPTION in type_suscription.DESCRIPTION%type default null);
+  procedure upd (p_ID IN type_suscription.ID%TYPE, p_NAME in type_suscription.NAME%type, p_num_days in type_suscription.num_days%type, p_price in type_suscription.price%type,p_DESCRIPTION in type_suscription.DESCRIPTION%type default null);
+  procedure del (p_ID in type_suscription.ID%type);
+  procedure list(type_suscription_C OUT SYS_REFCURSOR);
+  procedure search(p_texto IN varchar2,type_suscription_C OUT SYS_REFCURSOR);
+  procedure getTypeSuscription(p_id IN type_suscription.id%TYPE,type_suscription_C OUT SYS_REFCURSOR);
+END type_suscription_api;
+/
+CREATE OR REPLACE NONEDITIONABLE PACKAGE BODY type_suscription_api AS
+  procedure ins (p_NAME in type_suscription.NAME%type, p_num_days in type_suscription.num_days%type, p_price in type_suscription.price%type,p_DESCRIPTION in type_suscription.DESCRIPTION%type default null)
+  is
+  begin
+    insert into type_suscription(NAME, num_days, price, description) values (p_NAME, p_num_days, p_price, p_description);
+    COMMIT;
+  end;
+
+  procedure upd (p_ID IN type_suscription.ID%TYPE, p_NAME in type_suscription.NAME%type, p_num_days in type_suscription.num_days%type, p_price in type_suscription.price%type,p_DESCRIPTION in type_suscription.DESCRIPTION%type default null)
+  is
+  begin
+    update type_suscription set DESCRIPTION = p_DESCRIPTION, NAME = p_NAME, NUM_DAYS = p_num_days, PRICE = p_price
+    where ID = p_ID;
+    COMMIT;
+  end;
+
+  procedure del (p_ID in type_suscription.ID%type)
+  IS
+  BEGIN
+    delete from type_suscription where ID = p_ID;
+    COMMIT;
+  end;
+
+  procedure list(type_suscription_C OUT SYS_REFCURSOR)
+  IS
+  BEGIN 
+    OPEN type_suscription_C FOR 
+      SELECT * 
+      FROM type_suscription c;
+
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            dbms_output.put_line('No hay datos de type_suscription');
+  END LIST;
+
+  procedure search(p_texto IN varchar2,type_suscription_C OUT SYS_REFCURSOR)
+  IS
+  BEGIN
+      OPEN type_suscription_C FOR
+          SELECT *
+          FROM type_suscription c
+          WHERE UPPER(c.name) ||' '|| upper(c.description) like '%'||upper(p_texto)||'%';
+  EXCEPTION
+      WHEN NO_DATA_FOUND THEN
+          dbms_output.put_line('No hay datos de type_suscription');
+  END;
+
+  procedure getTypeSuscription(p_id IN type_suscription.id%TYPE,type_suscription_C OUT SYS_REFCURSOR)
+  IS
+  BEGIN
+      OPEN type_suscription_C FOR
+          SELECT *
+          FROM type_suscription c
+          WHERE c.id = p_id ;
+  END;
+
+END type_suscription_api;
