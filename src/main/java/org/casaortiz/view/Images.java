@@ -16,7 +16,7 @@ public class Images {
     
     public static ImageIcon getImage(String name){
         try {
-            String string = FileLocation.pathImage + name;
+            String string = FileLocation.pathImagePerson + name;
             Image img = new ImageIcon(string).getImage();
             //Me permite redimensionar la imagen para que se adapte al jLabel
             ImageIcon ii = new ImageIcon(img.getScaledInstance(400, 300, Image.SCALE_SMOOTH));

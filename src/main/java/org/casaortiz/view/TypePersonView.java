@@ -31,22 +31,24 @@ public class TypePersonView extends javax.swing.JPanel {
 
     private TypePersonDao typePersonDao;
     private TypePerson typePerson;
+    private PersonView pv;
 
-    public TypePersonView() {
+    public TypePersonView(PersonView ppv) {
         initComponents();
         typePersonDao = new TypePersonDao();
         loadTypePeople();
         btnSaveChanges.setVisible(false);
         btnDelete.setVisible(false);
+        this.pv = ppv;
         addImageButtons();
     }
 
     private void addImageButtons() {
-        btnDelete.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnDelete));
-        btnSave.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnSave));
-        btnCleanForm.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnClean));
-        btnSaveChanges.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnEdit));
-        lblSearch.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnSearch));
+        btnDelete.setIcon(new ButtonsColors().addIconButton(FileLocation.pathIconBtnDelete));
+        btnSave.setIcon(new ButtonsColors().addIconButton(FileLocation.pathIconBtnSave));
+        btnCleanForm.setIcon(new ButtonsColors().addIconButton(FileLocation.pathIconBtnClean));
+        btnSaveChanges.setIcon(new ButtonsColors().addIconButton(FileLocation.pathIconBtnEdit));
+        lblSearch.setIcon(new ButtonsColors().addIconButton(FileLocation.pathIconBtnSearch));
     }
 
     /**
@@ -78,7 +80,7 @@ public class TypePersonView extends javax.swing.JPanel {
         lblWarning = new javax.swing.JTextArea();
 
         setBackground(new java.awt.Color(240, 242, 245));
-        setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "CATEGORIA"));
+        setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "TIPO CLIENTE"));
 
         tListTypePeople.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -287,7 +289,8 @@ public class TypePersonView extends javax.swing.JPanel {
                 typePersonDao.insert(cat);
                 JOptionPane.showMessageDialog(btnSave, "Guardado correctamente");
                 cleanForm();
-                loadTypePeople();
+                this.loadTypePeople();
+                pv.loadTypePeople();
             } else {
                 lblWarning.setText("TypePerson no puede estar vacio");
                 lblWarning.setForeground(Color.red);
@@ -353,6 +356,7 @@ public class TypePersonView extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(btnSave, "Cambios guardados correctamente");
                 cleanForm();
                 loadTypePeople();
+                pv.loadTypePeople();
             } else {
                 lblWarning.setText("TypePerson no puede estar vacio");
                 lblWarning.setForeground(Color.red);
@@ -391,6 +395,7 @@ public class TypePersonView extends javax.swing.JPanel {
                     typePersonDao.delete(typePerson.getId());
                     JOptionPane.showMessageDialog(btnDelete, "Se elimino correctamente la TypePerson: " + typePerson);
                     loadTypePeople();
+                    pv.loadTypePeople();
                     cleanForm();
                 }
             }
@@ -416,7 +421,7 @@ public class TypePersonView extends javax.swing.JPanel {
      * Call TypePersonDao.getTypePeople() Recupera datos TypePeople y lo carga
      * al jTable
      */
-    private void loadTypePeople() {
+    public void loadTypePeople() {
         try {
             loadTable(typePersonDao.getList());
         } catch (Exception ex) {

@@ -61,11 +61,12 @@ public class PersonView extends javax.swing.JPanel {
     }
 
     private void addImageButtons() {
-        btnDelete.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnDelete));
-        btnSave.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnSave));
-        btnCleanForm.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnClean));
-        btnSaveChanges.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnEdit));
-        lblSearch.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnSearch));
+        btnDelete.setIcon(new ButtonsColors().addIconButton(FileLocation.pathIconBtnDelete));
+        btnSave.setIcon(new ButtonsColors().addIconButton(FileLocation.pathIconBtnSave));
+        btnCleanForm.setIcon(new ButtonsColors().addIconButton(FileLocation.pathIconBtnClean));
+        btnSaveChanges.setIcon(new ButtonsColors().addIconButton(FileLocation.pathIconBtnEdit));
+        btnTakePhoto.setIcon(new ButtonsColors().addIconButton(FileLocation.pathIconBtnCamera));
+        lblSearch.setIcon(new ButtonsColors().addIconButton(FileLocation.pathIconBtnSearch));
     }
 
     /**
@@ -480,7 +481,7 @@ public class PersonView extends javax.swing.JPanel {
         lblPhoto.setIcon(null);
     }
 
-    private void loadPeople() {
+    public void loadPeople() {
         try {
             loadTable(personDao.getList());
         } catch (Exception ex) {
@@ -506,10 +507,9 @@ public class PersonView extends javax.swing.JPanel {
             if (txtIdentificationId.getText().equals("")) {
                 JOptionPane.showMessageDialog(txtIdentificationId, "Debe ingresar primero la cédula");
             } else {
-                BufferedImage image = webcam.getImage();
                 //nombre y formato de la imagen de salida
-                ImageIO.write(image, "PNG", new File(System.getProperty("user.dir") + "/src/main/resources/photos/persona/" + txtIdentificationId.getText() + ".png"));
-                loadImageGuardada(txtIdentificationId.getText() + ".png");
+                Camera.takePhoto(webcam.getImage(), txtIdentificationId.getText());
+                loadPhotoPerson(txtIdentificationId.getText() + ".png");
                 webcam.close();
                 panel.stop();
                 encendidoCamara = false;
@@ -522,7 +522,7 @@ public class PersonView extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnTakePhotoActionPerformed
 
-    private void loadImageGuardada(String name) {
+    private void loadPhotoPerson(String name) {
         lblPhoto.setIcon(Images.getImage(name));
         lblPhoto.validate();
         lblPhoto.repaint();
@@ -571,7 +571,7 @@ public class PersonView extends javax.swing.JPanel {
                 txtPhone.setText(person.getPhone());
                 lblActive.setText(person.getActive());
                 System.out.println("Foto: "+person.getPhoto());
-                loadImageGuardada(person.getPhoto()+".png");
+                loadPhotoPerson(person.getPhoto()+".png");
                 TypePerson typePerson = typePersonDao.get(person.getTypePersonId());
                 cbTypePeople.getModel().setSelectedItem(typePerson);
                 txtIdentificationId.setEnabled(false);
@@ -589,6 +589,7 @@ public class PersonView extends javax.swing.JPanel {
 
     public void loadTypePeople() {
         try {
+            cbTypePeople.removeAllItems();
             List<TypePerson> items = typePersonDao.getList();
             for (TypePerson tp : items) {
                 cbTypePeople.addItem(tp);

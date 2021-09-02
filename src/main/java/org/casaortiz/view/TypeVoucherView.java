@@ -41,11 +41,11 @@ public class TypeVoucherView extends javax.swing.JPanel {
     }
     
     private void addImageButtons() {
-        btnDelete.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnDelete));
-        btnSave.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnSave));
-        btnCleanForm.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnClean));
-        btnSaveChanges.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnEdit));
-        lblSearch.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnSearch));
+        btnDelete.setIcon(new ButtonsColors().addIconButton(FileLocation.pathIconBtnDelete));
+        btnSave.setIcon(new ButtonsColors().addIconButton(FileLocation.pathIconBtnSave));
+        btnCleanForm.setIcon(new ButtonsColors().addIconButton(FileLocation.pathIconBtnClean));
+        btnSaveChanges.setIcon(new ButtonsColors().addIconButton(FileLocation.pathIconBtnEdit));
+        lblSearch.setIcon(new ButtonsColors().addIconButton(FileLocation.pathIconBtnSearch));
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -419,7 +419,7 @@ public class TypeVoucherView extends javax.swing.JPanel {
      * Call TypeVoucherDao.getTypeVoucher()
      * Recupera datos TypeVoucher y lo carga al jTable
      */
-    private void loadTypeVouchers(){
+    public void loadTypeVouchers(){
         try {
             loadTable(typeVoucherDao.getList());
         } catch (Exception ex) {

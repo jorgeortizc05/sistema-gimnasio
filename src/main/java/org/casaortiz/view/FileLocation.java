@@ -11,12 +11,13 @@ package org.casaortiz.view;
  */
 public class FileLocation {
     
-    public static String pathImage = System.getProperty("user.dir") + "/src/main/resources/photos/persona/";
+    public static String pathImagePerson = System.getProperty("user.dir") + "/src/main/resources/photos/persona/";
     
     public static String pathIconBtnSave = "/icons/system/save.png";
     public static String pathIconBtnDelete = "/icons/system/delete.png";
     public static String pathIconBtnClean = "/icons/system/clean.png";
     public static String pathIconBtnEdit = "/icons/system/edit.png";
     public static String pathIconBtnSearch = "/icons/system/search.png";
+    public static String pathIconBtnCamera = "/icons/system/camera.png";
 
 }

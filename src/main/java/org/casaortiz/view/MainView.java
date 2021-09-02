@@ -28,10 +28,10 @@ public class MainView extends javax.swing.JFrame {
     public MainView() {
         initComponents();
         categoryView = new CategoryView();
-        typePersonView = new TypePersonView();
         typeVoucherView = new TypeVoucherView();
         typeSuscriptionView = new TypeSuscriptionView();
         personView = new PersonView();
+        typePersonView = new TypePersonView(personView);
         jTabbedPane1.add(categoryView);
         jTabbedPane1.add(typePersonView);
         jTabbedPane1.add(typeVoucherView);
@@ -140,6 +140,7 @@ public class MainView extends javax.swing.JFrame {
     private void miCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miCategoriaActionPerformed
         // TODO add your handling code here:
         jTabbedPane1.setSelectedComponent(categoryView);
+        categoryView.loadCategories();
         
     }//GEN-LAST:event_miCategoriaActionPerformed
 
@@ -151,6 +152,7 @@ public class MainView extends javax.swing.JFrame {
     private void miTypeVoucherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miTypeVoucherActionPerformed
         // TODO add your handling code here:
         jTabbedPane1.setSelectedComponent(typeVoucherView);
+        typeVoucherView.loadTypeVouchers();
     }//GEN-LAST:event_miTypeVoucherActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed

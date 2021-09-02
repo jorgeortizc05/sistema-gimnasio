@@ -5,12 +5,16 @@
  */
 package org.casaortiz.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 /**
  * Model Category
  * @author Ing. Jorge Luis Ortiz Cáceres
  * @since 31/08/2021
  * @version 0.0.1
  */
+
 public class Category {
     
     private int id;

@@ -16,7 +16,7 @@ import javax.swing.JButton;
  */
 public class ButtonsColors {
     
-    public ImageIcon addImageButtons1(String pathIcon){
+    public ImageIcon addIconButton(String pathIcon){
         ImageIcon iconBtn = createImageIcon(pathIcon);
         return iconBtn;
     }
