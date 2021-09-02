@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import oracle.jdbc.OracleTypes;
+import org.casaortiz.dao.interfaces.ICrud;
 import org.casaortiz.db.ConnectionDBOracle;
 import org.casaortiz.model.TypePerson;
 
@@ -20,7 +21,7 @@ import org.casaortiz.model.TypePerson;
  * @since 31/08/2021
  * @version 0.0.1
  */
-public class TypePersonDao {
+public class TypePersonDao implements ICrud<TypePerson>{
     ConnectionDBOracle connectionDBOracle;
     
     public TypePersonDao(){
@@ -115,7 +116,7 @@ public class TypePersonDao {
      * @throws SQLException
      * @throws Exception 
      */
-    public TypePerson getTypePerson(int id) throws SQLException, Exception{
+    public TypePerson get(int id) throws SQLException, Exception{
         Connection conn = null;
         CallableStatement cs = null;
         ResultSet rs = null;
@@ -155,7 +156,7 @@ public class TypePersonDao {
      * @throws SQLException
      * @throws Exception 
      */
-    public List<TypePerson> getTypePeople() throws SQLException, Exception{
+    public List<TypePerson> getList() throws SQLException, Exception{
         Connection conn = null;
         CallableStatement cs = null;
         ResultSet rs = null;
@@ -197,7 +198,7 @@ public class TypePersonDao {
      * @return List<TypePerson>
      * @throws Exception 
      */
-    public List<TypePerson> searchTypePeople(String texto) throws Exception{
+    public List<TypePerson> searchList(String texto) throws Exception{
         Connection conn = null;
         CallableStatement cs = null;
         ResultSet rs = null;

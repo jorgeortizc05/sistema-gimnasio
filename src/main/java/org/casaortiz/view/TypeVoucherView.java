@@ -5,6 +5,7 @@
  */
 package org.casaortiz.view;
 
+import org.casaortiz.view.components.ButtonsColors;
 import java.awt.Color;
 import java.awt.Image;
 import java.net.URL;
@@ -17,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.casaortiz.dao.TypeVoucherDao;
 import org.casaortiz.model.TypeVoucher;
+import org.casaortiz.view.components.TableModels;
 
 /**
  * JPanel TypeVoucherView
@@ -38,33 +40,12 @@ public class TypeVoucherView extends javax.swing.JPanel {
         addImageButtons();
     }
     
-    private void addImageButtons(){
-        ImageIcon iconBtnDelete = createImageIcon("/icons/system/delete.png", "boton eliminar");
-        ImageIcon iconBtnSave = createImageIcon("/icons/system/diskette.png", "boton guardar");
-        ImageIcon iconBtnCleanForm = createImageIcon("/icons/system/clean.png", "boton CleanForm");
-        ImageIcon iconBtnSaveChanges = createImageIcon("/icons/system/edit.png", "boton SaveChanges");
-        ImageIcon iconLblBuscar = createImageIcon("/icons/system/search.png", "label lblBuscar");
-
-        btnDelete.setIcon(iconBtnDelete);
-        btnSave.setIcon(iconBtnSave);
-        btnCleanForm.setIcon(iconBtnCleanForm);
-        btnSaveChanges.setIcon(iconBtnSaveChanges);
-        lblSearch.setIcon(iconLblBuscar);
-    }
-    
-    protected ImageIcon createImageIcon(String path,
-                                           String description) {
-        URL imgURL = getClass().getResource(path);
-        
-        if (imgURL != null) {
-            Image img = new ImageIcon(imgURL).getImage();
-            System.out.println("imgURL = " + imgURL.getPath());
-            return new ImageIcon(img.getScaledInstance(30, 30, Image.SCALE_SMOOTH), description);
-        } else {
-            System.err.println("Couldn't find file: " + path);
-            System.out.println("imgURL = " + imgURL.getPath());
-            return null;
-        }
+    private void addImageButtons() {
+        btnDelete.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnDelete));
+        btnSave.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnSave));
+        btnCleanForm.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnClean));
+        btnSaveChanges.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnEdit));
+        lblSearch.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnSearch));
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -341,7 +322,7 @@ public class TypeVoucherView extends javax.swing.JPanel {
             btnSave.setVisible(false);
             btnSaveChanges.setVisible(true);
             try {
-                typeVoucher = typeVoucherDao.getTypeVoucher(Integer.parseInt(tListTypeVoucher.getValueAt(fila, 0).toString()));
+                typeVoucher = typeVoucherDao.get(Integer.parseInt(tListTypeVoucher.getValueAt(fila, 0).toString()));
                 lblID.setText(String.valueOf(typeVoucher.getId()));
                 txtTypeVoucher.setText(typeVoucher.getName());
                 txtDescription.setText(typeVoucher.getDescription());
@@ -440,7 +421,7 @@ public class TypeVoucherView extends javax.swing.JPanel {
      */
     private void loadTypeVouchers(){
         try {
-            loadTable(typeVoucherDao.getTypeVouchers());
+            loadTable(typeVoucherDao.getList());
         } catch (Exception ex) {
             Logger.getLogger(TypeVoucherView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "Error al obtener datos de TypeVoucher: " +ex.getMessage());
@@ -454,7 +435,7 @@ public class TypeVoucherView extends javax.swing.JPanel {
      */
     private void loadSearchTypeVouchers(String text){
         try {
-            loadTable(typeVoucherDao.searchTypeVouchers(text));
+            loadTable(typeVoucherDao.searchList(text));
         } catch (Exception ex) {
             Logger.getLogger(TypeVoucherView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "Error al buscar: " +ex.getMessage());
@@ -466,18 +447,8 @@ public class TypeVoucherView extends javax.swing.JPanel {
      * @param List<TypeVoucher>
      */
     private void loadTable(List<TypeVoucher> typeVouchers){
-        cleanTable();
-        DefaultTableModel modelo = (DefaultTableModel) tListTypeVoucher.getModel();
-        List<TypeVoucher> items = typeVouchers;
-        Object rowData[] = new Object[3];
-        for(TypeVoucher c: items){
-            System.out.println(c);
-            rowData[0] = c.getId();
-            rowData[1] = c.getName();
-            rowData[2] = c.getDescription();
-            modelo.addRow(rowData);
-        }
-        tListTypeVoucher.setModel(modelo);
+        
+        tListTypeVoucher.setModel(TableModels.getModelTypeVoucher(tListTypeVoucher, typeVouchers));
     }
     
     /**

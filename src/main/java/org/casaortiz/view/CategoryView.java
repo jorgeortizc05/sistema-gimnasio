@@ -5,16 +5,14 @@
  */
 package org.casaortiz.view;
 
+import org.casaortiz.view.components.ButtonsColors;
+import org.casaortiz.view.components.TableModels;
 import java.awt.Color;
-import java.awt.Image;
-import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 import org.casaortiz.dao.CategoryDao;
 import org.casaortiz.model.Category;
 
@@ -40,32 +38,11 @@ public class CategoryView extends javax.swing.JPanel {
     }
 
     private void addImageButtons() {
-        ImageIcon iconBtnDelete = createImageIcon("/icons/system/delete.png", "boton eliminar");
-        ImageIcon iconBtnSave = createImageIcon("/icons/system/diskette.png", "boton guardar");
-        ImageIcon iconBtnCleanForm = createImageIcon("/icons/system/clean.png", "boton CleanForm");
-        ImageIcon iconBtnSaveChanges = createImageIcon("/icons/system/edit.png", "boton SaveChanges");
-        ImageIcon iconLblBuscar = createImageIcon("/icons/system/search.png", "label lblBuscar");
-
-        btnDelete.setIcon(iconBtnDelete);
-        btnSave.setIcon(iconBtnSave);
-        btnCleanForm.setIcon(iconBtnCleanForm);
-        btnSaveChanges.setIcon(iconBtnSaveChanges);
-        lblSearch.setIcon(iconLblBuscar);
-    }
-
-    protected ImageIcon createImageIcon(String path,
-            String description) {
-        URL imgURL = getClass().getResource(path);
-
-        if (imgURL != null) {
-            Image img = new ImageIcon(imgURL).getImage();
-            System.out.println("imgURL = " + imgURL.getPath());
-            return new ImageIcon(img.getScaledInstance(30, 30, Image.SCALE_SMOOTH), description);
-        } else {
-            System.err.println("Couldn't find file: " + path);
-            System.out.println("imgURL = " + imgURL.getPath());
-            return null;
-        }
+        btnDelete.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnDelete));
+        btnSave.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnSave));
+        btnCleanForm.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnClean));
+        btnSaveChanges.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnEdit));
+        lblSearch.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnSearch));
     }
 
     /**
@@ -342,7 +319,7 @@ public class CategoryView extends javax.swing.JPanel {
             btnSave.setVisible(false);
             btnSaveChanges.setVisible(true);
             try {
-                category = catDao.getCategory(Integer.parseInt(tListCategories.getValueAt(fila, 0).toString()));
+                category = catDao.get(Integer.parseInt(tListCategories.getValueAt(fila, 0).toString()));
                 lblID.setText(String.valueOf(category.getId()));
                 txtCategory.setText(category.getName());
                 txtDescription.setText(category.getDescription());
@@ -435,9 +412,7 @@ public class CategoryView extends javax.swing.JPanel {
      * Vacia datos del jTable tListCategories
      */
     private void cleanTable() {
-        DefaultTableModel modelo = (DefaultTableModel) tListCategories.getModel();
-        modelo.setRowCount(0);
-        tListCategories.setModel(modelo);
+        tListCategories.setModel(TableModels.cleanTable(tListCategories));
     }
 
     /**
@@ -446,7 +421,7 @@ public class CategoryView extends javax.swing.JPanel {
      */
     private void loadCategories() {
         try {
-            loadTable(catDao.getCategories());
+            loadTable(catDao.getList());
         } catch (Exception ex) {
             Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "Error al obtener datos de categoria: " + ex.getMessage());
@@ -461,7 +436,7 @@ public class CategoryView extends javax.swing.JPanel {
      */
     private void loadSearchCategories(String text) {
         try {
-            loadTable(catDao.searchCategories(text));
+            loadTable(catDao.searchList(text));
         } catch (Exception ex) {
             Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "Error al buscar: " + ex.getMessage());
@@ -475,20 +450,9 @@ public class CategoryView extends javax.swing.JPanel {
      * @param List<Category>
      */
     private void loadTable(List<Category> categories) {
-        cleanTable();
-        DefaultTableModel modelo = (DefaultTableModel) tListCategories.getModel();
-        List<Category> items = categories;
-        Object rowData[] = new Object[3];
-        for (Category c : items) {
-            System.out.println(c);
-            rowData[0] = c.getId();
-            rowData[1] = c.getName();
-            rowData[2] = c.getDescription();
-            modelo.addRow(rowData);
-        }
-        tListCategories.setModel(modelo);
+        tListCategories.setModel(TableModels.getModelCategories(tListCategories, categories));
+        
     }
-
     /**
      * Limpia todo el formulario del jPanel
      */

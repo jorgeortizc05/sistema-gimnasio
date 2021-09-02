@@ -5,6 +5,7 @@
  */
 package org.casaortiz.view;
 
+import org.casaortiz.view.components.ButtonsColors;
 import java.awt.Color;
 import java.awt.Image;
 import java.net.URL;
@@ -19,6 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.casaortiz.dao.TypeSuscriptionDao;
 import org.casaortiz.model.TypeSuscription;
+import org.casaortiz.view.components.TableModels;
 
 /**
  * JPanel TypeSuscriptionView
@@ -40,33 +42,12 @@ public class TypeSuscriptionView extends javax.swing.JPanel {
         addImageButtons();
     }
     
-    private void addImageButtons(){
-        ImageIcon iconBtnDelete = createImageIcon("/icons/system/delete.png", "boton eliminar");
-        ImageIcon iconBtnSave = createImageIcon("/icons/system/diskette.png", "boton guardar");
-        ImageIcon iconBtnCleanForm = createImageIcon("/icons/system/clean.png", "boton CleanForm");
-        ImageIcon iconBtnSaveChanges = createImageIcon("/icons/system/edit.png", "boton SaveChanges");
-        ImageIcon iconLblBuscar = createImageIcon("/icons/system/search.png", "label lblBuscar");
-
-        btnDelete.setIcon(iconBtnDelete);
-        btnSave.setIcon(iconBtnSave);
-        btnCleanForm.setIcon(iconBtnCleanForm);
-        btnSaveChanges.setIcon(iconBtnSaveChanges);
-        lblSearch.setIcon(iconLblBuscar);
-    }
-    
-    protected ImageIcon createImageIcon(String path,
-                                           String description) {
-        URL imgURL = getClass().getResource(path);
-        
-        if (imgURL != null) {
-            Image img = new ImageIcon(imgURL).getImage();
-            System.out.println("imgURL = " + imgURL.getPath());
-            return new ImageIcon(img.getScaledInstance(30, 30, Image.SCALE_SMOOTH), description);
-        } else {
-            System.err.println("Couldn't find file: " + path);
-            System.out.println("imgURL = " + imgURL.getPath());
-            return null;
-        }
+    private void addImageButtons() {
+        btnDelete.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnDelete));
+        btnSave.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnSave));
+        btnCleanForm.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnClean));
+        btnSaveChanges.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnEdit));
+        lblSearch.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnSearch));
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -392,7 +373,7 @@ public class TypeSuscriptionView extends javax.swing.JPanel {
             btnSave.setVisible(false);
             btnSaveChanges.setVisible(true);
             try {
-                typeSuscription = typeSuscriptionDao.getTypeSuscription(Integer.parseInt(tListTypeSuscriptions.getValueAt(fila, 0).toString()));
+                typeSuscription = typeSuscriptionDao.get(Integer.parseInt(tListTypeSuscriptions.getValueAt(fila, 0).toString()));
                 lblID.setText(String.valueOf(typeSuscription.getId()));
                 txtTypeSuscription.setText(typeSuscription.getName());
                 txtNumDays.setText(String.valueOf(typeSuscription.getNum_days()));
@@ -516,7 +497,7 @@ public class TypeSuscriptionView extends javax.swing.JPanel {
      */
     public void loadTypeSuscription(){
         try {
-            loadTable(typeSuscriptionDao.getTypeSuscriptions());
+            loadTable(typeSuscriptionDao.getList());
         } catch (Exception ex) {
             Logger.getLogger(TypeSuscriptionView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "Error al obtener datos de TypeSuscription: " +ex.getMessage());
@@ -530,7 +511,7 @@ public class TypeSuscriptionView extends javax.swing.JPanel {
      */
     private void loadSearchTypeSuscriptions(String text){
         try {
-            loadTable(typeSuscriptionDao.searchTypeSuscriptions(text));
+            loadTable(typeSuscriptionDao.searchList(text));
         } catch (Exception ex) {
             Logger.getLogger(TypeSuscriptionView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "Error al buscar: " +ex.getMessage());
@@ -542,20 +523,8 @@ public class TypeSuscriptionView extends javax.swing.JPanel {
      * @param List<TypeSuscription>
      */
     private void loadTable(List<TypeSuscription> typeSuscriptions){
-        cleanTable();
-        DefaultTableModel modelo = (DefaultTableModel) tListTypeSuscriptions.getModel();
-        List<TypeSuscription> items = typeSuscriptions;
-        Object rowData[] = new Object[5];
-        for(TypeSuscription ts: items){
-            System.out.println(ts);
-            rowData[0] = ts.getId();
-            rowData[1] = ts.getName();
-            rowData[2] = ts.getNum_days();
-            rowData[3] = ts.getPrice();
-            rowData[4] = ts.getDescription();
-            modelo.addRow(rowData);
-        }
-        tListTypeSuscriptions.setModel(modelo);
+        
+        tListTypeSuscriptions.setModel(TableModels.getModelTypeSuscription(tListTypeSuscriptions, typeSuscriptions));
     }
     
     /**

@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package org.casaortiz.dao;
+import org.casaortiz.dao.interfaces.ICrud;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -20,7 +21,7 @@ import org.casaortiz.model.Category;
  * @since 31/08/2021
  * @version 0.0.1
  */
-public class CategoryDao {
+public class CategoryDao implements ICrud<Category>{
     ConnectionDBOracle connectionDBOracle;
     
     public CategoryDao(){
@@ -34,7 +35,9 @@ public class CategoryDao {
      * @throws SQLException
      * @throws Exception 
      */
+    @Override
     public void insert(Category item) throws SQLException, Exception{
+        item = new Category();
         Connection conn = null;
         CallableStatement cstmt = null;
         conn = connectionDBOracle.getConnection();
@@ -115,7 +118,7 @@ public class CategoryDao {
      * @throws SQLException
      * @throws Exception 
      */
-    public Category getCategory(int id) throws SQLException, Exception{
+    public Category get(int id) throws SQLException, Exception{
         Connection conn = null;
         CallableStatement cs = null;
         ResultSet rs = null;
@@ -155,7 +158,7 @@ public class CategoryDao {
      * @throws SQLException
      * @throws Exception 
      */
-    public List<Category> getCategories() throws SQLException, Exception{
+    public List<Category> getList() throws SQLException, Exception{
         Connection conn = null;
         CallableStatement cs = null;
         ResultSet rs = null;
@@ -197,7 +200,7 @@ public class CategoryDao {
      * @return List<Category>
      * @throws Exception 
      */
-    public List<Category> searchCategories(String texto) throws Exception{
+    public List<Category> searchList(String texto) throws SQLException, Exception{
         Connection conn = null;
         CallableStatement cs = null;
         ResultSet rs = null;

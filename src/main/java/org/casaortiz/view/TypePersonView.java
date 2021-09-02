@@ -5,6 +5,7 @@
  */
 package org.casaortiz.view;
 
+import org.casaortiz.view.components.ButtonsColors;
 import java.awt.Color;
 import java.awt.Image;
 import java.net.URL;
@@ -17,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.casaortiz.dao.TypePersonDao;
 import org.casaortiz.model.TypePerson;
+import org.casaortiz.view.components.TableModels;
 
 /**
  * JPanel TypePersonView Para manejar el CRUD de TypePerson
@@ -40,32 +42,11 @@ public class TypePersonView extends javax.swing.JPanel {
     }
 
     private void addImageButtons() {
-        ImageIcon iconBtnDelete = createImageIcon("/icons/system/delete.png", "boton eliminar");
-        ImageIcon iconBtnSave = createImageIcon("/icons/system/diskette.png", "boton guardar");
-        ImageIcon iconBtnCleanForm = createImageIcon("/icons/system/clean.png", "boton CleanForm");
-        ImageIcon iconBtnSaveChanges = createImageIcon("/icons/system/edit.png", "boton SaveChanges");
-        ImageIcon iconLblBuscar = createImageIcon("/icons/system/search.png", "label lblBuscar");
-
-        btnDelete.setIcon(iconBtnDelete);
-        btnSave.setIcon(iconBtnSave);
-        btnCleanForm.setIcon(iconBtnCleanForm);
-        btnSaveChanges.setIcon(iconBtnSaveChanges);
-        lblSearch.setIcon(iconLblBuscar);
-    }
-
-    protected ImageIcon createImageIcon(String path,
-            String description) {
-        URL imgURL = getClass().getResource(path);
-
-        if (imgURL != null) {
-            Image img = new ImageIcon(imgURL).getImage();
-            System.out.println("imgURL = " + imgURL.getPath());
-            return new ImageIcon(img.getScaledInstance(30, 30, Image.SCALE_SMOOTH), description);
-        } else {
-            System.err.println("Couldn't find file: " + path);
-            System.out.println("imgURL = " + imgURL.getPath());
-            return null;
-        }
+        btnDelete.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnDelete));
+        btnSave.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnSave));
+        btnCleanForm.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnClean));
+        btnSaveChanges.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnEdit));
+        lblSearch.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnSearch));
     }
 
     /**
@@ -339,7 +320,7 @@ public class TypePersonView extends javax.swing.JPanel {
             btnSave.setVisible(false);
             btnSaveChanges.setVisible(true);
             try {
-                typePerson = typePersonDao.getTypePerson(Integer.parseInt(tListTypePeople.getValueAt(fila, 0).toString()));
+                typePerson = typePersonDao.get(Integer.parseInt(tListTypePeople.getValueAt(fila, 0).toString()));
                 lblID.setText(String.valueOf(typePerson.getId()));
                 txtTypePerson.setText(typePerson.getName());
                 txtDescription.setText(typePerson.getDescription());
@@ -437,7 +418,7 @@ public class TypePersonView extends javax.swing.JPanel {
      */
     private void loadTypePeople() {
         try {
-            loadTable(typePersonDao.getTypePeople());
+            loadTable(typePersonDao.getList());
         } catch (Exception ex) {
             Logger.getLogger(TypePersonView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "Error al obtener datos de TypePerson: " + ex.getMessage());
@@ -452,7 +433,7 @@ public class TypePersonView extends javax.swing.JPanel {
      */
     private void loadSearchTypePeople(String text) {
         try {
-            loadTable(typePersonDao.searchTypePeople(text));
+            loadTable(typePersonDao.searchList(text));
         } catch (Exception ex) {
             Logger.getLogger(TypePersonView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "Error al buscar: " + ex.getMessage());
@@ -465,18 +446,7 @@ public class TypePersonView extends javax.swing.JPanel {
      * @param List<TypePerson>
      */
     private void loadTable(List<TypePerson> typePeople) {
-        cleanTable();
-        DefaultTableModel modelo = (DefaultTableModel) tListTypePeople.getModel();
-        List<TypePerson> items = typePeople;
-        Object rowData[] = new Object[3];
-        for (TypePerson c : items) {
-            System.out.println(c);
-            rowData[0] = c.getId();
-            rowData[1] = c.getName();
-            rowData[2] = c.getDescription();
-            modelo.addRow(rowData);
-        }
-        tListTypePeople.setModel(modelo);
+        tListTypePeople.setModel(TableModels.getModelTypePerson(tListTypePeople, typePeople));
     }
 
     /**

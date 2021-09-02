@@ -5,6 +5,7 @@
  */
 package org.casaortiz.view;
 
+import org.casaortiz.view.components.ButtonsColors;
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamException;
 import com.github.sarxos.webcam.WebcamPanel;
@@ -29,6 +30,7 @@ import org.casaortiz.dao.PersonDao;
 import org.casaortiz.dao.TypePersonDao;
 import org.casaortiz.model.Person;
 import org.casaortiz.model.TypePerson;
+import org.casaortiz.view.components.TableModels;
 
 /**
  *
@@ -59,32 +61,11 @@ public class PersonView extends javax.swing.JPanel {
     }
 
     private void addImageButtons() {
-        ImageIcon iconBtnDelete = createImageIcon("/icons/system/delete.png", "boton eliminar");
-        ImageIcon iconBtnSave = createImageIcon("/icons/system/diskette.png", "boton guardar");
-        ImageIcon iconBtnCleanForm = createImageIcon("/icons/system/clean.png", "boton CleanForm");
-        ImageIcon iconBtnSaveChanges = createImageIcon("/icons/system/edit.png", "boton SaveChanges");
-        ImageIcon iconLblBuscar = createImageIcon("/icons/system/search.png", "label lblBuscar");
-
-        btnDelete.setIcon(iconBtnDelete);
-        btnSave.setIcon(iconBtnSave);
-        btnCleanForm.setIcon(iconBtnCleanForm);
-        btnSaveChanges.setIcon(iconBtnSaveChanges);
-        lblSearch.setIcon(iconLblBuscar);
-    }
-
-    protected ImageIcon createImageIcon(String path,
-            String description) {
-        URL imgURL = getClass().getResource(path);
-
-        if (imgURL != null) {
-            Image img = new ImageIcon(imgURL).getImage();
-            System.out.println("imgURL = " + imgURL.getPath());
-            return new ImageIcon(img.getScaledInstance(30, 30, Image.SCALE_SMOOTH), description);
-        } else {
-            System.err.println("Couldn't find file: " + path);
-            System.out.println("imgURL = " + imgURL.getPath());
-            return null;
-        }
+        btnDelete.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnDelete));
+        btnSave.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnSave));
+        btnCleanForm.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnClean));
+        btnSaveChanges.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnEdit));
+        lblSearch.setIcon(new ButtonsColors().addImageButtons1(FileLocation.pathIconBtnSearch));
     }
 
     /**
@@ -397,8 +378,8 @@ public class PersonView extends javax.swing.JPanel {
                 JOptionPane.showConfirmDialog(tListPeople, "Debe seleccionar una fila");
             } else {
                 int estadoEliminacionDialog = JOptionPane.showConfirmDialog(btnDelete,
-                    "Seguro que desea eliminar " + person + " ?",
-                    "Confirmar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                        "Seguro que desea eliminar " + person + " ?",
+                        "Confirmar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (estadoEliminacionDialog == 0) {
                     personDao.delete(person.getId());
                     JOptionPane.showMessageDialog(btnDelete, "Se elimino correctamente la categoria: " + person);
@@ -481,7 +462,7 @@ public class PersonView extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(btnSave, "Exception: Error al guardar: " + ex.getMessage());
         }
     }//GEN-LAST:event_btnSaveActionPerformed
-    
+
     private void cleanForm() {
         lblID.setText("");
         txtFirstName.setText("");
@@ -496,11 +477,12 @@ public class PersonView extends javax.swing.JPanel {
         btnSave.setVisible(true);
         btnSaveChanges.setVisible(false);
         btnDelete.setVisible(false);
+        lblPhoto.setIcon(null);
     }
-    
+
     private void loadPeople() {
         try {
-            loadTable(personDao.getPeople());
+            loadTable(personDao.getList());
         } catch (Exception ex) {
             Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "Error al obtener datos de categoria: " + ex.getMessage());
@@ -508,21 +490,8 @@ public class PersonView extends javax.swing.JPanel {
     }
 
     private void loadTable(List<Person> people) {
-        cleanTable();
-        DefaultTableModel modelo = (DefaultTableModel) tListPeople.getModel();
-        List<Person> items = people;
-        Object rowData[] = new Object[6];
-        for (Person p : items) {
-            rowData[0] = p.getId();
-            rowData[1] = p.getFirstName();
-            rowData[2] = p.getLastName();
-            rowData[3] = p.getEmail();
-            rowData[4] = p.getPhone();
-            rowData[5] = p.getActive();
 
-            modelo.addRow(rowData);
-        }
-        tListPeople.setModel(modelo);
+        tListPeople.setModel(TableModels.getModelPerson(tListPeople, people));
     }
 
     private void cleanTable() {
@@ -554,21 +523,9 @@ public class PersonView extends javax.swing.JPanel {
     }//GEN-LAST:event_btnTakePhotoActionPerformed
 
     private void loadImageGuardada(String name) {
-        System.out.println(name);
-        try {
-            String string = System.getProperty("user.dir") + "/src/main/resources/photos/persona/" + name;
-
-            Image img = new ImageIcon(string).getImage();
-
-            //Me permite redimensionar la imagen para que se adapte al jLabel
-            ImageIcon ii = new ImageIcon(img.getScaledInstance(400, 300, Image.SCALE_SMOOTH));
-
-            lblPhoto.setIcon(ii);
-            lblPhoto.validate();
-            lblPhoto.repaint();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        lblPhoto.setIcon(Images.getImage(name));
+        lblPhoto.validate();
+        lblPhoto.repaint();
     }
 
     private void lblCameraMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCameraMouseClicked
@@ -603,7 +560,7 @@ public class PersonView extends javax.swing.JPanel {
             btnSaveChanges.setVisible(true);
             try {
 
-                person = personDao.getPerson(Integer.parseInt(tListPeople.getValueAt(fila, 0).toString()));
+                person = personDao.get(Integer.parseInt(tListPeople.getValueAt(fila, 0).toString()));
                 lblID.setText(String.valueOf(person.getId()));
                 txtFirstName.setText(person.getFirstName());
                 txtLastName.setText(person.getLastName());
@@ -613,7 +570,9 @@ public class PersonView extends javax.swing.JPanel {
                 txtDate.setDatoFecha(person.getBirthday());
                 txtPhone.setText(person.getPhone());
                 lblActive.setText(person.getActive());
-                TypePerson typePerson = typePersonDao.getTypePerson(person.getTypePersonId());
+                System.out.println("Foto: "+person.getPhoto());
+                loadImageGuardada(person.getPhoto()+".png");
+                TypePerson typePerson = typePersonDao.get(person.getTypePersonId());
                 cbTypePeople.getModel().setSelectedItem(typePerson);
                 txtIdentificationId.setEnabled(false);
 
@@ -630,7 +589,7 @@ public class PersonView extends javax.swing.JPanel {
 
     public void loadTypePeople() {
         try {
-            List<TypePerson> items = typePersonDao.getTypePeople();
+            List<TypePerson> items = typePersonDao.getList();
             for (TypePerson tp : items) {
                 cbTypePeople.addItem(tp);
             }
@@ -641,7 +600,7 @@ public class PersonView extends javax.swing.JPanel {
 
     private void loadSearchPeople(String text) {
         try {
-            loadTable(personDao.searchPeople(text));
+            loadTable(personDao.searchList(text));
         } catch (Exception ex) {
             Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "Error al buscar: " + ex.getMessage());

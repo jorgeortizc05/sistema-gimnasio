@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import oracle.jdbc.OracleTypes;
+import org.casaortiz.dao.interfaces.ICrud;
 import org.casaortiz.db.ConnectionDBOracle;
 import org.casaortiz.model.TypeSuscription;
 
@@ -20,7 +21,7 @@ import org.casaortiz.model.TypeSuscription;
  * @since 31/08/2021
  * @version 0.0.1
  */
-public class TypeSuscriptionDao {
+public class TypeSuscriptionDao implements ICrud<TypeSuscription>{
     ConnectionDBOracle connectionDBOracle;
     
     public TypeSuscriptionDao(){
@@ -119,7 +120,7 @@ public class TypeSuscriptionDao {
      * @throws SQLException
      * @throws Exception 
      */
-    public TypeSuscription getTypeSuscription(int id) throws SQLException, Exception{
+    public TypeSuscription get(int id) throws SQLException, Exception{
         Connection conn = null;
         CallableStatement cs = null;
         ResultSet rs = null;
@@ -161,7 +162,7 @@ public class TypeSuscriptionDao {
      * @throws SQLException
      * @throws Exception 
      */
-    public List<TypeSuscription> getTypeSuscriptions() throws SQLException, Exception{
+    public List<TypeSuscription> getList() throws SQLException, Exception{
         Connection conn = null;
         CallableStatement cs = null;
         ResultSet rs = null;
@@ -205,7 +206,7 @@ public class TypeSuscriptionDao {
      * @return List<TypeSuscription>
      * @throws Exception 
      */
-    public List<TypeSuscription> searchTypeSuscriptions(String texto) throws Exception{
+    public List<TypeSuscription> searchList(String texto) throws Exception{
         Connection conn = null;
         CallableStatement cs = null;
         ResultSet rs = null;

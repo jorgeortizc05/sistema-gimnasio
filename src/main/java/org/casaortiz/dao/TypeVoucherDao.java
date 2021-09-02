@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import oracle.jdbc.OracleTypes;
+import org.casaortiz.dao.interfaces.ICrud;
 import org.casaortiz.db.ConnectionDBOracle;
 import org.casaortiz.model.TypePerson;
 import org.casaortiz.model.TypeVoucher;
@@ -21,7 +22,7 @@ import org.casaortiz.model.TypeVoucher;
  * @since 31/08/2021
  * @version 0.0.1
  */
-public class TypeVoucherDao {
+public class TypeVoucherDao implements ICrud<TypeVoucher>{
     ConnectionDBOracle connectionDBOracle;
     
     public TypeVoucherDao(){
@@ -116,7 +117,7 @@ public class TypeVoucherDao {
      * @throws SQLException
      * @throws Exception 
      */
-    public TypeVoucher getTypeVoucher(int id) throws SQLException, Exception{
+    public TypeVoucher get(int id) throws SQLException, Exception{
         Connection conn = null;
         CallableStatement cs = null;
         ResultSet rs = null;
@@ -156,7 +157,7 @@ public class TypeVoucherDao {
      * @throws SQLException
      * @throws Exception 
      */
-    public List<TypeVoucher> getTypeVouchers() throws SQLException, Exception{
+    public List<TypeVoucher> getList() throws SQLException, Exception{
         Connection conn = null;
         CallableStatement cs = null;
         ResultSet rs = null;
@@ -198,7 +199,7 @@ public class TypeVoucherDao {
      * @return List<TypeVoucher>
      * @throws Exception 
      */
-    public List<TypeVoucher> searchTypeVouchers(String texto) throws Exception{
+    public List<TypeVoucher> searchList(String texto) throws Exception{
         Connection conn = null;
         CallableStatement cs = null;
         ResultSet rs = null;
