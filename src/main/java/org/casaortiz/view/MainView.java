@@ -23,6 +23,7 @@ public class MainView extends javax.swing.JFrame {
     private TypePersonView typePersonView;
     private TypeVoucherView typeVoucherView;
     private TypeSuscriptionView typeSuscriptionView;
+    private PersonView personView;
     
     public MainView() {
         initComponents();
@@ -30,10 +31,12 @@ public class MainView extends javax.swing.JFrame {
         typePersonView = new TypePersonView();
         typeVoucherView = new TypeVoucherView();
         typeSuscriptionView = new TypeSuscriptionView();
+        personView = new PersonView();
         jTabbedPane1.add(categoryView);
         jTabbedPane1.add(typePersonView);
         jTabbedPane1.add(typeVoucherView);
         jTabbedPane1.add(typeSuscriptionView);
+        jTabbedPane1.add(personView);
         
     }
 
@@ -53,6 +56,7 @@ public class MainView extends javax.swing.JFrame {
         miCategoria = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         miTypePerson = new javax.swing.JMenuItem();
+        miClientes = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         miTypeVoucher = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -86,6 +90,14 @@ public class MainView extends javax.swing.JFrame {
             }
         });
         jMenu2.add(miTypePerson);
+
+        miClientes.setText("Clientes");
+        miClientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miClientesActionPerformed(evt);
+            }
+        });
+        jMenu2.add(miClientes);
 
         jMenuBar1.add(jMenu2);
 
@@ -147,6 +159,11 @@ public class MainView extends javax.swing.JFrame {
         jTabbedPane1.setSelectedComponent(typeSuscriptionView);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void miClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miClientesActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane1.setSelectedComponent(personView);
+    }//GEN-LAST:event_miClientesActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -204,6 +221,7 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JMenuItem miCategoria;
+    private javax.swing.JMenuItem miClientes;
     private javax.swing.JMenu miInventario;
     private javax.swing.JMenuItem miTypePerson;
     private javax.swing.JMenuItem miTypeVoucher;
