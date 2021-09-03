@@ -28,15 +28,18 @@ public class MainView extends javax.swing.JFrame {
     public MainView() {
         initComponents();
         categoryView = new CategoryView();
+        typePersonView = new TypePersonView(personView);
         typeVoucherView = new TypeVoucherView();
         typeSuscriptionView = new TypeSuscriptionView();
         personView = new PersonView();
-        typePersonView = new TypePersonView(personView);
+        
+        
+        
+        jTabbedPane1.add(typeSuscriptionView);
+        jTabbedPane1.add(personView);
         jTabbedPane1.add(categoryView);
         jTabbedPane1.add(typePersonView);
         jTabbedPane1.add(typeVoucherView);
-        jTabbedPane1.add(typeSuscriptionView);
-        jTabbedPane1.add(personView);
         
     }
 

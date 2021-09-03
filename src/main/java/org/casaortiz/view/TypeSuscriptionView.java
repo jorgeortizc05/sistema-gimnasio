@@ -7,15 +7,12 @@ package org.casaortiz.view;
 
 import org.casaortiz.view.components.ButtonsColors;
 import java.awt.Color;
-import java.awt.Image;
-import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.casaortiz.dao.TypeSuscriptionDao;
@@ -534,6 +531,8 @@ public class TypeSuscriptionView extends javax.swing.JPanel {
         lblID.setText("");
         lblWarning.setText("");
         txtTypeSuscription.setText("");
+        txtNumDays.setText("");
+        txtPrice.setText("");
         txtDescription.setText("");
         btnSave.setVisible(true);
         btnSaveChanges.setVisible(false);

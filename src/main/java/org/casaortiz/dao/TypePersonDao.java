@@ -4,8 +4,8 @@
  * and open the template in the editor.
  */
 package org.casaortiz.dao;
-import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,6 +13,7 @@ import java.util.List;
 import oracle.jdbc.OracleTypes;
 import org.casaortiz.dao.interfaces.ICrud;
 import org.casaortiz.db.ConnectionDBOracle;
+import org.casaortiz.model.Category;
 import org.casaortiz.model.TypePerson;
 
 /**
@@ -37,20 +38,18 @@ public class TypePersonDao implements ICrud<TypePerson>{
      */
     public void insert(TypePerson item) throws SQLException, Exception{
         Connection conn = null;
-        CallableStatement cstmt = null;
         conn = connectionDBOracle.getConnection();
         try {
             
-            cstmt = conn.prepareCall("{call TYPE_PERSON_API.INS(?,?)}");
-            cstmt.setString(1, item.getName());
-            cstmt.setString(2, item.getDescription());
-            cstmt.execute();
+            PreparedStatement st = conn.prepareStatement("insert into Type_Person (name, description) values (?,?)");
+            st.setString(1, item.getName());
+            st.setString(2, item.getDescription());
+            st.execute();
+            st.close();
         } catch (Exception e ) {
-            cstmt.close();
             connectionDBOracle.closeConnection(conn);
             throw new Exception("Error al insertar TypePerson: \n" + e.getMessage());
         }finally{
-            cstmt.close();
             connectionDBOracle.closeConnection(conn);
         }
     }
@@ -64,21 +63,20 @@ public class TypePersonDao implements ICrud<TypePerson>{
      */
     public void update(TypePerson item) throws SQLException, Exception{
         Connection conn = null;
-        CallableStatement cstmt = null;
         
         try {
             conn = connectionDBOracle.getConnection();
-            cstmt = conn.prepareCall("{call Type_Person_API.UPD(?,?,?)}");
-            cstmt.setInt(1, item.getId());
-            cstmt.setString(2, item.getName());
-            cstmt.setString(3, item.getDescription());
-            cstmt.execute();
+            PreparedStatement st = conn.prepareStatement("update Type_Person set name = ?, description = ? where id = ?");
+            st.setString(1, item.getName());
+            st.setString(2, item.getDescription());
+            st.setInt(3, item.getId());
+            st.execute();
+            st.close();
         } catch (Exception e) {
-            cstmt.close();
             connectionDBOracle.closeConnection(conn);
-            throw new Exception("Error al actualizar: \n" + e.getMessage());
+            throw new Exception("Error al actualizar TypePerson: \n" + e.getMessage());
         }finally{
-            cstmt.close();
+            
             connectionDBOracle.closeConnection(conn);
         }
     }
@@ -92,19 +90,16 @@ public class TypePersonDao implements ICrud<TypePerson>{
      */
     public void delete(int id) throws SQLException, Exception{
         Connection conn = null;
-        CallableStatement cstmt = null;
         try {
             conn = connectionDBOracle.getConnection();
-            cstmt = conn.prepareCall("{call Type_Person_API.DEL(?)}");
-            cstmt.setInt(1, id);
-            cstmt.execute();
+            PreparedStatement st = conn.prepareStatement("delete from Type_Person where id = "+id);
+            st.executeUpdate();
+            st.close();
         } catch (Exception e) {
             connectionDBOracle.closeConnection(conn);
-            cstmt.close();
             throw new Exception(e.getMessage());
         }finally{
             connectionDBOracle.closeConnection(conn);
-            cstmt.close();
         }
     }
     
@@ -118,33 +113,27 @@ public class TypePersonDao implements ICrud<TypePerson>{
      */
     public TypePerson get(int id) throws SQLException, Exception{
         Connection conn = null;
-        CallableStatement cs = null;
         ResultSet rs = null;
-        TypePerson typePerson = null;
+        TypePerson item = null;
         try {
             conn = connectionDBOracle.getConnection();
-            cs = conn.prepareCall("{call Type_Person_API.getTypePerson(?,?)}");
-            cs.setInt(1, id);
-            cs.registerOutParameter(2, OracleTypes.CURSOR);
-            cs.execute();
-            rs = (ResultSet) cs.getObject(2);
-            while(rs.next()){
-                typePerson = new TypePerson();
-                typePerson.setId(rs.getInt("id"));
-                typePerson.setName(rs.getString("name"));
-                typePerson.setDescription(rs.getString("description"));
+            PreparedStatement st = conn.prepareStatement("select * from Type_Person c where c.id ="+id);
+            rs = st.executeQuery();
+            if(rs.next()){
+                item = new TypePerson();
+                item.setId(rs.getInt("id"));
+                item.setName(rs.getString("name"));
+                item.setDescription(rs.getString("description"));
             }
-            
-            return typePerson;
+            rs.close();
+            return item;
         } catch (Exception e) {
             System.out.println("Error al obtener la TypePerson: " + e.getMessage());
-            rs.close();
-            cs.close();
             connectionDBOracle.closeConnection(conn);
+            rs.close();
             throw new Exception("Error al obtener la TypePerson: \n" +e.getMessage());
         }finally{
             rs.close();
-            cs.close();
             connectionDBOracle.closeConnection(conn);
         }
     }
@@ -158,35 +147,30 @@ public class TypePersonDao implements ICrud<TypePerson>{
      */
     public List<TypePerson> getList() throws SQLException, Exception{
         Connection conn = null;
-        CallableStatement cs = null;
         ResultSet rs = null;
-        List<TypePerson> typePeople;
-        TypePerson typePerson;
+        List<TypePerson> items;
+        TypePerson item;
         try {
-            typePeople = new ArrayList<TypePerson>();
+            items = new ArrayList<TypePerson>();
             conn = connectionDBOracle.getConnection();
-            cs = conn.prepareCall("{call Type_Person_API.LIST(?)}");
-            cs.registerOutParameter(1, OracleTypes.CURSOR);
-            cs.execute();
-            rs = (ResultSet) cs.getObject(1);
+            PreparedStatement st = conn.prepareStatement("select * from Type_Person");
+            rs = st.executeQuery();
             while(rs.next()){
-                typePerson = new TypePerson();
-                typePerson.setId(rs.getInt("id"));
-                typePerson.setName(rs.getString("name"));
-                typePerson.setDescription(rs.getString("description"));
-                typePeople.add(typePerson);
+                item = new TypePerson();
+                item.setId(rs.getInt("id"));
+                item.setName(rs.getString("name"));
+                item.setDescription(rs.getString("description"));
+                items.add(item);
             }
             rs.close();
-            return typePeople;
+            return items;
         } catch (Exception e) {
             System.out.println("Error al obtener TypePerson: " + e.getMessage());
             rs.close();
-            cs.close();
             connectionDBOracle.closeConnection(conn);
             throw new Exception("Error al obtener TypePerson: \n" + e.getMessage());
         }finally{
             rs.close();
-            cs.close();
             connectionDBOracle.closeConnection(conn);
         }
     }
@@ -200,35 +184,29 @@ public class TypePersonDao implements ICrud<TypePerson>{
      */
     public List<TypePerson> searchList(String texto) throws Exception{
         Connection conn = null;
-        CallableStatement cs = null;
         ResultSet rs = null;
-        List<TypePerson> typePeople;
-        TypePerson typePerson;
+        List<TypePerson> items;
+        TypePerson item;
         try {
-            typePeople = new ArrayList<TypePerson>();
+            items = new ArrayList<TypePerson>();
             conn = connectionDBOracle.getConnection();
-            cs = conn.prepareCall("{call Type_Person_API.SEARCH(?,?)}");
-            cs.setString(1, texto);
-            cs.registerOutParameter(2, OracleTypes.CURSOR);
-            cs.execute();
-            rs = (ResultSet) cs.getObject(2);
+            PreparedStatement st = conn.prepareStatement("select * from Type_Person where upper(name ||' '||description) like upper('%"+texto+"%')");
+            rs = st.executeQuery();
             while(rs.next()){
-                typePerson = new TypePerson();
-                typePerson.setId(rs.getInt("id"));
-                typePerson.setName(rs.getString("name"));
-                typePerson.setDescription(rs.getString("description"));
-                typePeople.add(typePerson);
+                item = new TypePerson();
+                item.setId(rs.getInt("id"));
+                item.setName(rs.getString("name"));
+                item.setDescription(rs.getString("description"));
+                items.add(item);
             }
-            return typePeople;
+            return items;
         } catch (Exception e) {
-            System.out.println("Error al obtener TypePeople: " + e.getMessage());
+            System.out.println("Error al obtener TypePerson: " + e.getMessage());
             rs.close();
-            cs.close();
             connectionDBOracle.closeConnection(conn);
-            throw new Exception("Error al buscar TypePeople: \n" + e.getMessage());
+            throw new Exception("Error al buscar TypePerson: \n" + e.getMessage());
         }finally{
             rs.close();
-            cs.close();
             connectionDBOracle.closeConnection(conn);
         }
     }

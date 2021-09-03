@@ -4,13 +4,12 @@
  * and open the template in the editor.
  */
 package org.casaortiz.dao;
-import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import oracle.jdbc.OracleTypes;
 import org.casaortiz.dao.interfaces.ICrud;
 import org.casaortiz.db.ConnectionDBOracle;
 import org.casaortiz.model.TypeSuscription;
@@ -37,22 +36,20 @@ public class TypeSuscriptionDao implements ICrud<TypeSuscription>{
      */
     public void insert(TypeSuscription item) throws SQLException, Exception{
         Connection conn = null;
-        CallableStatement cstmt = null;
         conn = connectionDBOracle.getConnection();
         try {
             
-            cstmt = conn.prepareCall("{call Type_Suscription_API.INS(?,?,?,?)}");
-            cstmt.setString(1, item.getName());
-            cstmt.setInt(2, item.getNum_days());
-            cstmt.setDouble(3, item.getPrice());
-            cstmt.setString(4, item.getDescription());
-            cstmt.execute();
+            PreparedStatement st = conn.prepareStatement("insert into Type_Suscription (name, num_days, price, description) values (?, ?, ?, ?)");
+            st.setString(1, item.getName());
+            st.setInt(2, item.getNum_days());
+            st.setDouble(3, item.getPrice());
+            st.setString(4, item.getDescription());
+            st.execute();
+            st.close();
         } catch (Exception e ) {
-            cstmt.close();
             connectionDBOracle.closeConnection(conn);
-            throw new Exception("Error al insertar TypeSuscription: \n" + e.getMessage());
+            throw new Exception("Error al insertar Type_Suscription: \n" + e.getMessage());
         }finally{
-            cstmt.close();
             connectionDBOracle.closeConnection(conn);
         }
     }
@@ -66,23 +63,21 @@ public class TypeSuscriptionDao implements ICrud<TypeSuscription>{
      */
     public void update(TypeSuscription item) throws SQLException, Exception{
         Connection conn = null;
-        CallableStatement cstmt = null;
-        
+        conn = connectionDBOracle.getConnection();
         try {
-            conn = connectionDBOracle.getConnection();
-            cstmt = conn.prepareCall("{call Type_Suscription_API.UPD(?,?,?,?,?)}");
-            cstmt.setInt(1, item.getId());
-            cstmt.setString(2, item.getName());
-            cstmt.setInt(3, item.getNum_days());
-            cstmt.setDouble(4, item.getPrice());
-            cstmt.setString(5, item.getDescription());
-            cstmt.execute();
-        } catch (Exception e) {
-            cstmt.close();
+            
+            PreparedStatement st = conn.prepareStatement("update Type_Suscription set name = ?, num_days = ?, price = ?, description = ? where id = ?");
+            st.setString(1, item.getName());
+            st.setInt(2, item.getNum_days());
+            st.setDouble(3, item.getPrice());
+            st.setString(4, item.getDescription());
+            st.setInt(5, item.getId());
+            st.execute();
+            st.close();
+        } catch (Exception e ) {
             connectionDBOracle.closeConnection(conn);
-            throw new Exception("Error al actualizar: \n" + e.getMessage());
+            throw new Exception("Error al insertar Type_Suscription: \n" + e.getMessage());
         }finally{
-            cstmt.close();
             connectionDBOracle.closeConnection(conn);
         }
     }
@@ -96,19 +91,16 @@ public class TypeSuscriptionDao implements ICrud<TypeSuscription>{
      */
     public void delete(int id) throws SQLException, Exception{
         Connection conn = null;
-        CallableStatement cstmt = null;
         try {
             conn = connectionDBOracle.getConnection();
-            cstmt = conn.prepareCall("{call Type_Suscription_API.DEL(?)}");
-            cstmt.setInt(1, id);
-            cstmt.execute();
+            PreparedStatement st = conn.prepareStatement("delete from Type_Suscription where id = "+id);
+            st.executeUpdate();
+            st.close();
         } catch (Exception e) {
             connectionDBOracle.closeConnection(conn);
-            cstmt.close();
             throw new Exception(e.getMessage());
         }finally{
             connectionDBOracle.closeConnection(conn);
-            cstmt.close();
         }
     }
     
@@ -122,35 +114,29 @@ public class TypeSuscriptionDao implements ICrud<TypeSuscription>{
      */
     public TypeSuscription get(int id) throws SQLException, Exception{
         Connection conn = null;
-        CallableStatement cs = null;
         ResultSet rs = null;
-        TypeSuscription typeSuscription = null;
+        TypeSuscription item = null;
         try {
             conn = connectionDBOracle.getConnection();
-            cs = conn.prepareCall("{call Type_Suscription_API.getTypeSuscription(?,?)}");
-            cs.setInt(1, id);
-            cs.registerOutParameter(2, OracleTypes.CURSOR);
-            cs.execute();
-            rs = (ResultSet) cs.getObject(2);
-            while(rs.next()){
-                typeSuscription = new TypeSuscription();
-                typeSuscription.setId(rs.getInt("id"));
-                typeSuscription.setName(rs.getString("name"));
-                typeSuscription.setNum_days(rs.getInt("num_days"));
-                typeSuscription.setPrice(rs.getDouble("price"));
-                typeSuscription.setDescription(rs.getString("description"));
+            PreparedStatement st = conn.prepareStatement("select * from Type_Suscription c where c.id ="+id);
+            rs = st.executeQuery();
+            if(rs.next()){
+                item = new TypeSuscription();
+                item.setId(rs.getInt("id"));
+                item.setName(rs.getString("name"));
+                item.setNum_days(rs.getInt("num_days"));
+                item.setPrice(rs.getDouble("price"));
+                item.setDescription(rs.getString("description"));
             }
-            
-            return typeSuscription;
+            rs.close();
+            return item;
         } catch (Exception e) {
             System.out.println("Error al obtener la TypeSuscription: " + e.getMessage());
-            rs.close();
-            cs.close();
             connectionDBOracle.closeConnection(conn);
+            rs.close();
             throw new Exception("Error al obtener la TypeSuscription: \n" +e.getMessage());
         }finally{
             rs.close();
-            cs.close();
             connectionDBOracle.closeConnection(conn);
         }
     }
@@ -164,37 +150,32 @@ public class TypeSuscriptionDao implements ICrud<TypeSuscription>{
      */
     public List<TypeSuscription> getList() throws SQLException, Exception{
         Connection conn = null;
-        CallableStatement cs = null;
         ResultSet rs = null;
-        List<TypeSuscription> typeSuscriptions;
-        TypeSuscription typeSuscription;
+        List<TypeSuscription> items;
+        TypeSuscription item;
         try {
-            typeSuscriptions = new ArrayList<TypeSuscription>();
+            items = new ArrayList<TypeSuscription>();
             conn = connectionDBOracle.getConnection();
-            cs = conn.prepareCall("{call Type_Suscription_API.LIST(?)}");
-            cs.registerOutParameter(1, OracleTypes.CURSOR);
-            cs.execute();
-            rs = (ResultSet) cs.getObject(1);
+            PreparedStatement st = conn.prepareStatement("select * from Type_Suscription");
+            rs = st.executeQuery();
             while(rs.next()){
-                typeSuscription = new TypeSuscription();
-                typeSuscription.setId(rs.getInt("id"));
-                typeSuscription.setName(rs.getString("name"));
-                typeSuscription.setNum_days(rs.getInt("num_days"));
-                typeSuscription.setPrice(rs.getDouble("price"));
-                typeSuscription.setDescription(rs.getString("description"));
-                typeSuscriptions.add(typeSuscription);
+                item = new TypeSuscription();
+                item.setId(rs.getInt("id"));
+                item.setName(rs.getString("name"));
+                item.setNum_days(rs.getInt("num_days"));
+                item.setPrice(rs.getDouble("price"));
+                item.setDescription(rs.getString("description"));
+                items.add(item);
             }
             rs.close();
-            return typeSuscriptions;
+            return items;
         } catch (Exception e) {
-            System.out.println("Error al obtener TypeSuscription: " + e.getMessage());
+            System.out.println("Error al obtener TypeSuscriptions: " + e.getMessage());
             rs.close();
-            cs.close();
             connectionDBOracle.closeConnection(conn);
-            throw new Exception("Error al obtener TypeSuscription: \n" + e.getMessage());
+            throw new Exception("Error al obtener TypeSuscriptions: \n" + e.getMessage());
         }finally{
             rs.close();
-            cs.close();
             connectionDBOracle.closeConnection(conn);
         }
     }
@@ -208,37 +189,31 @@ public class TypeSuscriptionDao implements ICrud<TypeSuscription>{
      */
     public List<TypeSuscription> searchList(String texto) throws Exception{
         Connection conn = null;
-        CallableStatement cs = null;
         ResultSet rs = null;
-        List<TypeSuscription> typeSuscriptions;
-        TypeSuscription typeSuscription;
+        List<TypeSuscription> items;
+        TypeSuscription item;
         try {
-            typeSuscriptions = new ArrayList<TypeSuscription>();
+            items = new ArrayList<TypeSuscription>();
             conn = connectionDBOracle.getConnection();
-            cs = conn.prepareCall("{call Type_Suscription_API.SEARCH(?,?)}");
-            cs.setString(1, texto);
-            cs.registerOutParameter(2, OracleTypes.CURSOR);
-            cs.execute();
-            rs = (ResultSet) cs.getObject(2);
+            PreparedStatement st = conn.prepareStatement("select * from Type_Suscription where upper(name ||' '||description) like upper('%"+texto+"%')");
+            rs = st.executeQuery();
             while(rs.next()){
-                typeSuscription = new TypeSuscription();
-                typeSuscription.setId(rs.getInt("id"));
-                typeSuscription.setName(rs.getString("name"));
-                typeSuscription.setNum_days(rs.getInt("num_days"));
-                typeSuscription.setPrice(rs.getDouble("price"));
-                typeSuscription.setDescription(rs.getString("description"));
-                typeSuscriptions.add(typeSuscription);
+                item = new TypeSuscription();
+                item.setId(rs.getInt("id"));
+                item.setName(rs.getString("name"));
+                item.setNum_days(rs.getInt("num_days"));
+                item.setPrice(rs.getDouble("price"));
+                item.setDescription(rs.getString("description"));
+                items.add(item);
             }
-            return typeSuscriptions;
+            return items;
         } catch (Exception e) {
-            System.out.println("Error al obtener TypeSuscription: " + e.getMessage());
+            System.out.println("Error al obtener TypeSuscriptions: " + e.getMessage());
             rs.close();
-            cs.close();
             connectionDBOracle.closeConnection(conn);
-            throw new Exception("Error al buscar TypeSuscription: \n" + e.getMessage());
+            throw new Exception("Error al buscar TypeSuscriptions: \n" + e.getMessage());
         }finally{
             rs.close();
-            cs.close();
             connectionDBOracle.closeConnection(conn);
         }
     }

@@ -7,11 +7,11 @@ package org.casaortiz.dao;
 import org.casaortiz.dao.interfaces.ICrud;
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import oracle.jdbc.OracleTypes;
 import org.casaortiz.db.ConnectionDBOracle;
 import org.casaortiz.model.Category;
 
@@ -37,22 +37,19 @@ public class CategoryDao implements ICrud<Category>{
      */
     @Override
     public void insert(Category item) throws SQLException, Exception{
-        item = new Category();
         Connection conn = null;
-        CallableStatement cstmt = null;
         conn = connectionDBOracle.getConnection();
         try {
             
-            cstmt = conn.prepareCall("{call CATEGORY_API.INS(?,?)}");
-            cstmt.setString(1, item.getName());
-            cstmt.setString(2, item.getDescription());
-            cstmt.execute();
+            PreparedStatement st = conn.prepareStatement("insert into category (name, description) values (?,?)");
+            st.setString(1, item.getName());
+            st.setString(2, item.getDescription());
+            st.execute();
+            st.close();
         } catch (Exception e ) {
-            cstmt.close();
             connectionDBOracle.closeConnection(conn);
             throw new Exception("Error al insertar Category: \n" + e.getMessage());
         }finally{
-            cstmt.close();
             connectionDBOracle.closeConnection(conn);
         }
     }
@@ -66,21 +63,18 @@ public class CategoryDao implements ICrud<Category>{
      */
     public void update(Category item) throws SQLException, Exception{
         Connection conn = null;
-        CallableStatement cstmt = null;
-        
         try {
             conn = connectionDBOracle.getConnection();
-            cstmt = conn.prepareCall("{call CATEGORY_API.UPD(?,?,?)}");
-            cstmt.setInt(1, item.getId());
-            cstmt.setString(2, item.getName());
-            cstmt.setString(3, item.getDescription());
-            cstmt.execute();
+            PreparedStatement st = conn.prepareStatement("update category set name = ?, description = ? where id = ?");
+            st.setString(1, item.getName());
+            st.setString(2, item.getDescription());
+            st.setInt(3, item.getId());
+            st.execute();
+            st.close();
         } catch (Exception e) {
-            cstmt.close();
             connectionDBOracle.closeConnection(conn);
             throw new Exception("Error al actualizar Category: \n" + e.getMessage());
         }finally{
-            cstmt.close();
             connectionDBOracle.closeConnection(conn);
         }
     }
@@ -94,19 +88,16 @@ public class CategoryDao implements ICrud<Category>{
      */
     public void delete(int id) throws SQLException, Exception{
         Connection conn = null;
-        CallableStatement cstmt = null;
         try {
             conn = connectionDBOracle.getConnection();
-            cstmt = conn.prepareCall("{call CATEGORY_API.DEL(?)}");
-            cstmt.setInt(1, id);
-            cstmt.execute();
+            PreparedStatement st = conn.prepareStatement("delete from category where id = "+id);
+            st.executeUpdate();
+            st.close();
         } catch (Exception e) {
             connectionDBOracle.closeConnection(conn);
-            cstmt.close();
             throw new Exception(e.getMessage());
         }finally{
             connectionDBOracle.closeConnection(conn);
-            cstmt.close();
         }
     }
     
@@ -120,33 +111,27 @@ public class CategoryDao implements ICrud<Category>{
      */
     public Category get(int id) throws SQLException, Exception{
         Connection conn = null;
-        CallableStatement cs = null;
         ResultSet rs = null;
-        Category category = null;
+        Category item = null;
         try {
             conn = connectionDBOracle.getConnection();
-            cs = conn.prepareCall("{call CATEGORY_API.getcategory(?,?)}");
-            cs.setInt(1, id);
-            cs.registerOutParameter(2, OracleTypes.CURSOR);
-            cs.execute();
-            rs = (ResultSet) cs.getObject(2);
-            while(rs.next()){
-                category = new Category();
-                category.setId(rs.getInt("id"));
-                category.setName(rs.getString("name"));
-                category.setDescription(rs.getString("description"));
+            PreparedStatement st = conn.prepareStatement("select * from category c where c.id ="+id);
+            rs = st.executeQuery();
+            if(rs.next()){
+                item = new Category();
+                item.setId(rs.getInt("id"));
+                item.setName(rs.getString("name"));
+                item.setDescription(rs.getString("description"));
             }
-            
-            return category;
+            rs.close();
+            return item;
         } catch (Exception e) {
             System.out.println("Error al obtener la categoria: " + e.getMessage());
-            rs.close();
-            cs.close();
             connectionDBOracle.closeConnection(conn);
+            rs.close();
             throw new Exception("Error al obtener la categoria: \n" +e.getMessage());
         }finally{
             rs.close();
-            cs.close();
             connectionDBOracle.closeConnection(conn);
         }
     }
@@ -160,35 +145,30 @@ public class CategoryDao implements ICrud<Category>{
      */
     public List<Category> getList() throws SQLException, Exception{
         Connection conn = null;
-        CallableStatement cs = null;
         ResultSet rs = null;
-        List<Category> categories;
-        Category category;
+        List<Category> items;
+        Category item;
         try {
-            categories = new ArrayList<Category>();
+            items = new ArrayList<Category>();
             conn = connectionDBOracle.getConnection();
-            cs = conn.prepareCall("{call CATEGORY_API.LIST(?)}");
-            cs.registerOutParameter(1, OracleTypes.CURSOR);
-            cs.execute();
-            rs = (ResultSet) cs.getObject(1);
+            PreparedStatement st = conn.prepareStatement("select * from category");
+            rs = st.executeQuery();
             while(rs.next()){
-                category = new Category();
-                category.setId(rs.getInt("id"));
-                category.setName(rs.getString("name"));
-                category.setDescription(rs.getString("description"));
-                categories.add(category);
+                item = new Category();
+                item.setId(rs.getInt("id"));
+                item.setName(rs.getString("name"));
+                item.setDescription(rs.getString("description"));
+                items.add(item);
             }
             rs.close();
-            return categories;
+            return items;
         } catch (Exception e) {
-            System.out.println("Error al obtener categorias: " + e.getMessage());
+            System.out.println("Error al obtener categories: " + e.getMessage());
             rs.close();
-            cs.close();
             connectionDBOracle.closeConnection(conn);
-            throw new Exception("Error al obtener categorias: \n" + e.getMessage());
+            throw new Exception("Error al obtener categories: \n" + e.getMessage());
         }finally{
             rs.close();
-            cs.close();
             connectionDBOracle.closeConnection(conn);
         }
     }
@@ -202,35 +182,29 @@ public class CategoryDao implements ICrud<Category>{
      */
     public List<Category> searchList(String texto) throws SQLException, Exception{
         Connection conn = null;
-        CallableStatement cs = null;
         ResultSet rs = null;
-        List<Category> categories;
-        Category category;
+        List<Category> items;
+        Category item;
         try {
-            categories = new ArrayList<Category>();
+            items = new ArrayList<Category>();
             conn = connectionDBOracle.getConnection();
-            cs = conn.prepareCall("{call CATEGORY_API.SEARCH(?,?)}");
-            cs.setString(1, texto);
-            cs.registerOutParameter(2, OracleTypes.CURSOR);
-            cs.execute();
-            rs = (ResultSet) cs.getObject(2);
+            PreparedStatement st = conn.prepareStatement("select * from category where upper(name ||' '||description) like upper('%"+texto+"%')");
+            rs = st.executeQuery();
             while(rs.next()){
-                category = new Category();
-                category.setId(rs.getInt("id"));
-                category.setName(rs.getString("name"));
-                category.setDescription(rs.getString("description"));
-                categories.add(category);
+                item = new Category();
+                item.setId(rs.getInt("id"));
+                item.setName(rs.getString("name"));
+                item.setDescription(rs.getString("description"));
+                items.add(item);
             }
-            return categories;
+            return items;
         } catch (Exception e) {
-            System.out.println("Error al obtener categorias: " + e.getMessage());
+            System.out.println("Error al obtener categories: " + e.getMessage());
             rs.close();
-            cs.close();
             connectionDBOracle.closeConnection(conn);
-            throw new Exception("Error al buscar categorias: \n" + e.getMessage());
+            throw new Exception("Error al buscar categories: \n" + e.getMessage());
         }finally{
             rs.close();
-            cs.close();
             connectionDBOracle.closeConnection(conn);
         }
     }
