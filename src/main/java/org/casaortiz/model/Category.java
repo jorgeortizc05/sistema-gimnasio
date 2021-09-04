@@ -5,8 +5,6 @@
  */
 package org.casaortiz.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
 
 /**
  * Model Category
