@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import org.casaortiz.dao.interfaces.ICrud;
-import org.casaortiz.db.ConnectionDBOracle;
+import org.casaortiz.db.ConnectionDBPostgres;
 import org.casaortiz.model.TypePerson;
 
 /**
@@ -21,10 +21,10 @@ import org.casaortiz.model.TypePerson;
  * @version 0.0.1
  */
 public class TypePersonDao implements ICrud<TypePerson>{
-    ConnectionDBOracle connectionDBOracle;
+    ConnectionDBPostgres connectionDBOracle;
     
     public TypePersonDao(){
-        connectionDBOracle = new ConnectionDBOracle();
+        connectionDBOracle = new ConnectionDBPostgres();
     }
 
     /**

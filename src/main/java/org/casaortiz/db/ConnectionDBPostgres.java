@@ -18,8 +18,8 @@ import java.util.logging.Logger;
  * @since 30/08/2021
  * @version 1.0.0
  */
-public class ConnectionDBOracle {
-    private String url = "jdbc:postgresql://192.168.100.253:5432/gimnasiosoliz";
+public class ConnectionDBPostgres {
+    private String url = "jdbc:postgresql://localhost:5432/gimnasio";
     private String user = "jorge";
     private String pass = "jorge";
     private Connection connect;

@@ -52,7 +52,7 @@ public class ConectorOracle {
             }
             
         } catch (SQLException ex) {
-            Logger.getLogger(ConnectionDBOracle.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ConnectionDBPostgres.class.getName()).log(Level.SEVERE, null, ex);
             throw new SQLException(ex.getMessage());
         }
     } 

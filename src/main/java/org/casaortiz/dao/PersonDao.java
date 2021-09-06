@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import org.casaortiz.dao.interfaces.ICrud;
-import org.casaortiz.db.ConnectionDBOracle;
+import org.casaortiz.db.ConnectionDBPostgres;
 import org.casaortiz.model.Person;
 
 /**
@@ -24,10 +24,10 @@ import org.casaortiz.model.Person;
  */
 public class PersonDao implements ICrud<Person>{
 
-    ConnectionDBOracle connectionDBOracle;
+    ConnectionDBPostgres connectionDBOracle;
 
     public PersonDao() {
-        connectionDBOracle = new ConnectionDBOracle();
+        connectionDBOracle = new ConnectionDBPostgres();
     }
 
     /**

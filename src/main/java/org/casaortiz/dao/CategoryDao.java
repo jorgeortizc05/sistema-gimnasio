@@ -12,7 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import org.casaortiz.db.ConnectionDBOracle;
+import org.casaortiz.db.ConnectionDBPostgres;
 import org.casaortiz.model.Category;
 
 /**
@@ -22,10 +22,10 @@ import org.casaortiz.model.Category;
  * @version 0.0.1
  */
 public class CategoryDao implements ICrud<Category>{
-    ConnectionDBOracle connectionDBOracle;
+    ConnectionDBPostgres connectionDBOracle;
     
     public CategoryDao(){
-        connectionDBOracle = new ConnectionDBOracle();
+        connectionDBOracle = new ConnectionDBPostgres();
     }
 
     /**

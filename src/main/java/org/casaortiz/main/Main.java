@@ -8,7 +8,7 @@ package org.casaortiz.main;
 import java.sql.SQLException;
 import java.util.List;
 import org.casaortiz.dao.CategoryDao;
-import org.casaortiz.db.ConnectionDBOracle;
+import org.casaortiz.db.ConnectionDBPostgres;
 import org.casaortiz.model.Category;
 
 /**
