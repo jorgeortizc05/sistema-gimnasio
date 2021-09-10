@@ -5,60 +5,25 @@
  */
 package org.casaortiz.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * Model TypeSuscription
  * @author Ing. Jorge Luis Ortiz Cáceres
  * @since 01/09/2021
  * @version 0.0.1
  */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class TypeSuscription {
     private int id;
     private String name;
     private int num_days;
     private double price;
     private String description;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-    
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getNum_days() {
-        return num_days;
-    }
-
-    public void setNum_days(int num_days) {
-        this.num_days = num_days;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-    
-    
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     @Override
     public String toString() {
