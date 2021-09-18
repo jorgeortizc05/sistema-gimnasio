@@ -5,7 +5,6 @@
  */
 package org.casaortiz.dao;
 import org.casaortiz.dao.interfaces.ICrud;
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -188,7 +187,7 @@ public class CategoryDao implements ICrud<Category>{
         try {
             items = new ArrayList<Category>();
             conn = connectionDBOracle.getConnection();
-            PreparedStatement st = conn.prepareStatement("select * from category where upper(name ||' '||description) like upper('%"+texto+"%')");
+            PreparedStatement st = conn.prepareStatement("select * from category where upper(id ||' '|| name ||' '||description) like upper('%"+texto+"%')");
             rs = st.executeQuery();
             while(rs.next()){
                 item = new Category();

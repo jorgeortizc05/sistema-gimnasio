@@ -20,16 +20,16 @@ drop table if exists company cascade;
 
 	create table type_person (
 		id serial not null, -- serial crea una secuencia de manera automatica y no es necesario establecer id
-		name varchar(50),
+		name varchar(50) unique not NULL,
 		description varchar(300),
 		primary key (id)
 	);
 
 	create table person (
 		id serial not null,
-		first_name varchar(70),
-		last_name varchar(70),
-		identification_id varchar(16),
+		first_name varchar(70) not NULL,
+		last_name varchar(70) not null,
+		identification_id varchar(16) unique not null,
 		address varchar(300),
 		email varchar(150),
 		birthday DATE,
@@ -43,14 +43,14 @@ drop table if exists company cascade;
 
 	create table type_voucher (
 		id serial not null,
-		name varchar(50),
+		name varchar(50) unique not null,
 		description varchar(300),
 		primary key (id)
 	);
 
 	create table type_suscription (
 		id serial not null,
-		name varchar(50),
+		name varchar(50) unique not null,
 		num_days int,
 		price numeric(1000,2),
 		description varchar(300),
@@ -59,13 +59,13 @@ drop table if exists company cascade;
 
 	create table suscription (
 		id serial not null,
-		receipt_number varchar(70),
-		fecha_suscription date,
-		fecha_desde date,
-		fecha_hasta date,
-		price numeric(1000,2),
-		descuento numeric(1000,2),
-		totla numeric(1000,2),
+		receipt_number varchar(70) unique not null,
+		date_suscription date not null,
+		date_from date not null,
+		date_to date not null,
+		price numeric(1000,2) not null,
+		discount numeric(1000,2),
+		total numeric(1000,2),
 		comment varchar(300),
 		person_id int not null,
 		type_suscription_id int not null,
@@ -77,7 +77,7 @@ drop table if exists company cascade;
 
 	create table category (
 		id serial not null,
-		name varchar(50),
+		name varchar(50) unique not null,
 		description varchar(300),
 		primary key (id)
 	);
@@ -85,21 +85,21 @@ drop table if exists company cascade;
 
 	create table city (
 		id serial not null,
-		name varchar(50),
+		name varchar(50) unique not null,
 		description varchar(300),
 		primary key (id)
 	);
 
 	create table method_pay (
 		id serial not null,
-		name varchar(50),
+		name varchar(50) unique not null,
 		description varchar(300),
 		primary key (id)
 	);
 
 	create table product(
 		id serial not null,
-		name varchar(50),
+		name varchar(50) unique not null,
 		description varchar(300),
 		price numeric(1000,2),
 		serial varchar(30),
@@ -111,8 +111,8 @@ drop table if exists company cascade;
 
 	create table company(
 		id serial not null,
-		ruc varchar(50),
-		name varchar(50),
+		ruc varchar(50) unique not null,
+		name varchar(50) unique not null,
 		description varchar(300),
 		address_main varchar(300),
 		address_branch varchar(300),

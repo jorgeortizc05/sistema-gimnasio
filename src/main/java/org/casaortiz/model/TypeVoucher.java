@@ -8,6 +8,7 @@ package org.casaortiz.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * Model TypeVoucher
@@ -18,13 +19,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class TypeVoucher {
     private int id;
     private String name;
     private String description;
-
-    @Override
-    public String toString() {
-        return "TypePerson{" + "id=" + id + ", name=" + name + ", description=" + description + '}';
-    }
 }

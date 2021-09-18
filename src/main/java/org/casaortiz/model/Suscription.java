@@ -5,24 +5,32 @@
  */
 package org.casaortiz.model;
 
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * Model Type Person
- * @author Ing. Jorge Luis Ortiz Cáceres
- * @since 31/08/2021
- * @version 0.0.1
+ *
+ * @author jorge
  */
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
-public class TypePerson {
+public class Suscription {
+    
     private int id;
-    private String name;
-    private String description;
+    private String receipt_number;
+    private Date DateSuscription;
+    private Date DateFrom;
+    private Date DateTo;
+    private Double price;
+    private Double discount;
+    private Double total;
+    private String comment;
+    private int personId;
+    private int typeSuscriptionId;
     
 }

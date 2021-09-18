@@ -8,6 +8,7 @@ package org.casaortiz.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * Model TypeSuscription
@@ -18,17 +19,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class TypeSuscription {
     private int id;
     private String name;
     private int num_days;
     private double price;
-    private String description;
-
-    @Override
-    public String toString() {
-        return "TypeSuscription{" + "id=" + id + ", name=" + name + ", num_days=" + num_days + ", price=" + price + ", description=" + description + '}';
-    }
-
-    
+    private String description; 
 }

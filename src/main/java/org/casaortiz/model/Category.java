@@ -8,6 +8,7 @@ package org.casaortiz.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 
 /**
@@ -20,16 +21,14 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor //sin constructor
+@ToString
 public class Category {
     
     private int id;
     private String name;
     private String description;
 
-    @Override
-    public String toString() {
-        return "Category{" + "id=" + id + ", name=" + name + ", description=" + description + '}';
-    }
+    
 
     
        

@@ -5,10 +5,6 @@
  */
 package org.casaortiz.dao.interfaces;
 
-import java.sql.SQLException;
-import java.util.List;
-import org.casaortiz.model.Category;
-
 /**
  *
  * @author jorge

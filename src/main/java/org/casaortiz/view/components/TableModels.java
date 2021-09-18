@@ -52,6 +52,22 @@ public class TableModels {
         return modelo;
     }
     
+    public static DefaultTableModel getModelPersonForCheckSuscription(JTable table, List<Person> people){
+        cleanTable(table);
+        DefaultTableModel modelo = (DefaultTableModel) table.getModel();
+        List<Person> items = people;
+        Object rowData[] = new Object[5];
+        for (Person p : items) {
+            rowData[0] = p.getId();
+            rowData[1] = p.getIdentificationId();
+            rowData[2] = p.getFirstName();
+            rowData[3] = p.getLastName();
+            rowData[4] = p.getPhone();
+            modelo.addRow(rowData);
+        }
+        return modelo;
+    }
+    
     public static DefaultTableModel getModelTypePerson(JTable table, List<TypePerson> typePeople){
         cleanTable(table);
         DefaultTableModel modelo = (DefaultTableModel) table.getModel();

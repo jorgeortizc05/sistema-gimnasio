@@ -23,11 +23,12 @@ import org.casaortiz.model.Category;
  * @since 31/08/2021
  * @version 0.0.1
  */
-public class CategoryView extends javax.swing.JPanel {
-
+public class CategoryView extends javax.swing.JPanel{
+    
     private CategoryDao catDao;
+    
     private Category category;
-
+    
     public CategoryView() {
         initComponents();
         catDao = new CategoryDao();

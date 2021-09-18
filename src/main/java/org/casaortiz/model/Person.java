@@ -9,6 +9,7 @@ import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * Model Person
@@ -20,6 +21,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class Person {
 
     private int id;
@@ -33,11 +35,4 @@ public class Person {
     private String active;
     private String photo;
     private int typePersonId;
-
-    @Override
-    public String toString() {
-        return "Person{" + "id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", identificationId=" + identificationId + ", address=" + address + ", email=" + email + ", birthday=" + birthday + ", phone=" + phone + ", active=" + active + ", photo=" + photo + ", typePersonId=" + typePersonId + '}';
-    }
-
-    
 }
