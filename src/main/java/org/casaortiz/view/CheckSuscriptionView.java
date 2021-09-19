@@ -6,25 +6,13 @@
 package org.casaortiz.view;
 
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.view.JasperViewer;
 import org.casaortiz.dao.PersonDao;
-import org.casaortiz.db.ConnectionDBPostgres;
 import org.casaortiz.model.Person;
-import org.casaortiz.model.TypePerson;
 import org.casaortiz.view.components.ButtonsColors;
 import org.casaortiz.view.components.TableModels;
 
@@ -36,11 +24,12 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
 
     private PersonDao personDao;
     private Person person;
+    private MainView mainView;
 
-    public CheckSuscriptionView() {
+    public CheckSuscriptionView(MainView _mainView) {
         initComponents();
         personDao = new PersonDao();
-        person = new Person();
+        mainView = _mainView;
         addImageButtons();
 
     }
@@ -99,6 +88,11 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
         btnAddSuscription.setForeground(new java.awt.Color(255, 255, 255));
         btnAddSuscription.setText("AGREGAR SUSCRIPCIÓN");
         btnAddSuscription.setPreferredSize(new java.awt.Dimension(280, 39));
+        btnAddSuscription.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddSuscriptionActionPerformed(evt);
+            }
+        });
 
         btnSaveChanges.setBackground(new java.awt.Color(194, 60, 61));
         btnSaveChanges.setFont(new java.awt.Font("Dialog", 1, 20)); // NOI18N
@@ -313,6 +307,16 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
         }
 
     }//GEN-LAST:event_btnGeneratorCardActionPerformed
+
+    private void btnAddSuscriptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSuscriptionActionPerformed
+        // TODO add your handling code here:
+        if(person instanceof Person){
+            var suscriptionViewJD = new SuscriptionViewJD(mainView, true, person);
+            suscriptionViewJD.setVisible(true);
+        }else{
+            JOptionPane.showMessageDialog(btnAddSuscription, "Primero debes cargar el cliente");
+        }
+    }//GEN-LAST:event_btnAddSuscriptionActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

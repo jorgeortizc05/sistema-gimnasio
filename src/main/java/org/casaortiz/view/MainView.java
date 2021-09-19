@@ -36,7 +36,7 @@ public class MainView extends javax.swing.JFrame {
         typeVoucherView = new TypeVoucherView();
         typeSuscriptionView = new TypeSuscriptionView();
         personView = new PersonView();
-        checkSuscriptionView = new CheckSuscriptionView();
+        checkSuscriptionView = new CheckSuscriptionView(this);
         
         
         jTabbedPane1.add(checkSuscriptionView);
@@ -233,8 +233,8 @@ public class MainView extends javax.swing.JFrame {
                         // Set cross-platform Java L&F (also called "Metal")
                     //UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
                     //UIManager.setLookAndFeel( new FlatLightLaf());
-                    //UIManager.setLookAndFeel( new FlatDarkLaf());
-                    UIManager.setLookAndFeel( new FlatIntelliJLaf() );
+                    UIManager.setLookAndFeel( new FlatDarkLaf());
+                    //UIManager.setLookAndFeel( new FlatIntelliJLaf() );
                     
                 } 
                 catch (UnsupportedLookAndFeelException e) {
