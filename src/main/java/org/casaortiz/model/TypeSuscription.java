@@ -17,13 +17,15 @@ import lombok.ToString;
  * @version 0.0.1
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
 public class TypeSuscription {
     private int id;
     private String name;
     private int num_days;
     private double price;
     private String description; 
+
+   
+    public String toString() {
+        return  name + " - " + description ;
+    }
 }

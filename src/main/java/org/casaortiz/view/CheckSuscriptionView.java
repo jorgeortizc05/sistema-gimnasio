@@ -241,6 +241,8 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
         /*tListPeople.getColumnModel().getColumn(0).setMinWidth(0);
         tListPeople.getColumnModel().getColumn(0).setMaxWidth(0);
         tListPeople.getColumnModel().getColumn(0).setWidth(0);*/
+        tListPeople.setRowSelectionInterval(0, 0); //Selecciona la primera fila
+        loadItemFromTable();
     }//GEN-LAST:event_txtSearchKeyReleased
 
     private void loadSearchPeople(String text) {

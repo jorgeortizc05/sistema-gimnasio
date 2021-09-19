@@ -304,10 +304,16 @@ public class CategoryView extends javax.swing.JPanel{
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
         // TODO add your handling code here:
         loadSearchCategories(txtSearch.getText());
+        /*tListCategories.setRowSelectionInterval(0, 0); //Selecciona la primera fila
+        loadItemFromTable();*/ 
     }//GEN-LAST:event_txtSearchKeyReleased
 
     private void tListCategoriesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tListCategoriesMouseClicked
         // TODO add your handling code here:
+        loadItemFromTable();
+    }//GEN-LAST:event_tListCategoriesMouseClicked
+
+    private void loadItemFromTable(){
         int fila = tListCategories.getSelectedRow();
         if (fila == -1) {
             JOptionPane.showMessageDialog(this, "Debe seleccionar una fila");
@@ -331,8 +337,7 @@ public class CategoryView extends javax.swing.JPanel{
             }
 
         }
-    }//GEN-LAST:event_tListCategoriesMouseClicked
-
+    }
     /**
      * Call CategoryDao.update(Category cat) Envia datos para actualizar una
      * category
