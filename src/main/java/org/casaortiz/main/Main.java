@@ -5,11 +5,15 @@
  */
 package org.casaortiz.main;
 
+import com.formdev.flatlaf.FlatDarkLaf;
 import java.sql.SQLException;
 import java.util.List;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import org.casaortiz.dao.CategoryDao;
 import org.casaortiz.db.ConnectionDBPostgres;
 import org.casaortiz.model.Category;
+import org.casaortiz.view.MainView;
 
 /**
  *
@@ -19,7 +23,28 @@ public class Main {
     
     public static void main(String[] args) throws SQLException{
         
-        
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                        // Set cross-platform Java L&F (also called "Metal")
+                    //UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+                    //UIManager.setLookAndFeel( new FlatLightLaf());
+                    UIManager.setLookAndFeel( new FlatDarkLaf());
+                    //UIManager.setLookAndFeel( new FlatIntelliJLaf() );
+                    
+                } 
+                catch (UnsupportedLookAndFeelException e) {
+                   // handle exception
+                } /*catch (ClassNotFoundException ex) {
+                    Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
+                }*/
+                new MainView().setVisible(true);
+            }
+        });
         
     }
     
