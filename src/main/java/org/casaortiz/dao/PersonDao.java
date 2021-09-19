@@ -170,6 +170,48 @@ public class PersonDao implements ICrud<Person>{
             connectionDBOracle.closeConnection(conn);
         }
     }
+    
+    /**
+     * Obtengo la persona mediante su cedula
+     * @param identification_id cedula
+     * @return Persona
+     * @throws SQLException
+     * @throws Exception 
+     */
+    public Person getPerIdentification_id(String identification_id) throws SQLException, Exception {
+        Connection conn = null;
+        ResultSet rs = null;
+        Person item = null;
+        try {
+            conn = connectionDBOracle.getConnection();
+            PreparedStatement st = conn.prepareStatement("select * from person c where c.identification_id ='"+identification_id+"'");
+            rs = st.executeQuery();
+            if(rs.next()){
+                item = new Person();
+                item.setId(rs.getInt("id"));
+                item.setFirstName(rs.getString("first_name"));
+                item.setLastName(rs.getString("last_name"));
+                item.setIdentificationId(rs.getString("identification_id"));
+                item.setAddress(rs.getString("address"));
+                item.setEmail(rs.getString("email"));
+                item.setBirthday(rs.getDate("birthday"));
+                item.setPhone(rs.getString("phone"));
+                item.setActive(rs.getString("active"));
+                item.setPhoto(rs.getString("photo"));
+                item.setTypePersonId(rs.getInt("type_person_id"));
+            }
+            rs.close();
+            return item;
+        } catch (Exception e) {
+            System.out.println("Error al obtener la Person: " + e.getMessage());
+            connectionDBOracle.closeConnection(conn);
+            rs.close();
+            throw new Exception("Error al obtener la Person: \n" +e.getMessage());
+        }finally{
+            rs.close();
+            connectionDBOracle.closeConnection(conn);
+        }
+    }
 
     /**
      * call procedure PERSON_API.LIST(Person_c) Recupero una lista de People

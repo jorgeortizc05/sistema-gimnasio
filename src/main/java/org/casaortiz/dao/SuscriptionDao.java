@@ -11,8 +11,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.casaortiz.db.ConnectionDBPostgres;
+import org.casaortiz.model.Person;
 import org.casaortiz.model.Suscription;
 
 /**
@@ -24,10 +26,10 @@ import org.casaortiz.model.Suscription;
  */
 public class SuscriptionDao implements ICrud<Suscription> {
 
-    ConnectionDBPostgres connectionDBOracle;
+    ConnectionDBPostgres connectionDBPostgres;
 
     public SuscriptionDao() {
-        connectionDBOracle = new ConnectionDBPostgres();
+        connectionDBPostgres = new ConnectionDBPostgres();
     }
 
     /**
@@ -40,7 +42,7 @@ public class SuscriptionDao implements ICrud<Suscription> {
     @Override
     public void insert(Suscription item) throws SQLException, Exception {
         Connection conn = null;
-        conn = connectionDBOracle.getConnection();
+        conn = connectionDBPostgres.getConnection();
         try {
 
             PreparedStatement st = conn.prepareStatement("insert into Suscription (receipt_number, date_suscription, date_from, date_to, price, discount, total, comment, person_id, type_suscription_id) values (?,?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -58,10 +60,10 @@ public class SuscriptionDao implements ICrud<Suscription> {
             st.execute();
             st.close();
         } catch (Exception e) {
-            connectionDBOracle.closeConnection(conn);
+            connectionDBPostgres.closeConnection(conn);
             throw new Exception("Error al insertar Suscription: \n" + e.getMessage());
         } finally {
-            connectionDBOracle.closeConnection(conn);
+            connectionDBPostgres.closeConnection(conn);
         }
     }
 
@@ -76,7 +78,7 @@ public class SuscriptionDao implements ICrud<Suscription> {
     public void update(Suscription item) throws SQLException, Exception {
         Connection conn = null;
         try {
-            conn = connectionDBOracle.getConnection();
+            conn = connectionDBPostgres.getConnection();
             PreparedStatement st = conn.prepareStatement("update Suscription set date_suscription=?, date_from=?, date_to=?, price=?, discount=?, total=?, comment=?, person_id=?, type_suscription_id=? where id = ?");
             st.setString(1, item.getReceipt_number());
             st.setDate(2, new java.sql.Date(item.getDateSuscription().getTime()));
@@ -92,10 +94,10 @@ public class SuscriptionDao implements ICrud<Suscription> {
             st.execute();
             st.close();
         } catch (Exception e) {
-            connectionDBOracle.closeConnection(conn);
+            connectionDBPostgres.closeConnection(conn);
             throw new Exception("Error al actualizar Suscription: \n" + e.getMessage());
         } finally {
-            connectionDBOracle.closeConnection(conn);
+            connectionDBPostgres.closeConnection(conn);
         }
     }
 
@@ -109,15 +111,15 @@ public class SuscriptionDao implements ICrud<Suscription> {
     public void delete(int id) throws SQLException, Exception {
         Connection conn = null;
         try {
-            conn = connectionDBOracle.getConnection();
+            conn = connectionDBPostgres.getConnection();
             PreparedStatement st = conn.prepareStatement("delete from Suscription where id = " + id);
             st.executeUpdate();
             st.close();
         } catch (Exception e) {
-            connectionDBOracle.closeConnection(conn);
+            connectionDBPostgres.closeConnection(conn);
             throw new Exception(e.getMessage());
         } finally {
-            connectionDBOracle.closeConnection(conn);
+            connectionDBPostgres.closeConnection(conn);
         }
     }
 
@@ -134,34 +136,34 @@ public class SuscriptionDao implements ICrud<Suscription> {
         ResultSet rs = null;
         Suscription item = null;
         try {
-            conn = connectionDBOracle.getConnection();
+            conn = connectionDBPostgres.getConnection();
             PreparedStatement st = conn.prepareStatement("select * from Suscription c where c.id =" + id);
             rs = st.executeQuery();
             if (rs.next()) {
                 item = new Suscription();
                 item.setId(rs.getInt("id"));
                 item.setReceipt_number(rs.getString("receipt_number"));
-                item.setDateSuscription(rs.getDate("date_suscripcion"));
-                item.setDateFrom(rs.getDate("date_deom"));
+                item.setDateSuscription(rs.getDate("date_suscription"));
+                item.setDateFrom(rs.getDate("date_suscription"));
                 item.setDateTo(rs.getDate("date_to"));
                 item.setPrice(rs.getDouble("price"));
                 item.setDiscount(rs.getDouble("discount"));
                 item.setTotal(rs.getDouble("total"));
                 item.setComment(rs.getString("comment"));
                 item.setPersonId(rs.getInt("person_id"));
-                item.setTypeSuscriptionId(rs.getInt("type_suscripcion_id"));
+                item.setTypeSuscriptionId(rs.getInt("type_suscription_id"));
 
             }
             rs.close();
             return item;
         } catch (Exception e) {
             System.out.println("Error al obtener la Suscription: " + e.getMessage());
-            connectionDBOracle.closeConnection(conn);
+            connectionDBPostgres.closeConnection(conn);
             rs.close();
             throw new Exception("Error al obtener la Suscription: \n" + e.getMessage());
         } finally {
             rs.close();
-            connectionDBOracle.closeConnection(conn);
+            connectionDBPostgres.closeConnection(conn);
         }
     }
 
@@ -178,22 +180,22 @@ public class SuscriptionDao implements ICrud<Suscription> {
         Suscription item;
         try {
             items = new ArrayList<Suscription>();
-            conn = connectionDBOracle.getConnection();
+            conn = connectionDBPostgres.getConnection();
             PreparedStatement st = conn.prepareStatement("select * from Suscription");
             rs = st.executeQuery();
             while (rs.next()) {
                 item = new Suscription();
                 item.setId(rs.getInt("id"));
                 item.setReceipt_number(rs.getString("receipt_number"));
-                item.setDateSuscription(rs.getDate("date_suscripcion"));
-                item.setDateFrom(rs.getDate("date_deom"));
+                item.setDateSuscription(rs.getDate("date_suscription"));
+                item.setDateFrom(rs.getDate("date_suscription"));
                 item.setDateTo(rs.getDate("date_to"));
                 item.setPrice(rs.getDouble("price"));
                 item.setDiscount(rs.getDouble("discount"));
                 item.setTotal(rs.getDouble("total"));
                 item.setComment(rs.getString("comment"));
                 item.setPersonId(rs.getInt("person_id"));
-                item.setTypeSuscriptionId(rs.getInt("type_suscripcion_id"));
+                item.setTypeSuscriptionId(rs.getInt("type_suscription_id"));
                 items.add(item);
             }
             rs.close();
@@ -201,11 +203,97 @@ public class SuscriptionDao implements ICrud<Suscription> {
         } catch (Exception e) {
             System.out.println("Error al obtener Suscriptions: " + e.getMessage());
             rs.close();
-            connectionDBOracle.closeConnection(conn);
+            connectionDBPostgres.closeConnection(conn);
             throw new Exception("Error al obtener Suscriptions: \n" + e.getMessage());
         } finally {
             rs.close();
-            connectionDBOracle.closeConnection(conn);
+            connectionDBPostgres.closeConnection(conn);
+        }
+    }
+    
+    /**
+     * Recupero las suscripciones de las personas mediante su cédula
+     * @param Objeto Persona
+     * @return List<Suscription>
+     * @throws SQLException
+     * @throws Exception 
+     */
+    public List<Suscription> getListSuscriptionFromPerson(Person p) throws SQLException, Exception {
+        Connection conn = null;
+        ResultSet rs = null;
+        List<Suscription> items;
+        Suscription item;
+        try {
+            items = new ArrayList<Suscription>();
+            conn = connectionDBPostgres.getConnection();
+            PreparedStatement st = conn.prepareStatement("select * from Suscription s where s.person_id = '"+p.getId()+"' order by s.id desc");
+            rs = st.executeQuery();
+            while (rs.next()) {
+                item = new Suscription();
+                item.setId(rs.getInt("id"));
+                item.setReceipt_number(rs.getString("receipt_number"));
+                item.setDateSuscription(rs.getDate("date_suscription"));
+                item.setDateFrom(rs.getDate("date_suscription"));
+                item.setDateTo(rs.getDate("date_to"));
+                item.setPrice(rs.getDouble("price"));
+                item.setDiscount(rs.getDouble("discount"));
+                item.setTotal(rs.getDouble("total"));
+                item.setComment(rs.getString("comment"));
+                item.setPersonId(rs.getInt("person_id"));
+                item.setTypeSuscriptionId(rs.getInt("type_suscription_id"));
+                items.add(item);
+            }
+            rs.close();
+            return items;
+        } catch (Exception e) {
+            System.out.println("Error al obtener Suscriptions: " + e.getMessage());
+            rs.close();
+            connectionDBPostgres.closeConnection(conn);
+            throw new Exception("Error al obtener Suscriptions: \n" + e.getMessage());
+        } finally {
+            rs.close();
+            connectionDBPostgres.closeConnection(conn);
+        }
+    }
+    
+    public Date getDateMaxFromPerson(int idPersona) throws Exception{
+        Connection conn = null;
+        ResultSet result = null;
+        try{
+            Date fechaMaxima = null;
+            conn = connectionDBPostgres.getConnection();
+            PreparedStatement st = conn.prepareStatement("select max(s.date_to) as fecha_maxima\n" +
+                            "from suscription s\n" +
+                            "where s.person_id = "+idPersona);
+            result = st.executeQuery();
+            if(result.next()){
+                fechaMaxima = result.getDate("fecha_maxima");
+            }
+            conn.close();
+            return fechaMaxima;
+        }catch(SQLException ex){
+            connectionDBPostgres.closeConnection(conn);
+            throw new Exception("No tiene suscripiones: \n" + ex.getMessage());
+        }
+    }
+    
+    public int getDateMaxReceiptNumber() throws Exception{
+        Connection conn = null;
+        ResultSet result = null;
+        try{
+            int maxReceiptNumber = 0;
+            conn = connectionDBPostgres.getConnection();
+            PreparedStatement st = conn.prepareStatement("select max(s.receipt_number) as maxReceiptNumber\n" +
+                            "from suscription s");
+            result = st.executeQuery();
+            if(result.next()){
+                maxReceiptNumber = result.getInt("maxReceiptNumber");
+            }
+            conn.close();
+            return maxReceiptNumber;
+        }catch(SQLException ex){
+            connectionDBPostgres.closeConnection(conn);
+            throw new Exception("No tiene suscripiones: \n" + ex.getMessage());
         }
     }
 
@@ -216,7 +304,7 @@ public class SuscriptionDao implements ICrud<Suscription> {
      * @throws Exception
      */
     public List<Suscription> searchList(String texto) throws SQLException, Exception {
-        Connection conn = null;
+        /*Connection conn = null;
         ResultSet rs = null;
         List<Suscription> items;
         Suscription item;
@@ -229,15 +317,15 @@ public class SuscriptionDao implements ICrud<Suscription> {
                 item = new Suscription();
                 item.setId(rs.getInt("id"));
                 item.setReceipt_number(rs.getString("receipt_number"));
-                item.setDateSuscription(rs.getDate("date_suscripcion"));
-                item.setDateFrom(rs.getDate("date_deom"));
+                item.setDateSuscription(rs.getDate("date_suscription"));
+                item.setDateFrom(rs.getDate("date_suscription"));
                 item.setDateTo(rs.getDate("date_to"));
                 item.setPrice(rs.getDouble("price"));
                 item.setDiscount(rs.getDouble("discount"));
                 item.setTotal(rs.getDouble("total"));
                 item.setComment(rs.getString("comment"));
                 item.setPersonId(rs.getInt("person_id"));
-                item.setTypeSuscriptionId(rs.getInt("type_suscripcion_id"));
+                item.setTypeSuscriptionId(rs.getInt("type_suscription_id"));
                 items.add(item);
             }
             return items;
@@ -249,6 +337,7 @@ public class SuscriptionDao implements ICrud<Suscription> {
         } finally {
             rs.close();
             connectionDBOracle.closeConnection(conn);
-        }
+        }*/
+        return null;
     }
 }

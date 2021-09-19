@@ -131,6 +131,7 @@ public class CategoryView extends javax.swing.JPanel{
         lblID.setPreferredSize(new java.awt.Dimension(5, 20));
 
         btnSave.setBackground(new java.awt.Color(0, 128, 129));
+        btnSave.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         btnSave.setForeground(new java.awt.Color(255, 255, 255));
         btnSave.setText("Guardar");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -140,6 +141,7 @@ public class CategoryView extends javax.swing.JPanel{
         });
 
         btnSaveChanges.setBackground(new java.awt.Color(53, 152, 219));
+        btnSaveChanges.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         btnSaveChanges.setForeground(new java.awt.Color(255, 255, 255));
         btnSaveChanges.setText("Guardar Cambios");
         btnSaveChanges.addActionListener(new java.awt.event.ActionListener() {
@@ -149,6 +151,7 @@ public class CategoryView extends javax.swing.JPanel{
         });
 
         btnDelete.setBackground(new java.awt.Color(212, 105, 89));
+        btnDelete.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         btnDelete.setForeground(new java.awt.Color(255, 255, 255));
         btnDelete.setText("Eliminar");
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -158,6 +161,7 @@ public class CategoryView extends javax.swing.JPanel{
         });
 
         btnCleanForm.setBackground(new java.awt.Color(252, 246, 214));
+        btnCleanForm.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         btnCleanForm.setText("Limpiar Formulario");
         btnCleanForm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

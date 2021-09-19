@@ -5,15 +5,19 @@
  */
 package org.casaortiz.view;
 
+import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import org.casaortiz.dao.SuscriptionDao;
 import org.casaortiz.dao.TypeSuscriptionDao;
 import org.casaortiz.model.Person;
+import org.casaortiz.model.Suscription;
 import org.casaortiz.model.TypeSuscription;
+import org.casaortiz.view.components.TableModels;
 
 /**
  *
@@ -23,39 +27,59 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
 
     private Person person;
     private TypeSuscriptionDao typeSuscriptionDao;
-    
+    private SuscriptionDao suscriptionDao;
+    List<Suscription> suscriptions = null;
     public SuscriptionViewJD(java.awt.Frame parent, boolean modal, Person _person) {
         super(parent, modal);
-        initComponents();
-        typeSuscriptionDao = new TypeSuscriptionDao();
-        person = _person;
-        lblNames.setText(person.getFirstName()+" "+person.getLastName());
-        lblIdentificationId.setText(person.getIdentificationId());
-        loadTipoSuscripcion();
-    }
-    
-    
-    public void loadTipoSuscripcion(){
         try {
-            var items = typeSuscriptionDao.getList();
-            for(TypeSuscription i: items){
-            cbTypeSuscription.addItem(i);
-        }
+            initComponents();
+            typeSuscriptionDao = new TypeSuscriptionDao();
+            suscriptionDao = new SuscriptionDao();
+            person = _person;
+            lblNames.setText(person.getFirstName() + " " + person.getLastName());
+            lblIdentificationId.setText(person.getIdentificationId());
+            txtReceipt_number.setText(String.valueOf(suscriptionDao.getDateMaxReceiptNumber()+1));
+            loadTypeSuscription();
+            loadSuscriptionFromPerson();
         } catch (Exception ex) {
             Logger.getLogger(SuscriptionViewJD.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(tTypeSuscription, "Error al cargar tipo de suscripciones: "+ex.getMessage());
         }
-        
     }
-         
 
-    
+    private void loadSuscriptionFromPerson() {
+        try {
+            suscriptions = suscriptionDao.getListSuscriptionFromPerson(person);
+            loadTable(suscriptions);
+        } catch (Exception ex) {
+            Logger.getLogger(SuscriptionViewJD.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Error al obtener datos de suscripciones de las personas: " + ex.getMessage());
+        }
+    }
+
+    private void loadTable(List<Suscription> suscription) {
+
+        tSuscription.setModel(TableModels.getModelSuscription(tSuscription, suscription));
+    }
+
+    public void loadTypeSuscription() {
+        try {
+            var items = typeSuscriptionDao.getList();
+            for (TypeSuscription i : items) {
+                cbTypeSuscription.addItem(i);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(SuscriptionViewJD.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(tSuscription, "Error al cargar tipo de suscripciones: " + ex.getMessage());
+        }
+
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tTypeSuscription = new javax.swing.JTable();
+        tSuscription = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtReceipt_number = new javax.swing.JTextField();
@@ -83,12 +107,13 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
         lblNames = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         lblDays = new javax.swing.JLabel();
+        btnSave = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "Historial Suscripciones", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 11))); // NOI18N
 
-        tTypeSuscription.setModel(new javax.swing.table.DefaultTableModel(
+        tSuscription.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -104,12 +129,14 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
                 return types [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(tTypeSuscription);
+        jScrollPane1.setViewportView(tSuscription);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "Suscripción", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 11))); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         jLabel1.setText("No. Recibo");
+
+        txtReceipt_number.setEditable(false);
 
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         jLabel2.setText("Tipo Suscripción");
@@ -305,6 +332,16 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        btnSave.setBackground(new java.awt.Color(0, 128, 129));
+        btnSave.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        btnSave.setForeground(new java.awt.Color(255, 255, 255));
+        btnSave.setText("Guardar");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -314,7 +351,9 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSave))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 566, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -326,7 +365,10 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSave))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 574, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(203, Short.MAX_VALUE))
         );
@@ -340,33 +382,53 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
         var item = (TypeSuscription) cbTypeSuscription.getSelectedItem();
         txtPrice.setText(String.valueOf(item.getPrice()));
         var dateFrom = new Date();
-        if(dDateFrom.getDatoFecha() == null){
-            dDateFrom.setDatoFecha(dateFrom);
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(dateFrom);
-            calendar.add(Calendar.DAY_OF_YEAR, item.getNum_days());//sumo los dias desde la fecha de hoy
-            Date dateTo = calendar.getTime();
-            dDateTo.setDatoFecha(dateTo);
-        }else{
+        //Validaciones para facilitar al usuario al suscribirse con la fecha y
+        //suma la fecha segun el elemento seleccionado en el tipo de suscripcion
+        //Si el campo dDateFrom esta vacio pone la de hoy o el max
+        if (dDateFrom.getDatoFecha() == null) {
+            try {
+                //Si no tiene suscripciones de la persona pone la fecha de hoy
+                if(suscriptions == null){
+                    dDateFrom.setDatoFecha(dateFrom);
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(dateFrom);
+                    calendar.add(Calendar.DAY_OF_YEAR, item.getNum_days());//sumo los dias desde la fecha de hoy
+                    Date dateTo = calendar.getTime();
+                    dDateTo.setDatoFecha(dateTo);
+                }else{//caso contrario pone la fecha maxima de las suscripciones de la persona
+                    Date fechaMaxima = suscriptionDao.getDateMaxFromPerson(person.getId());
+                    dDateFrom.setDatoFecha(fechaMaxima);
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(fechaMaxima);
+                    calendar.add(Calendar.DAY_OF_YEAR, item.getNum_days());//sumo los dias desde la fecha de hoy
+                    Date dateTo = calendar.getTime();
+                    dDateTo.setDatoFecha(dateTo);
+                }
+                
+               
+            } catch (Exception ex) {
+                Logger.getLogger(SuscriptionViewJD.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {//recupera la fecha del campo dDateFrom e incrementa
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(dDateFrom.getDatoFecha());
             calendar.add(Calendar.DAY_OF_YEAR, item.getNum_days());//sumo los dias desde la fecha de hoy
             Date dateTo = calendar.getTime();
             dDateTo.setDatoFecha(dateTo);
         }
-        
+
         calculateTotal();
     }//GEN-LAST:event_cbTypeSuscriptionItemStateChanged
 
     private void txtDiscountKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDiscountKeyReleased
         // TODO add your handling code here:
-        if(txtDiscount.getText().equals("")){
+        if (txtDiscount.getText().equals("")) {
             txtDiscount.setText("0.00");
             calculateTotal();
-        }else{
+        } else {
             calculateTotal();
         }
-        
+
     }//GEN-LAST:event_txtDiscountKeyReleased
 
     private void dDateFromMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dDateFromMouseReleased
@@ -380,16 +442,57 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
         System.out.println("cambio");
     }//GEN-LAST:event_dDateFromMouseReleased
 
-    private void calculateTotal(){
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        // TODO add your handling code here:
+
+        try {
+            var suscription = new Suscription();
+            suscription.setReceipt_number(txtReceipt_number.getText());
+            suscription.setDateSuscription(new Date());
+            suscription.setDateFrom(dDateFrom.getDatoFecha());
+            suscription.setDateTo(dDateTo.getDatoFecha());
+            suscription.setPrice(Double.parseDouble(txtPrice.getText()));
+            suscription.setDiscount(Double.parseDouble(txtDiscount.getText()));
+            suscription.setTotal(Double.parseDouble(txtTotal.getText()));
+            suscription.setComment(txtComment.getText());
+            suscription.setPersonId(person.getId());
+
+            TypeSuscription ts = (TypeSuscription) cbTypeSuscription.getSelectedItem();
+            suscription.setTypeSuscriptionId(ts.getId());
+
+            suscriptionDao.insert(suscription);
+            JOptionPane.showMessageDialog(btnSave, "Guardado correctamente");
+            cleanForm();
+            loadSuscriptionFromPerson();
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(btnSave, "SQLException: Error al guardar: " + ex.toString());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(btnSave, "Exception: Error al guardar: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void cleanForm() {
+        txtReceipt_number.setText("");
+        dDateFrom.setDatoFecha(null);
+        dDateTo.setDatoFecha(null);
+        txtPrice.setText("0.00");
+        txtDiscount.setText("0.00");
+        txtTotal.setText("0.00");
+        txtComment.setText("");
+    }
+
+    private void calculateTotal() {
         try {
             double total = Double.parseDouble(txtPrice.getText()) - Double.parseDouble(txtDiscount.getText());
-            txtTotal.setText(total+"");
+            txtTotal.setText(total + "");
         } catch (Exception e) {
         }
     }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnSave;
     private javax.swing.JComboBox<TypeSuscription> cbTypeSuscription;
     private rojeru_san.componentes.RSDateChooser dDateFrom;
     private rojeru_san.componentes.RSDateChooser dDateTo;
@@ -413,7 +516,7 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
     private javax.swing.JLabel lblDays;
     private javax.swing.JLabel lblIdentificationId;
     private javax.swing.JLabel lblNames;
-    private javax.swing.JTable tTypeSuscription;
+    private javax.swing.JTable tSuscription;
     private javax.swing.JTextField txtComment;
     private javax.swing.JTextField txtDiscount;
     private javax.swing.JTextField txtPrice;
