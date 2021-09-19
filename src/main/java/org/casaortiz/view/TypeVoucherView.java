@@ -75,7 +75,6 @@ public class TypeVoucherView extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
 
-        setBackground(new java.awt.Color(240, 242, 245));
         setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "CATEGORIA", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 11))); // NOI18N
 
         tListTypeVoucher.setModel(new javax.swing.table.DefaultTableModel(
@@ -125,7 +124,6 @@ public class TypeVoucherView extends javax.swing.JPanel {
 
         lblSearch.setPreferredSize(new java.awt.Dimension(30, 30));
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
@@ -168,6 +166,7 @@ public class TypeVoucherView extends javax.swing.JPanel {
             }
         });
 
+        lblWarning.setBackground(new java.awt.Color(238, 238, 238));
         lblWarning.setColumns(20);
         lblWarning.setLineWrap(true);
         lblWarning.setRows(5);

@@ -80,6 +80,7 @@ public class MainView extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTabbedPane1);
 
         jMenu1.setText("Control Acceso");
+        jMenu1.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
 
         miCheckSuscription.setText("Verificar Suscripción");
         miCheckSuscription.addActionListener(new java.awt.event.ActionListener() {
@@ -92,6 +93,7 @@ public class MainView extends javax.swing.JFrame {
         jMenuBar1.add(jMenu1);
 
         miInventario.setText("Inventarios");
+        miInventario.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
 
         miCategory.setText("Categoría");
         miCategory.addActionListener(new java.awt.event.ActionListener() {
@@ -104,6 +106,7 @@ public class MainView extends javax.swing.JFrame {
         jMenuBar1.add(miInventario);
 
         jMenu2.setText("Clientes");
+        jMenu2.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
 
         miTypePerson.setText("Tipo de Clientes");
         miTypePerson.addActionListener(new java.awt.event.ActionListener() {
@@ -124,6 +127,7 @@ public class MainView extends javax.swing.JFrame {
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Ventas");
+        jMenu3.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
 
         miTypeVoucher.setText("Tipo de Comprobante");
         miTypeVoucher.addActionListener(new java.awt.event.ActionListener() {
@@ -157,6 +161,7 @@ public class MainView extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void miCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miCategoryActionPerformed
@@ -227,7 +232,10 @@ public class MainView extends javax.swing.JFrame {
                 try {
                         // Set cross-platform Java L&F (also called "Metal")
                     //UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+                    //UIManager.setLookAndFeel( new FlatLightLaf());
+                    //UIManager.setLookAndFeel( new FlatDarkLaf());
                     UIManager.setLookAndFeel( new FlatIntelliJLaf() );
+                    
                 } 
                 catch (UnsupportedLookAndFeelException e) {
                    // handle exception

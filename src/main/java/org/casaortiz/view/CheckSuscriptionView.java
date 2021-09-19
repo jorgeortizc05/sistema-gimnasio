@@ -5,6 +5,7 @@
  */
 package org.casaortiz.view;
 
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -75,9 +76,7 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
         jScrollPane2 = new javax.swing.JScrollPane();
         tListPeople = new javax.swing.JTable();
 
-        jTextField1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "Código Barras"));
-
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jTextField1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "Código Barras", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 11))); // NOI18N
 
         lblPhoto.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         lblPhoto.setPreferredSize(new java.awt.Dimension(400, 300));
@@ -173,9 +172,7 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
 
         lblSearch.setPreferredSize(new java.awt.Dimension(30, 30));
 
-        tListPeople.setBackground(new java.awt.Color(24, 23, 23));
         tListPeople.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
-        tListPeople.setForeground(new java.awt.Color(255, 255, 255));
         tListPeople.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -268,6 +265,10 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
 
 
     private void tListPeopleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tListPeopleMouseClicked
+        loadItemFromTable();
+    }//GEN-LAST:event_tListPeopleMouseClicked
+
+    public void loadItemFromTable(){
         // TODO add your handling code here:
         //seleccionarItemTabla();
         int fila = tListPeople.getSelectedRow();
@@ -275,12 +276,10 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Debe seleccionar una fila");
         } else {
             try {
-
                 person = personDao.get(Integer.parseInt(tListPeople.getValueAt(fila, 0).toString()));
                 lblNames.setText(person.getFirstName() + " " + person.getLastName());
                 System.out.println("Foto: " + person.getPhoto());
                 loadPhotoPerson(person.getPhoto() + ".png");
-
             } catch (SQLException ex) {
                 Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(this, "Error al eliminar: " + ex.getMessage());
@@ -288,10 +287,9 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
                 Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(this, "Error al eliminar: " + ex.getMessage());
             }
-
         }
-    }//GEN-LAST:event_tListPeopleMouseClicked
-
+    }
+    
     private void loadPhotoPerson(String name) {
         lblPhoto.setIcon(Images.getImage(name));
         lblPhoto.validate();
@@ -299,41 +297,23 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
     }
     private void tListPeopleKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tListPeopleKeyReleased
         // TODO add your handling code here:
-        /*if(evt.getKeyCode()==KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN){
-            seleccionarItemTabla();
-        }*/
+        if(evt.getKeyCode()==KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN){
+            loadItemFromTable();
+        }
     }//GEN-LAST:event_tListPeopleKeyReleased
 
     private void btnGeneratorCardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGeneratorCardActionPerformed
         // TODO add your handling code here:
-        generarTarjetaGimnasio(person);
-    }//GEN-LAST:event_btnGeneratorCardActionPerformed
-    
-    public void generarTarjetaGimnasio(Person person){
-        String ubicacionJrxml = System.getProperty("user.dir")+File.separator+File.separator+"src"+File.separator+"main"+File.separator+"resources" +File.separator+"tarjetaGimnasioPersona.jrxml";
-        ConnectionDBPostgres conector = new ConnectionDBPostgres();
-        Connection connect = null;
-        try {
-            // TODO add your handling code here:
-            if(person == null){
-                JOptionPane.showMessageDialog(txtSearch, "Primero debes seleccionar un cliente de la tabla");
-            }else{
-                JasperReport reporte;
-                connect = conector.getConnection();
-                Map<String, Object> parametros = new HashMap<String, Object>();
-                parametros.put("pv_cedula", person.getIdentificationId());
-                parametros.put("pv_nombres", person.getFirstName()+" "+person.getLastName());
-
-                reporte = JasperCompileManager.compileReport(ubicacionJrxml);
-                JasperPrint jp = JasperFillManager.fillReport(reporte, parametros, connect);
-                JasperViewer.viewReport(jp, false);
-                conector.closeConnection(connect);
-            }
-        } catch (JRException ex) {
-            Logger.getLogger(CheckSuscriptionView.class.getName()).log(Level.SEVERE, null, ex);
-            conector.closeConnection(connect);
+        int fila = tListPeople.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar una fila");
+        } else {
+            var reporte = new Reportes();
+            reporte.generarTarjetaGimnasio(person);
         }
-    }
+
+    }//GEN-LAST:event_btnGeneratorCardActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSuscription;
