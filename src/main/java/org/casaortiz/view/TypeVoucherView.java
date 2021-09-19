@@ -166,7 +166,6 @@ public class TypeVoucherView extends javax.swing.JPanel {
             }
         });
 
-        lblWarning.setBackground(new java.awt.Color(238, 238, 238));
         lblWarning.setColumns(20);
         lblWarning.setLineWrap(true);
         lblWarning.setRows(5);

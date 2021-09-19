@@ -165,7 +165,6 @@ public class CategoryView extends javax.swing.JPanel{
             }
         });
 
-        lblWarning.setBackground(new java.awt.Color(238, 238, 238));
         lblWarning.setColumns(20);
         lblWarning.setLineWrap(true);
         lblWarning.setRows(5);
@@ -205,7 +204,7 @@ public class CategoryView extends javax.swing.JPanel{
                             .addComponent(lblID, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(30, 30, 30)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 3, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

@@ -181,7 +181,6 @@ public class TypeSuscriptionView extends javax.swing.JPanel {
 
         jLabel2.setText("$");
 
-        lblWarning.setBackground(new java.awt.Color(238, 238, 238));
         lblWarning.setColumns(20);
         lblWarning.setLineWrap(true);
         lblWarning.setRows(5);

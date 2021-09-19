@@ -6,13 +6,10 @@
 package org.casaortiz.main;
 
 import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
 import java.sql.SQLException;
-import java.util.List;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import org.casaortiz.dao.CategoryDao;
-import org.casaortiz.db.ConnectionDBPostgres;
-import org.casaortiz.model.Category;
 import org.casaortiz.view.MainView;
 
 /**
@@ -29,8 +26,8 @@ public class Main {
                         // Set cross-platform Java L&F (also called "Metal")
                     //UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
                     //UIManager.setLookAndFeel( new FlatLightLaf());
-                    UIManager.setLookAndFeel( new FlatDarkLaf());
-                    //UIManager.setLookAndFeel( new FlatIntelliJLaf() );
+                    //UIManager.setLookAndFeel( new FlatDarkLaf());
+                    UIManager.setLookAndFeel( new FlatIntelliJLaf() );
                     
                 } 
                 catch (UnsupportedLookAndFeelException e) {
