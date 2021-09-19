@@ -30,16 +30,41 @@
             <version>0.3.12</version>
             <type>jar</type>
         </dependency>
-        <dependency>
-            <groupId>rscalendar</groupId>
-            <artifactId>RSCalendar</artifactId>
-            <version>SNAPSHOT</version>
-        </dependency>
+        <!--Lombok: permite evitar poner getter and setter y otros-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.20</version>
             <scope>provided</scope>
+        </dependency>
+        <!--Jasper Reports: Genera reportes -->
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>6.17.0</version>
+        </dependency>
+        <!--Complemento para jasper reports para generar codigo de barras -->
+        <dependency>
+            <groupId>net.sourceforge.barbecue</groupId>
+            <artifactId>barbecue</artifactId>
+            <version>1.5-beta1</version>
+        </dependency>
+        
+        <!-- https://mvnrepository.com/artifact/com.formdev/flatlaf -->
+        <!--Increibles temas de JETBRAINS para mi swing -->
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>1.6</version>
+        </dependency>
+
+        
+        <!--Librerias Locales ===========================-->
+        <!--Para el calendario y las fechas en el swing -->
+        <dependency>
+            <groupId>rscalendar</groupId>
+            <artifactId>RSCalendar</artifactId>
+            <version>SNAPSHOT</version>
         </dependency>
     </dependencies>
     

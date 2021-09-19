@@ -5,12 +5,23 @@
  */
 package org.casaortiz.view;
 
+import java.io.File;
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.view.JasperViewer;
 import org.casaortiz.dao.PersonDao;
+import org.casaortiz.db.ConnectionDBPostgres;
 import org.casaortiz.model.Person;
 import org.casaortiz.model.TypePerson;
 import org.casaortiz.view.components.ButtonsColors;
@@ -24,14 +35,15 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
 
     private PersonDao personDao;
     private Person person;
-    
+
     public CheckSuscriptionView() {
         initComponents();
         personDao = new PersonDao();
         person = new Person();
         addImageButtons();
+
     }
-    
+
     private void addImageButtons() {
         btnGeneratorCard.setIcon(new ButtonsColors().addIconButton(FileLocation.pathIconBtnGenerator));
         btnAddSuscription.setIcon(new ButtonsColors().addIconButton(FileLocation.pathIconBtnAdd));
@@ -100,6 +112,11 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
         btnGeneratorCard.setForeground(new java.awt.Color(255, 255, 255));
         btnGeneratorCard.setText("GENERAR TARJETA");
         btnGeneratorCard.setPreferredSize(new java.awt.Dimension(280, 39));
+        btnGeneratorCard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGeneratorCardActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -186,6 +203,11 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
             }
         });
         jScrollPane2.setViewportView(tListPeople);
+        if (tListPeople.getColumnModel().getColumnCount() > 0) {
+            tListPeople.getColumnModel().getColumn(0).setMinWidth(0);
+            tListPeople.getColumnModel().getColumn(0).setPreferredWidth(0);
+            tListPeople.getColumnModel().getColumn(0).setMaxWidth(0);
+        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -224,6 +246,10 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
         // TODO add your handling code here:
         loadSearchPeople(txtSearch.getText());
+        //Oculto mi column id que esta en la posicion 
+        /*tListPeople.getColumnModel().getColumn(0).setMinWidth(0);
+        tListPeople.getColumnModel().getColumn(0).setMaxWidth(0);
+        tListPeople.getColumnModel().getColumn(0).setWidth(0);*/
     }//GEN-LAST:event_txtSearchKeyReleased
 
     private void loadSearchPeople(String text) {
@@ -234,13 +260,13 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Error al buscar: " + ex.getMessage());
         }
     }
-    
+
     private void loadTable(List<Person> people) {
 
         tListPeople.setModel(TableModels.getModelPersonForCheckSuscription(tListPeople, people));
     }
-    
-    
+
+
     private void tListPeopleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tListPeopleMouseClicked
         // TODO add your handling code here:
         //seleccionarItemTabla();
@@ -251,9 +277,9 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
             try {
 
                 person = personDao.get(Integer.parseInt(tListPeople.getValueAt(fila, 0).toString()));
-                lblNames.setText(person.getFirstName()+" "+person.getLastName());
-                System.out.println("Foto: "+person.getPhoto());
-                loadPhotoPerson(person.getPhoto()+".png");
+                lblNames.setText(person.getFirstName() + " " + person.getLastName());
+                System.out.println("Foto: " + person.getPhoto());
+                loadPhotoPerson(person.getPhoto() + ".png");
 
             } catch (SQLException ex) {
                 Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
@@ -278,6 +304,36 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
         }*/
     }//GEN-LAST:event_tListPeopleKeyReleased
 
+    private void btnGeneratorCardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGeneratorCardActionPerformed
+        // TODO add your handling code here:
+        generarTarjetaGimnasio(person);
+    }//GEN-LAST:event_btnGeneratorCardActionPerformed
+    
+    public void generarTarjetaGimnasio(Person person){
+        String ubicacionJrxml = System.getProperty("user.dir")+File.separator+File.separator+"src"+File.separator+"main"+File.separator+"resources" +File.separator+"tarjetaGimnasioPersona.jrxml";
+        ConnectionDBPostgres conector = new ConnectionDBPostgres();
+        Connection connect = null;
+        try {
+            // TODO add your handling code here:
+            if(person == null){
+                JOptionPane.showMessageDialog(txtSearch, "Primero debes seleccionar un cliente de la tabla");
+            }else{
+                JasperReport reporte;
+                connect = conector.getConnection();
+                Map<String, Object> parametros = new HashMap<String, Object>();
+                parametros.put("pv_cedula", person.getIdentificationId());
+                parametros.put("pv_nombres", person.getFirstName()+" "+person.getLastName());
+
+                reporte = JasperCompileManager.compileReport(ubicacionJrxml);
+                JasperPrint jp = JasperFillManager.fillReport(reporte, parametros, connect);
+                JasperViewer.viewReport(jp, false);
+                conector.closeConnection(connect);
+            }
+        } catch (JRException ex) {
+            Logger.getLogger(CheckSuscriptionView.class.getName()).log(Level.SEVERE, null, ex);
+            conector.closeConnection(connect);
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSuscription;

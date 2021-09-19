@@ -5,6 +5,9 @@
  */
 package org.casaortiz.view;
 
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
@@ -223,17 +226,18 @@ public class MainView extends javax.swing.JFrame {
             public void run() {
                 try {
                         // Set cross-platform Java L&F (also called "Metal")
-                    UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+                    //UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+                    UIManager.setLookAndFeel( new FlatIntelliJLaf() );
                 } 
                 catch (UnsupportedLookAndFeelException e) {
                    // handle exception
-                } catch (ClassNotFoundException ex) {
+                } /*catch (ClassNotFoundException ex) {
                     Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (InstantiationException ex) {
                     Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IllegalAccessException ex) {
                     Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                }*/
                 new MainView().setVisible(true);
             }
         });
