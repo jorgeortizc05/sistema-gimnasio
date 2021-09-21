@@ -130,18 +130,7 @@ drop table if exists company cascade;
 
 	-----Tipo person-----------
 	INSERT INTO public.type_person(name, description)VALUES('Cliente', 'person que usa servicios del gimnasio');
-	-------person---------
-	INSERT INTO public.person
-	(first_name, last_name, identification_id, address, email, birthday, phone, active, photo, type_person_id)
-	VALUES('JORGE', 'ORTIZ', '0105182703', 'Paute', 'jorgeortizc05@gmail.com', TO_DATE('14/05/1992', 'DD/MM/YYYY'), '0983457699', 'A', '0105182703', 1);
-	INSERT INTO public.person
-	(first_name, last_name, identification_id, address, email, birthday, phone, active, photo, type_person_id)
-	VALUES('ANDREA', 'TAQUEZ', '2101047237', 'Paute', 'andreamery05@gmail.com', TO_DATE('21/01/1995', 'DD/MM/YYYY'), '0996186835', 'A', '2101047237', 1);
-	INSERT INTO public.person
-	(first_name, last_name, identification_id, address, email, birthday, phone, active, photo, type_person_id)
-	VALUES('DIANA', 'PERALTA', '0106148729', 'Paute', 'patyperalta06@gmail.com', TO_DATE('06/08/1997', 'DD/MM/YYYY'), '0996186835', 'A', '0106148729', 1);
-
-
+	
 	------Tipo Comprobante
 	INSERT INTO public.type_voucher(name, description)VALUES('Factura', 'Se incluye el IVA del 12%');
 	----Tipo suscription---------

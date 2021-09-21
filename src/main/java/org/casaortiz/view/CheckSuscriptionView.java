@@ -88,9 +88,11 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
         lblNames.setPreferredSize(new java.awt.Dimension(700, 70));
 
         jLabel4.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel4.setText("Días Restantes:");
 
         lblRemainingDays.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        lblRemainingDays.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         btnAddSuscription.setBackground(new java.awt.Color(194, 60, 61));
         btnAddSuscription.setFont(new java.awt.Font("Dialog", 1, 20)); // NOI18N
@@ -130,9 +132,9 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblRemainingDays, javax.swing.GroupLayout.PREFERRED_SIZE, 517, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblRemainingDays, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(lblWarning, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblNames, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -300,7 +302,11 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
             }
         } catch (Exception ex) {
             Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this,person.getFirstName()+ " no tiene suscripciones: \n" + ex.getMessage());
+            //JOptionPane.showMessageDialog(this,person.getFirstName()+ " no tiene suscripciones: \n" + ex.getMessage());
+            lblWarning.setText("No tiene suscripciones");
+            lblWarning.setForeground(Color.red);
+            lblRemainingDays.setText("0");
+            lblRemainingDays.setForeground(Color.red);
         }
     }
     

@@ -62,14 +62,17 @@ public class MainView extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         miCheckSuscription = new javax.swing.JMenuItem();
-        miInventario = new javax.swing.JMenu();
-        miCategory = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         miTypePerson = new javax.swing.JMenuItem();
         miPerson = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         miTypeVoucher = new javax.swing.JMenuItem();
         miTypeSuscription = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        miInventario = new javax.swing.JMenu();
+        miCategory = new javax.swing.JMenuItem();
+        Productos = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("GIMNASIOSOLIZ");
@@ -92,20 +95,7 @@ public class MainView extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        miInventario.setText("Inventarios");
-        miInventario.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
-
-        miCategory.setText("Categoría");
-        miCategory.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miCategoryActionPerformed(evt);
-            }
-        });
-        miInventario.add(miCategory);
-
-        jMenuBar1.add(miInventario);
-
-        jMenu2.setText("Clientes");
+        jMenu2.setText("Gestión de Clientes");
         jMenu2.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
 
         miTypePerson.setText("Tipo de Clientes");
@@ -126,7 +116,7 @@ public class MainView extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu2);
 
-        jMenu3.setText("Ventas");
+        jMenu3.setText("Caja");
         jMenu3.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
 
         miTypeVoucher.setText("Tipo de Comprobante");
@@ -145,7 +135,29 @@ public class MainView extends javax.swing.JFrame {
         });
         jMenu3.add(miTypeSuscription);
 
+        jMenuItem1.setText("Forma de Pago");
+        jMenu3.add(jMenuItem1);
+
         jMenuBar1.add(jMenu3);
+
+        miInventario.setText("Inventarios");
+        miInventario.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+
+        miCategory.setText("Categoría");
+        miCategory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miCategoryActionPerformed(evt);
+            }
+        });
+        miInventario.add(miCategory);
+
+        Productos.setText("jMenuItem1");
+        miInventario.add(Productos);
+
+        jMenuBar1.add(miInventario);
+
+        jMenu4.setText("Acerca de");
+        jMenuBar1.add(jMenu4);
 
         setJMenuBar(jMenuBar1);
 
@@ -231,10 +243,13 @@ public class MainView extends javax.swing.JFrame {
     //}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem Productos;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JMenuItem miCategory;
