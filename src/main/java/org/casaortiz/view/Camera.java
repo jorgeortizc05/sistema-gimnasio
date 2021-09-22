@@ -23,6 +23,7 @@ public class Camera {
    
     public static void takePhoto(BufferedImage image, String nameFile) throws IOException{
         ImageIO.write(image, "PNG", new File(FileLocation.pathImagePerson + nameFile + ".png"));
+        
     }
     
     public void cameraOff(){

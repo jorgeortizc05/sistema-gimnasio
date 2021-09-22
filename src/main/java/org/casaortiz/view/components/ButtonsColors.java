@@ -26,7 +26,6 @@ public class ButtonsColors {
 
         if (imgURL != null) {
             Image img = new ImageIcon(imgURL).getImage();
-            System.out.println("imgURL = " + imgURL.getPath());
             return new ImageIcon(img.getScaledInstance(30, 30, Image.SCALE_SMOOTH));
         } else {
             System.err.println("Couldn't find file: " + path);

@@ -6,6 +6,7 @@
 package org.casaortiz.view;
 
 import java.io.File;
+import java.net.URL;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +29,7 @@ import org.casaortiz.model.Person;
 public class Reportes {
     
     public void generarTarjetaGimnasio(Person person){
-        String ubicacionJrxml = System.getProperty("user.dir")+File.separator+File.separator+"src"+File.separator+"main"+File.separator+"resources" +File.separator+"tarjetaGimnasioPersona.jrxml";
+        String ubicacionJrxml = FileLocation.pathReports+"tarjetaGimnasioPersona.jrxml"; //System.getProperty("user.dir")+File.separator+File.separator+"src"+File.separator+"main"+File.separator+"resources" +File.separator+"tarjetaGimnasioPersona.jrxml";
         ConnectionDBPostgres conector = new ConnectionDBPostgres();
         Connection connect = null;
         try {

@@ -10,6 +10,7 @@ import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -71,16 +72,21 @@ public class MainView extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         miInventario = new javax.swing.JMenu();
         miCategory = new javax.swing.JMenuItem();
-        Productos = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("GIMNASIOSOLIZ");
         setMinimumSize(new java.awt.Dimension(1366, 768));
         setPreferredSize(new java.awt.Dimension(1366, 768));
+        getContentPane().setLayout(new java.awt.CardLayout());
+
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(1366, 771));
 
         jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.BOTTOM);
+        jTabbedPane1.setPreferredSize(new java.awt.Dimension(1366, 768));
         jScrollPane1.setViewportView(jTabbedPane1);
+
+        getContentPane().add(jScrollPane1, "card2");
 
         jMenu1.setText("Control Acceso");
         jMenu1.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
@@ -151,26 +157,13 @@ public class MainView extends javax.swing.JFrame {
         });
         miInventario.add(miCategory);
 
-        Productos.setText("jMenuItem1");
-        miInventario.add(Productos);
-
         jMenuBar1.add(miInventario);
 
         jMenu4.setText("Acerca de");
+        jMenu4.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         jMenuBar1.add(jMenu4);
 
         setJMenuBar(jMenuBar1);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1361, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 719, Short.MAX_VALUE)
-        );
 
         pack();
         setLocationRelativeTo(null);
@@ -243,7 +236,6 @@ public class MainView extends javax.swing.JFrame {
     //}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem Productos;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -260,4 +252,5 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JMenuItem miTypeSuscription;
     private javax.swing.JMenuItem miTypeVoucher;
     // End of variables declaration//GEN-END:variables
+
 }

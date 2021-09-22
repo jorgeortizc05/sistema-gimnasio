@@ -212,7 +212,7 @@ public class SuscriptionDao implements ICrud<Suscription> {
     }
     
     /**
-     * Recupero las suscripciones de las personas mediante su cédula
+     * Recupero las suscripciones de las personas mediante su id
      * @param Objeto Persona
      * @return List<Suscription>
      * @throws SQLException
@@ -226,7 +226,7 @@ public class SuscriptionDao implements ICrud<Suscription> {
         try {
             items = new ArrayList<Suscription>();
             conn = connectionDBPostgres.getConnection();
-            PreparedStatement st = conn.prepareStatement("select * from Suscription s where s.person_id = '"+p.getId()+"' order by s.id desc");
+            PreparedStatement st = conn.prepareStatement("select * from Suscription s where s.person_id = '"+p.getId()+"' order by s.date_to desc");
             rs = st.executeQuery();
             while (rs.next()) {
                 item = new Suscription();
@@ -283,7 +283,7 @@ public class SuscriptionDao implements ICrud<Suscription> {
         try{
             int maxReceiptNumber = 0;
             conn = connectionDBPostgres.getConnection();
-            PreparedStatement st = conn.prepareStatement("select max(s.receipt_number) as maxReceiptNumber\n" +
+            PreparedStatement st = conn.prepareStatement("select max(s.receipt_number::INTEGER) as maxReceiptNumber\n" +
                             "from suscription s");
             result = st.executeQuery();
             if(result.next()){

@@ -6,6 +6,7 @@
 package org.casaortiz.view;
 
 import java.awt.Image;
+import java.net.URL;
 import javax.swing.ImageIcon;
 
 /**
@@ -13,17 +14,20 @@ import javax.swing.ImageIcon;
  * @author jorge
  */
 public class Images {
-    
-    public static ImageIcon getImage(String name){
-        try {
-            String string = FileLocation.pathImagePerson + name;
-            Image img = new ImageIcon(string).getImage();
+
+    public ImageIcon getImage(String name) {
+        String string = FileLocation.pathImagePerson + name;
+        Image img = new ImageIcon(string).getImage();
             //Me permite redimensionar la imagen para que se adapte al jLabel
-            ImageIcon ii = new ImageIcon(img.getScaledInstance(400, 300, Image.SCALE_SMOOTH));
-            return ii;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        ImageIcon ii = new ImageIcon(img.getScaledInstance(400, 300, Image.SCALE_SMOOTH));
+        return ii;
+    }
+    
+    public ImageIcon getImageForCheckSuscription(String name) {
+        String string = FileLocation.pathImagePerson + name;
+        Image img = new ImageIcon(string).getImage();
+            //Me permite redimensionar la imagen para que se adapte al jLabel
+        ImageIcon ii = new ImageIcon(img.getScaledInstance(640, 480, Image.SCALE_SMOOTH));
+        return ii;
     }
 }

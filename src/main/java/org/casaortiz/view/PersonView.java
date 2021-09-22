@@ -10,11 +10,8 @@ import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamException;
 import com.github.sarxos.webcam.WebcamPanel;
 import java.awt.Color;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.File;
+import java.awt.Dimension;
 import java.io.IOException;
-import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -22,8 +19,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.casaortiz.dao.PersonDao;
@@ -113,6 +108,8 @@ public class PersonView extends javax.swing.JPanel {
 
         lblActive.setText("jLabel10");
 
+        setPreferredSize(new java.awt.Dimension(1236, 688));
+
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "CLIENTE", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 11))); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
@@ -121,23 +118,35 @@ public class PersonView extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         jLabel2.setText("Nombres:");
 
+        txtFirstName.setMaximumSize(new java.awt.Dimension(242, 2147483647));
+
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         jLabel3.setText("Apellidos:");
+
+        txtLastName.setMaximumSize(new java.awt.Dimension(242, 2147483647));
 
         jLabel4.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         jLabel4.setText("Cédula:");
 
+        txtIdentificationId.setMaximumSize(new java.awt.Dimension(242, 2147483647));
+
         jLabel5.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         jLabel5.setText("Dirección:");
 
+        txtAddress.setMaximumSize(new java.awt.Dimension(242, 2147483647));
+
         jLabel6.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         jLabel6.setText("Correo Electrónico:");
+
+        txtEmail.setMaximumSize(new java.awt.Dimension(242, 2147483647));
 
         jLabel7.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         jLabel7.setText("Fecha de Nacimiento:");
 
         jLabel8.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         jLabel8.setText("Teléfono:");
+
+        txtPhone.setMaximumSize(new java.awt.Dimension(242, 2147483647));
 
         btnCleanForm.setBackground(new java.awt.Color(252, 246, 214));
         btnCleanForm.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
@@ -209,9 +218,12 @@ public class PersonView extends javax.swing.JPanel {
 
         txtDate.setFormatoFecha("dd/MM/yyyy");
         txtDate.setFuente(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        txtDate.setMaximumSize(new java.awt.Dimension(242, 32767));
 
         jLabel9.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         jLabel9.setText("Tipo de Cliente:");
+
+        cbTypePeople.setMaximumSize(new java.awt.Dimension(242, 32767));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -225,9 +237,7 @@ public class PersonView extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnSaveChanges)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDelete)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCleanForm))
+                        .addComponent(btnDelete))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
@@ -242,22 +252,23 @@ public class PersonView extends javax.swing.JPanel {
                         .addGap(0, 0, 0)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(lblID, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtEmail)
-                            .addComponent(txtAddress)
-                            .addComponent(txtIdentificationId)
-                            .addComponent(txtLastName)
-                            .addComponent(txtFirstName)
-                            .addComponent(txtPhone)
-                            .addComponent(txtDate, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
-                            .addComponent(cbTypePeople, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtIdentificationId, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtLastName, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtFirstName, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbTypePeople, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnCleanForm))
+                .addGap(0, 0, 0)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnTakePhoto)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(lblCamera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -302,16 +313,17 @@ public class PersonView extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSaveChanges)
                     .addComponent(btnSave)
-                    .addComponent(btnCleanForm)
                     .addComponent(btnDelete))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnCleanForm)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblCamera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblCamera, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnTakePhoto)
-                .addGap(0, 14, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         tListPeople.setModel(new javax.swing.table.DefaultTableModel(
@@ -374,7 +386,7 @@ public class PersonView extends javax.swing.JPanel {
                     .addComponent(lblSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -521,10 +533,11 @@ public class PersonView extends javax.swing.JPanel {
             } else {
                 //nombre y formato de la imagen de salida
                 Camera.takePhoto(webcam.getImage(), txtIdentificationId.getText());
-                loadPhotoPerson(txtIdentificationId.getText() + ".png");
                 webcam.close();
                 panel.stop();
                 encendidoCamara = false;
+                loadPhotoPerson(txtIdentificationId.getText() + ".png");
+                
             }
 
         } catch (IOException ex) {
@@ -535,7 +548,7 @@ public class PersonView extends javax.swing.JPanel {
     }//GEN-LAST:event_btnTakePhotoActionPerformed
 
     private void loadPhotoPerson(String name) {
-        lblPhoto.setIcon(Images.getImage(name));
+        lblPhoto.setIcon(new Images().getImage(name));
         lblPhoto.validate();
         lblPhoto.repaint();
     }
@@ -625,12 +638,12 @@ public class PersonView extends javax.swing.JPanel {
         if (webcam == null) {
             encendidoCamara = true;
             webcam = Webcam.getDefault();
-            webcam.setViewSize(webcam.getViewSizes()[0]);
+            webcam.setViewSize(new Dimension(640, 480));
             panel = new WebcamPanel(webcam, false);
             panel.setPreferredSize(webcam.getViewSize());
             panel.setOpaque(true);
             panel.setBackground(Color.BLACK);
-            panel.setBounds(0, 0, 400, 300);
+            panel.setBounds(0, 0, 640, 480);
             lblCamera.add(panel);
             if (initialized.compareAndSet(false, true)) {
                 executor.execute(new Runnable() {
@@ -641,6 +654,7 @@ public class PersonView extends javax.swing.JPanel {
                 });
             }
         } else {
+            
             webcam.open();
             panel.start();
         }
