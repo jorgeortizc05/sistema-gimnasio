@@ -68,6 +68,7 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
         lblSearch = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tListPeople = new javax.swing.JTable();
+        checkOld = new javax.swing.JCheckBox();
 
         setPreferredSize(new java.awt.Dimension(1381, 668));
 
@@ -212,6 +213,13 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
         });
         jScrollPane2.setViewportView(tListPeople);
 
+        checkOld.setText("Antiguos(Mayores a 3 meses)");
+        checkOld.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                checkOldItemStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -225,6 +233,8 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
                         .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 554, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(checkOld)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane2))
                 .addContainerGap())
@@ -237,9 +247,11 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(checkOld))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
                 .addContainerGap())
@@ -259,7 +271,14 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
 
     private void loadSearchPeople(String text) {
         try {
-            loadTable(personDao.searchList(text));
+            if(checkOld.isSelected()){
+                loadTable(personDao.searchList(text));
+            }
+            else{
+                //busca solo usuarios activos de 3 meses
+                loadTable(personDao.searchListOnlyActive3Month(text));
+            }
+                
         } catch (Exception ex) {
             Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "Error al buscar: " + ex.getMessage());
@@ -374,11 +393,17 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_txtIdentificationIdKeyPressed
 
+    private void checkOldItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_checkOldItemStateChanged
+        // TODO add your handling code here:
+        TableModels.cleanTable(tListPeople);
+    }//GEN-LAST:event_checkOldItemStateChanged
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSuscription;
     private javax.swing.JButton btnGeneratorCard;
     private javax.swing.JButton btnSaveChanges;
+    private javax.swing.JCheckBox checkOld;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;

@@ -105,6 +105,7 @@ public class PersonView extends javax.swing.JPanel {
         txtSearch = new javax.swing.JTextField();
         lblSearch = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
+        checkOld = new javax.swing.JCheckBox();
 
         lblActive.setText("jLabel10");
 
@@ -268,7 +269,7 @@ public class PersonView extends javax.swing.JPanel {
                         .addComponent(lblCamera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -357,6 +358,13 @@ public class PersonView extends javax.swing.JPanel {
 
         lblSearch.setPreferredSize(new java.awt.Dimension(30, 30));
 
+        checkOld.setText("Antiguos(Mayores a 3 meses)");
+        checkOld.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                checkOldItemStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -370,6 +378,8 @@ public class PersonView extends javax.swing.JPanel {
                         .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 554, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(checkOld)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -384,7 +394,8 @@ public class PersonView extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(checkOld))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE))
         );
@@ -507,7 +518,7 @@ public class PersonView extends javax.swing.JPanel {
 
     public void loadPeople() {
         try {
-            loadTable(personDao.getList());
+            loadTable(personDao.searchListOnlyActive3Month(""));
         } catch (Exception ex) {
             Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "Error al obtener datos de categoria: " + ex.getMessage());
@@ -515,8 +526,10 @@ public class PersonView extends javax.swing.JPanel {
     }
 
     private void loadTable(List<Person> people) {
-
+        
         tListPeople.setModel(TableModels.getModelPerson(tListPeople, people));
+        
+        
     }
 
     private void cleanTable() {
@@ -612,6 +625,11 @@ public class PersonView extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_tListPeopleMouseClicked
 
+    private void checkOldItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_checkOldItemStateChanged
+        // TODO add your handling code here:
+        TableModels.cleanTable(tListPeople);
+    }//GEN-LAST:event_checkOldItemStateChanged
+
     public void loadTypePeople() {
         try {
             cbTypePeople.removeAllItems();
@@ -626,7 +644,13 @@ public class PersonView extends javax.swing.JPanel {
 
     private void loadSearchPeople(String text) {
         try {
-            loadTable(personDao.searchList(text));
+            if(checkOld.isSelected()){
+                loadTable(personDao.searchList(text));
+            }else{
+                //busca solo usuarios activos de 3 meses
+                loadTable(personDao.searchListOnlyActive3Month(text));
+            }
+            
         } catch (Exception ex) {
             Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "Error al buscar: " + ex.getMessage());
@@ -678,6 +702,7 @@ public class PersonView extends javax.swing.JPanel {
     private javax.swing.JButton btnSaveChanges;
     private javax.swing.JButton btnTakePhoto;
     private javax.swing.JComboBox<TypePerson> cbTypePeople;
+    private javax.swing.JCheckBox checkOld;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

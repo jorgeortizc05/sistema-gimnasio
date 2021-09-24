@@ -37,6 +37,8 @@
                       <Component id="txtSearch" min="-2" pref="554" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="lblSearch" min="-2" pref="30" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="checkOld" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -56,6 +58,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="lblSearch" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
                   <Component id="txtSearch" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
+                  <Component id="checkOld" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jScrollPane1" pref="264" max="32767" attributes="0"/>
@@ -127,7 +130,7 @@
                           <Component id="lblPhoto" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace pref="24" max="32767" attributes="0"/>
+                  <EmptySpace pref="19" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -548,6 +551,14 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JSeparator" name="jSeparator1">
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="checkOld">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Antiguos(Mayores a 3 meses)"/>
+      </Properties>
+      <Events>
+        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="checkOldItemStateChanged"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

@@ -89,7 +89,7 @@
         <repository>
             <id>repo-localy</id>
             <name>A temporary repository created by NetBeans for libraries and jars it could not identify. Please replace the dependencies in this repository with correct ones and delete this repository.</name>
-            <url>file:///${project.basedir}\src\main\resources\lib</url>
+            <url>file:///${project.basedir}/src/main/resources/lib</url>
         </repository>
     </repositories>
     <build>
