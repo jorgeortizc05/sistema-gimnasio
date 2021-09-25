@@ -6,11 +6,6 @@
 package org.casaortiz.model;
 
 import java.util.Date;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-
 /**
  * Model Person
  *
@@ -18,21 +13,12 @@ import lombok.ToString;
  * @since 31/08/2021
  * @version 0.0.1
  */
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
-public class Person {
-
-    private int id;
-    private String firstName;
-    private String lastName;
-    private String identificationId;
-    private String address;
-    private String email;
-    private Date birthday;
-    private String phone;
-    private String active;
-    private String photo;
-    private int typePersonId;
+public record Person (Integer id, String firstName, String lastName, String identificationId,
+        String address,String email,Date birthday,String phone,String active,String photo, Integer typePersonId) {
+    
+    public Person(String firstName, String lastName, String identificationId,
+        String address,String email,Date birthday,String phone,String active,String photo, Integer typePersonId){
+        this(null, firstName, lastName, identificationId, address, email, birthday, phone, active, photo, typePersonId);
+        
+    }
 }

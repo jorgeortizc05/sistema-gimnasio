@@ -5,31 +5,14 @@
  */
 package org.casaortiz.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-
-
 /**
  * Model Category
  * @author Ing. Jorge Luis Ortiz Cáceres
  * @since 31/08/2021
  * @version 0.0.1
  */
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor //sin constructor
-@ToString
-public class Category {
-    
-    private int id;
-    private String name;
-    private String description;
-
-    
-
-    
-       
+public record Category(Integer id, String name, String description) {
+    public Category(String name, String description){
+        this(null,name,description);
+    }
 }

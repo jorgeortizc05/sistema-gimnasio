@@ -40,8 +40,8 @@ public class TypePersonDao implements ICrud<TypePerson>{
         try {
             
             PreparedStatement st = conn.prepareStatement("insert into Type_Person (name, description) values (?,?)");
-            st.setString(1, item.getName());
-            st.setString(2, item.getDescription());
+            st.setString(1, item.name());
+            st.setString(2, item.description());
             st.execute();
             st.close();
         } catch (Exception e ) {
@@ -65,9 +65,9 @@ public class TypePersonDao implements ICrud<TypePerson>{
         try {
             conn = connectionDBOracle.getConnection();
             PreparedStatement st = conn.prepareStatement("update Type_Person set name = ?, description = ? where id = ?");
-            st.setString(1, item.getName());
-            st.setString(2, item.getDescription());
-            st.setInt(3, item.getId());
+            st.setString(1, item.name());
+            st.setString(2, item.description());
+            st.setInt(3, item.id());
             st.execute();
             st.close();
         } catch (Exception e) {
@@ -118,10 +118,7 @@ public class TypePersonDao implements ICrud<TypePerson>{
             PreparedStatement st = conn.prepareStatement("select * from Type_Person c where c.id ="+id);
             rs = st.executeQuery();
             if(rs.next()){
-                item = new TypePerson();
-                item.setId(rs.getInt("id"));
-                item.setName(rs.getString("name"));
-                item.setDescription(rs.getString("description"));
+                item = new TypePerson(rs.getInt("id"),rs.getString("name"),rs.getString("description"));
             }
             rs.close();
             return item;
@@ -154,10 +151,7 @@ public class TypePersonDao implements ICrud<TypePerson>{
             PreparedStatement st = conn.prepareStatement("select * from Type_Person");
             rs = st.executeQuery();
             while(rs.next()){
-                item = new TypePerson();
-                item.setId(rs.getInt("id"));
-                item.setName(rs.getString("name"));
-                item.setDescription(rs.getString("description"));
+                item = new TypePerson(rs.getInt("id"),rs.getString("name"),rs.getString("description"));
                 items.add(item);
             }
             rs.close();
@@ -191,10 +185,7 @@ public class TypePersonDao implements ICrud<TypePerson>{
             PreparedStatement st = conn.prepareStatement("select * from Type_Person where upper(name ||' '||description) like upper('%"+texto+"%')");
             rs = st.executeQuery();
             while(rs.next()){
-                item = new TypePerson();
-                item.setId(rs.getInt("id"));
-                item.setName(rs.getString("name"));
-                item.setDescription(rs.getString("description"));
+                item = new TypePerson(rs.getInt("id"),rs.getString("name"),rs.getString("description"));
                 items.add(item);
             }
             return items;

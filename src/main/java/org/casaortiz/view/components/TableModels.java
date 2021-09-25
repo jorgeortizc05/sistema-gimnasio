@@ -27,9 +27,9 @@ public class TableModels {
         List<Category> items = categories;
         Object rowData[] = new Object[3];
         for (Category c : items) {
-            rowData[0] = c.getId();
-            rowData[1] = c.getName();
-            rowData[2] = c.getDescription();
+            rowData[0] = c.id();
+            rowData[1] = c.name();
+            rowData[2] = c.description();
             modelo.addRow(rowData);
         }
         return modelo;
@@ -41,12 +41,12 @@ public class TableModels {
         List<Person> items = people;
         Object rowData[] = new Object[6];
         for (Person p : items) {
-            rowData[0] = p.getId();
-            rowData[1] = p.getFirstName();
-            rowData[2] = p.getLastName();
-            rowData[3] = p.getEmail();
-            rowData[4] = p.getPhone();
-            rowData[5] = p.getActive();
+            rowData[0] = p.id();
+            rowData[1] = p.firstName();
+            rowData[2] = p.lastName();
+            rowData[3] = p.email();
+            rowData[4] = p.phone();
+            rowData[5] = p.active();
 
             modelo.addRow(rowData);
         }
@@ -58,10 +58,10 @@ public class TableModels {
         DefaultTableModel modelo = (DefaultTableModel) table.getModel();
         Object rowData[] = new Object[4];
         for (Person p : people) {
-            rowData[0] = p.getIdentificationId();
-            rowData[1] = p.getFirstName();
-            rowData[2] = p.getLastName();
-            rowData[3] = p.getPhone();
+            rowData[0] = p.identificationId();
+            rowData[1] = p.firstName();
+            rowData[2] = p.lastName();
+            rowData[3] = p.phone();
             modelo.addRow(rowData);
         }
         return modelo;
@@ -74,9 +74,9 @@ public class TableModels {
         Object rowData[] = new Object[3];
         for (TypePerson c : items) {
             System.out.println(c);
-            rowData[0] = c.getId();
-            rowData[1] = c.getName();
-            rowData[2] = c.getDescription();
+            rowData[0] = c.id();
+            rowData[1] = c.name();
+            rowData[2] = c.description();
             modelo.addRow(rowData);
         }
         return modelo;
@@ -122,9 +122,9 @@ public class TableModels {
         Object rowData[] = new Object[3];
         for(TypeVoucher c: items){
             System.out.println(c);
-            rowData[0] = c.getId();
-            rowData[1] = c.getName();
-            rowData[2] = c.getDescription();
+            rowData[0] = c.id();
+            rowData[1] = c.name();
+            rowData[2] = c.description();
             modelo.addRow(rowData);
         }
         return modelo;

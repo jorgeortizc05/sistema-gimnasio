@@ -279,9 +279,7 @@ public class CategoryView extends javax.swing.JPanel{
         // TODO add your handling code here:
         try {
             if (!txtCategory.getText().equals("")) {
-                Category cat = new Category();
-                cat.setName(txtCategory.getText());
-                cat.setDescription(txtDescription.getText());
+                Category cat = new Category(txtCategory.getText(),txtDescription.getText());
                 catDao.insert(cat);
                 JOptionPane.showMessageDialog(btnSave, "Guardado correctamente");
                 cleanForm();
@@ -328,9 +326,9 @@ public class CategoryView extends javax.swing.JPanel{
             btnSaveChanges.setVisible(true);
             try {
                 category = catDao.get(Integer.parseInt(tListCategories.getValueAt(fila, 0).toString()));
-                lblID.setText(String.valueOf(category.getId()));
-                txtCategory.setText(category.getName());
-                txtDescription.setText(category.getDescription());
+                lblID.setText(String.valueOf(category.id()));
+                txtCategory.setText(category.name());
+                txtDescription.setText(category.description());
             } catch (SQLException ex) {
                 Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(this, "Error al eliminar: " + ex.getMessage());
@@ -353,10 +351,7 @@ public class CategoryView extends javax.swing.JPanel{
         // TODO add your handling code here:
         try {
             if (!txtCategory.getText().equals("")) {
-                Category cat = new Category();
-                cat.setId(Integer.parseInt(lblID.getText()));
-                cat.setName(txtCategory.getText());
-                cat.setDescription(txtDescription.getText());
+                Category cat = new Category(Integer.parseInt(lblID.getText()),txtCategory.getText(),txtDescription.getText());
                 catDao.update(cat);
                 JOptionPane.showMessageDialog(btnSave, "Cambios guardados correctamente");
                 cleanForm();
@@ -395,10 +390,10 @@ public class CategoryView extends javax.swing.JPanel{
                 JOptionPane.showConfirmDialog(tListCategories, "Debe seleccionar una fila");
             } else {
                 int estadoEliminacionDialog = JOptionPane.showConfirmDialog(btnDelete,
-                        "Seguro que desea eliminar " + category.getName() + " ?",
+                        "Seguro que desea eliminar " + category.name() + " ?",
                         "Confirmar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (estadoEliminacionDialog == 0) {
-                    catDao.delete(category.getId());
+                    catDao.delete(category.id());
                     JOptionPane.showMessageDialog(btnDelete, "Se elimino correctamente la categoria: " + category);
                     loadCategories();
                     cleanForm();

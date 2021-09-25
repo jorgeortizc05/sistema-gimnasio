@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package org.casaortiz.dao;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,110 +17,113 @@ import org.casaortiz.model.TypeVoucher;
 
 /**
  * CRUD a TypeVoucher
+ *
  * @author Ing. Jorge Luis Ortiz Cáceres
  * @since 31/08/2021
  * @version 0.0.1
  */
-public class TypeVoucherDao implements ICrud<TypeVoucher>{
+public class TypeVoucherDao implements ICrud<TypeVoucher> {
+
     ConnectionDBPostgres connectionDBOracle;
-    
-    public TypeVoucherDao(){
+
+    public TypeVoucherDao() {
         connectionDBOracle = new ConnectionDBPostgres();
     }
 
     /**
-     * Call procedure Type_Voucher_API.INS(p_name, p_description):
-     * Inserta un registro a TypeVoucher
+     * Call procedure Type_Voucher_API.INS(p_name, p_description): Inserta un
+     * registro a TypeVoucher
+     *
      * @param item TypeVoucher
      * @throws SQLException
-     * @throws Exception 
+     * @throws Exception
      */
-    public void insert(TypeVoucher item) throws SQLException, Exception{
+    public void insert(TypeVoucher item) throws SQLException, Exception {
         Connection conn = null;
         conn = connectionDBOracle.getConnection();
         try {
-            
+
             PreparedStatement st = conn.prepareStatement("insert into type_voucher (name, description) values (?,?)");
-            st.setString(1, item.getName());
-            st.setString(2, item.getDescription());
+            st.setString(1, item.name());
+            st.setString(2, item.description());
             st.execute();
             st.close();
-        } catch (Exception e ) {
+        } catch (Exception e) {
             connectionDBOracle.closeConnection(conn);
             throw new Exception("Error al insertar TypeVoucher: \n" + e.getMessage());
-        }finally{
+        } finally {
             connectionDBOracle.closeConnection(conn);
         }
     }
-    
+
     /**
      * Call procedure Type_Voucher_API.UPD(p_id, p_name, p_description)
      * Actualiza un registro de la TypeVoucher
+     *
      * @param item TypeVoucher
      * @throws SQLException
-     * @throws Exception 
+     * @throws Exception
      */
-    public void update(TypeVoucher item) throws SQLException, Exception{
+    public void update(TypeVoucher item) throws SQLException, Exception {
         Connection conn = null;
         try {
             conn = connectionDBOracle.getConnection();
             PreparedStatement st = conn.prepareStatement("update Type_Voucher set name = ?, description = ? where id = ?");
-            st.setString(1, item.getName());
-            st.setString(2, item.getDescription());
-            st.setInt(3, item.getId());
+            st.setString(1, item.name());
+            st.setString(2, item.description());
+            st.setInt(3, item.id());
             st.execute();
             st.close();
         } catch (Exception e) {
             connectionDBOracle.closeConnection(conn);
             throw new Exception("Error al actualizar TypeVoucher: \n" + e.getMessage());
-        }finally{
+        } finally {
             connectionDBOracle.closeConnection(conn);
         }
     }
-    
+
     /**
-     * Call procedure Type_Voucher_API.DEL(p_id)
-     * Elimina un registro de la TypeVoucher
+     * Call procedure Type_Voucher_API.DEL(p_id) Elimina un registro de la
+     * TypeVoucher
+     *
      * @param id - Id de la TypeVoucher
      * @throws SQLException
-     * @throws Exception 
+     * @throws Exception
      */
-    public void delete(int id) throws SQLException, Exception{
+    public void delete(int id) throws SQLException, Exception {
         Connection conn = null;
         try {
             conn = connectionDBOracle.getConnection();
-            PreparedStatement st = conn.prepareStatement("delete from Type_Voucher where id = "+id);
+            PreparedStatement st = conn.prepareStatement("delete from Type_Voucher where id = " + id);
             st.executeUpdate();
             st.close();
         } catch (Exception e) {
             connectionDBOracle.closeConnection(conn);
             throw new Exception(e.getMessage());
-        }finally{
+        } finally {
             connectionDBOracle.closeConnection(conn);
         }
     }
-    
+
     /**
      * Call procedure Type_Voucher_API.getTypeVoucher(p_id, Type_Person_c)
      * Obtengo un registro a partir del id
+     *
      * @param id - Id TypeVoucher
      * @return TypeVoucher
      * @throws SQLException
-     * @throws Exception 
+     * @throws Exception
      */
-    public TypeVoucher get(int id) throws SQLException, Exception{
+    public TypeVoucher get(int id) throws SQLException, Exception {
         Connection conn = null;
         ResultSet rs = null;
         TypeVoucher item = null;
         try {
             conn = connectionDBOracle.getConnection();
-            PreparedStatement st = conn.prepareStatement("select * from Type_Voucher c where c.id ="+id);
+            PreparedStatement st = conn.prepareStatement("select * from Type_Voucher c where c.id =" + id);
             rs = st.executeQuery();
-            if(rs.next()){
-                item = new TypeVoucher();
-                item.setId(rs.getInt("id"));
-                item.setName(rs.getString("name"));
-                item.setDescription(rs.getString("description"));
+            if (rs.next()) {
+                item = new TypeVoucher(rs.getInt("id"), rs.getString("name"), rs.getString("description"));
             }
             rs.close();
             return item;
@@ -127,21 +131,22 @@ public class TypeVoucherDao implements ICrud<TypeVoucher>{
             System.out.println("Error al obtener la TypeVoucher: " + e.getMessage());
             connectionDBOracle.closeConnection(conn);
             rs.close();
-            throw new Exception("Error al obtener la TypeVoucher: \n" +e.getMessage());
-        }finally{
+            throw new Exception("Error al obtener la TypeVoucher: \n" + e.getMessage());
+        } finally {
             rs.close();
             connectionDBOracle.closeConnection(conn);
         }
     }
-    
+
     /**
-     * call procedure Type_Voucher_API.LIST(Type_Person_c)
-     * Recupero una lista de TypeVoucher
+     * call procedure Type_Voucher_API.LIST(Type_Person_c) Recupero una lista de
+     * TypeVoucher
+     *
      * @return List<TypeVoucher>
      * @throws SQLException
-     * @throws Exception 
+     * @throws Exception
      */
-    public List<TypeVoucher> getList() throws SQLException, Exception{
+    public List<TypeVoucher> getList() throws SQLException, Exception {
         Connection conn = null;
         ResultSet rs = null;
         List<TypeVoucher> items;
@@ -151,11 +156,8 @@ public class TypeVoucherDao implements ICrud<TypeVoucher>{
             conn = connectionDBOracle.getConnection();
             PreparedStatement st = conn.prepareStatement("select * from Type_Voucher");
             rs = st.executeQuery();
-            while(rs.next()){
-                item = new TypeVoucher();
-                item.setId(rs.getInt("id"));
-                item.setName(rs.getString("name"));
-                item.setDescription(rs.getString("description"));
+            while (rs.next()) {
+                item = new TypeVoucher(rs.getInt("id"), rs.getString("name"), rs.getString("description"));
                 items.add(item);
             }
             rs.close();
@@ -165,20 +167,21 @@ public class TypeVoucherDao implements ICrud<TypeVoucher>{
             rs.close();
             connectionDBOracle.closeConnection(conn);
             throw new Exception("Error al obtener TypeVouchers: \n" + e.getMessage());
-        }finally{
+        } finally {
             rs.close();
             connectionDBOracle.closeConnection(conn);
         }
     }
-    
+
     /**
-     * call procedure Type_Voucher_API.SEARCH(texto)
-     * Para realizar busquedas en los registros TypeVoucher
+     * call procedure Type_Voucher_API.SEARCH(texto) Para realizar busquedas en
+     * los registros TypeVoucher
+     *
      * @param texto - Lo que va a buscar
      * @return List<TypeVoucher>
-     * @throws Exception 
+     * @throws Exception
      */
-    public List<TypeVoucher> searchList(String texto) throws Exception{
+    public List<TypeVoucher> searchList(String texto) throws Exception {
         Connection conn = null;
         ResultSet rs = null;
         List<TypeVoucher> items;
@@ -186,13 +189,10 @@ public class TypeVoucherDao implements ICrud<TypeVoucher>{
         try {
             items = new ArrayList<TypeVoucher>();
             conn = connectionDBOracle.getConnection();
-            PreparedStatement st = conn.prepareStatement("select * from Type_Voucher where upper(name ||' '||description) like upper('%"+texto+"%')");
+            PreparedStatement st = conn.prepareStatement("select * from Type_Voucher where upper(name ||' '||description) like upper('%" + texto + "%')");
             rs = st.executeQuery();
-            while(rs.next()){
-                item = new TypeVoucher();
-                item.setId(rs.getInt("id"));
-                item.setName(rs.getString("name"));
-                item.setDescription(rs.getString("description"));
+            while (rs.next()) {
+                item = new TypeVoucher(rs.getInt("id"), rs.getString("name"), rs.getString("description"));
                 items.add(item);
             }
             return items;
@@ -201,7 +201,7 @@ public class TypeVoucherDao implements ICrud<TypeVoucher>{
             rs.close();
             connectionDBOracle.closeConnection(conn);
             throw new Exception("Error al buscar TypeVouchers: \n" + e.getMessage());
-        }finally{
+        } finally {
             rs.close();
             connectionDBOracle.closeConnection(conn);
         }

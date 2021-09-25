@@ -210,13 +210,14 @@ public class SuscriptionDao implements ICrud<Suscription> {
             connectionDBPostgres.closeConnection(conn);
         }
     }
-    
+
     /**
      * Recupero las suscripciones de las personas mediante su id
+     *
      * @param Objeto Persona
      * @return List<Suscription>
      * @throws SQLException
-     * @throws Exception 
+     * @throws Exception
      */
     public List<Suscription> getListSuscriptionFromPerson(Person p) throws SQLException, Exception {
         Connection conn = null;
@@ -226,7 +227,7 @@ public class SuscriptionDao implements ICrud<Suscription> {
         try {
             items = new ArrayList<Suscription>();
             conn = connectionDBPostgres.getConnection();
-            PreparedStatement st = conn.prepareStatement("select * from Suscription s where s.person_id = '"+p.getId()+"' order by s.date_to desc");
+            PreparedStatement st = conn.prepareStatement("select * from Suscription s where s.person_id = '" + p.id() + "' order by s.date_to desc");
             rs = st.executeQuery();
             while (rs.next()) {
                 item = new Suscription();
@@ -255,43 +256,43 @@ public class SuscriptionDao implements ICrud<Suscription> {
             connectionDBPostgres.closeConnection(conn);
         }
     }
-    
-    public Date getDateMaxFromPerson(int idPersona) throws Exception{
+
+    public Date getDateMaxFromPerson(int idPersona) throws Exception {
         Connection conn = null;
         ResultSet result = null;
-        try{
+        try {
             Date fechaMaxima = null;
             conn = connectionDBPostgres.getConnection();
-            PreparedStatement st = conn.prepareStatement("select max(s.date_to) as fecha_maxima\n" +
-                            "from suscription s\n" +
-                            "where s.person_id = "+idPersona);
+            PreparedStatement st = conn.prepareStatement("select max(s.date_to) as fecha_maxima\n"
+                    + "from suscription s\n"
+                    + "where s.person_id = " + idPersona);
             result = st.executeQuery();
-            if(result.next()){
+            if (result.next()) {
                 fechaMaxima = result.getDate("fecha_maxima");
             }
             conn.close();
             return fechaMaxima;
-        }catch(SQLException ex){
+        } catch (SQLException ex) {
             connectionDBPostgres.closeConnection(conn);
             throw new Exception("No tiene suscripiones: \n" + ex.getMessage());
         }
     }
-    
-    public int getDateMaxReceiptNumber() throws Exception{
+
+    public int getDateMaxReceiptNumber() throws Exception {
         Connection conn = null;
         ResultSet result = null;
-        try{
+        try {
             int maxReceiptNumber = 0;
             conn = connectionDBPostgres.getConnection();
-            PreparedStatement st = conn.prepareStatement("select max(s.receipt_number::INTEGER) as maxReceiptNumber\n" +
-                            "from suscription s");
+            PreparedStatement st = conn.prepareStatement("select max(s.receipt_number::INTEGER) as maxReceiptNumber\n"
+                    + "from suscription s");
             result = st.executeQuery();
-            if(result.next()){
+            if (result.next()) {
                 maxReceiptNumber = result.getInt("maxReceiptNumber");
             }
             conn.close();
             return maxReceiptNumber;
-        }catch(SQLException ex){
+        } catch (SQLException ex) {
             connectionDBPostgres.closeConnection(conn);
             throw new Exception("No tiene suscripiones: \n" + ex.getMessage());
         }

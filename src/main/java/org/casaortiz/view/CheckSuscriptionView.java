@@ -311,7 +311,7 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
             loadPersonPerIdentificationId(identification_id);
             txtIdentificationId.setText("");
             Date hoy = new Date();
-            Date fechaMaxima = susDao.getDateMaxFromPerson(person.getId());
+            Date fechaMaxima = susDao.getDateMaxFromPerson(person.id());
             System.out.println("fechaMaxima = " + fechaMaxima);
             int dias = (int) ((fechaMaxima.getTime() - hoy.getTime())/86400000);
             if(dias < 0){
@@ -320,7 +320,7 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
                 lblRemainingDays.setText(dias+"");
                 lblRemainingDays.setForeground(Color.red);
             }else{
-                lblWarning.setText("BIENVENIDO "+person.getFirstName()+" "+person.getLastName());
+                lblWarning.setText("BIENVENIDO "+person.firstName()+" "+person.lastName());
                 lblWarning.setForeground(Color.BLACK);
                 lblRemainingDays.setText(dias+"");
                 lblRemainingDays.setForeground(Color.BLACK);
@@ -338,11 +338,11 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
     private void loadPersonPerIdentificationId(String identification_id){
         try {
             person = personDao.getPerIdentification_id(identification_id);
-            if(person.getId() == 0){
+            if(person.id() == 0){
                 JOptionPane.showMessageDialog(lblNames, "No existe esta persona");
             }else{
-                lblNames.setText(person.getFirstName() + " " + person.getLastName());
-                loadPhotoPerson(person.getPhoto() + ".png");
+                lblNames.setText(person.firstName() + " " + person.lastName());
+                loadPhotoPerson(person.photo() + ".png");
             }
            
         } catch (Exception ex) {

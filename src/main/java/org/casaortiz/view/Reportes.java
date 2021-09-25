@@ -5,8 +5,6 @@
  */
 package org.casaortiz.view;
 
-import java.io.File;
-import java.net.URL;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,8 +38,8 @@ public class Reportes {
                 JasperReport reporte;
                 connect = conector.getConnection();
                 Map<String, Object> parametros = new HashMap<String, Object>();
-                parametros.put("pv_cedula", person.getIdentificationId());
-                parametros.put("pv_nombres", person.getFirstName()+" "+person.getLastName());
+                parametros.put("pv_cedula", person.identificationId());
+                parametros.put("pv_nombres", person.firstName()+" "+person.lastName());
 
                 reporte = JasperCompileManager.compileReport(ubicacionJrxml);
                 JasperPrint jp = JasperFillManager.fillReport(reporte, parametros, connect);

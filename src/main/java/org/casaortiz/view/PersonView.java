@@ -47,7 +47,7 @@ public class PersonView extends javax.swing.JPanel {
         initComponents();
         personDao = new PersonDao();
         typePersonDao = new TypePersonDao();
-        person = new Person();
+        //person = new Person();
         loadPeople();
         loadTypePeople();
         btnSaveChanges.setVisible(false);
@@ -107,7 +107,7 @@ public class PersonView extends javax.swing.JPanel {
         jSeparator1 = new javax.swing.JSeparator();
         checkOld = new javax.swing.JCheckBox();
 
-        lblActive.setText("jLabel10");
+        lblActive.setText("S");
 
         setPreferredSize(new java.awt.Dimension(1236, 688));
 
@@ -417,7 +417,7 @@ public class PersonView extends javax.swing.JPanel {
                         "Seguro que desea eliminar " + person + " ?",
                         "Confirmar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (estadoEliminacionDialog == 0) {
-                    personDao.delete(person.getId());
+                    personDao.delete(person.id());
                     JOptionPane.showMessageDialog(btnDelete, "Se elimino correctamente la categoria: " + person);
                     loadPeople();
                     cleanForm();
@@ -437,19 +437,10 @@ public class PersonView extends javax.swing.JPanel {
         try {
             if (!(txtFirstName.getText().equals("") || txtLastName.getText().equals("")
                     || txtIdentificationId.getText().equals(""))) {
-                Person person = new Person();
-                person.setId(Integer.parseInt(lblID.getText()));
-                person.setFirstName(txtFirstName.getText());
-                person.setLastName(txtLastName.getText());
-                person.setIdentificationId(txtIdentificationId.getText());
-                person.setAddress(txtAddress.getText());
-                person.setEmail(txtEmail.getText());
-                person.setBirthday(txtDate.getDatoFecha());
-                person.setPhone(txtPhone.getText());
-                person.setActive(lblActive.getText());
-                person.setPhoto(txtIdentificationId.getText());
                 TypePerson tp = (TypePerson) cbTypePeople.getSelectedItem();
-                person.setTypePersonId(tp.getId());
+                Person person = new Person(Integer.parseInt(lblID.getText()),txtFirstName.getText(),txtLastName.getText(),
+                txtIdentificationId.getText(),txtAddress.getText(),txtEmail.getText(),txtDate.getDatoFecha(),txtPhone.getText(),
+                lblActive.getText(),txtIdentificationId.getText(), tp.id());
                 personDao.update(person);
                 JOptionPane.showMessageDialog(btnSave, "Cambios guardados correctamente");
                 cleanForm();
@@ -472,18 +463,11 @@ public class PersonView extends javax.swing.JPanel {
         try {
             if (!(txtFirstName.getText().equals("") || txtLastName.getText().equals("")
                     || txtIdentificationId.getText().equals(""))) {
-                Person person = new Person();
-                person.setFirstName(txtFirstName.getText());
-                person.setLastName(txtLastName.getText());
-                person.setIdentificationId(txtIdentificationId.getText());
-                person.setAddress(txtAddress.getText());
-                person.setEmail(txtEmail.getText());
-                person.setBirthday(txtDate.getDatoFecha());
-                person.setPhone(txtPhone.getText());
-                person.setActive("Y");
-                person.setPhoto(txtIdentificationId.getText());
+                System.out.println("Fecha: "+txtDate.getDatoFecha());
                 TypePerson tp = (TypePerson) cbTypePeople.getSelectedItem();
-                person.setTypePersonId(tp.getId());
+                Person person = new Person(txtFirstName.getText(),txtLastName.getText(),
+                txtIdentificationId.getText(),txtAddress.getText(),txtEmail.getText(),txtDate.getDatoFecha(),txtPhone.getText(),
+                "A",txtIdentificationId.getText(), tp.id());
                 personDao.insert(person);
                 JOptionPane.showMessageDialog(btnSave, "Guardado correctamente");
                 cleanForm();
@@ -599,18 +583,18 @@ public class PersonView extends javax.swing.JPanel {
             try {
 
                 person = personDao.get(Integer.parseInt(tListPeople.getValueAt(fila, 0).toString()));
-                lblID.setText(String.valueOf(person.getId()));
-                txtFirstName.setText(person.getFirstName());
-                txtLastName.setText(person.getLastName());
-                txtIdentificationId.setText(person.getIdentificationId());
-                txtAddress.setText(person.getAddress());
-                txtEmail.setText(person.getEmail());
-                txtDate.setDatoFecha(person.getBirthday());
-                txtPhone.setText(person.getPhone());
-                lblActive.setText(person.getActive());
-                System.out.println("Foto: "+person.getPhoto());
-                loadPhotoPerson(person.getPhoto()+".png");
-                TypePerson typePerson = typePersonDao.get(person.getTypePersonId());
+                lblID.setText(String.valueOf(person.id()));
+                txtFirstName.setText(person.firstName());
+                txtLastName.setText(person.lastName());
+                txtIdentificationId.setText(person.identificationId());
+                txtAddress.setText(person.address());
+                txtEmail.setText(person.email());
+                txtDate.setDatoFecha(person.birthday());
+                txtPhone.setText(person.phone());
+                lblActive.setText(person.active());
+                System.out.println("Foto: "+person.photo());
+                loadPhotoPerson(person.photo()+".png");
+                TypePerson typePerson = typePersonDao.get(person.typePersonId());
                 cbTypePeople.getModel().setSelectedItem(typePerson);
                 txtIdentificationId.setEnabled(false);
 

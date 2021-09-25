@@ -11,21 +11,22 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * Model TypeSuscription
+ * Model TypeSuscription using library lombok: getter and setter automaticos
+ *
  * @author Ing. Jorge Luis Ortiz Cáceres
  * @since 01/09/2021
  * @version 0.0.1
  */
 @Data
 public class TypeSuscription {
+
     private int id;
     private String name;
     private int num_days;
     private double price;
-    private String description; 
+    private String description;
 
-   
     public String toString() {
-        return  name + " - " + description ;
+        return name + " - " + description;
     }
 }
