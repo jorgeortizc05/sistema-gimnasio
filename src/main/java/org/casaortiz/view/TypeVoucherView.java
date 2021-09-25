@@ -282,7 +282,7 @@ public class TypeVoucherView extends javax.swing.JPanel {
         
         try {
             if(!txtTypeVoucher.getText().equals("")){
-                TypeVoucher cat = new TypeVoucher(txtTypeVoucher.getText(),txtDescription.getText());
+                TypeVoucher cat = new TypeVoucher(null,txtTypeVoucher.getText(),txtDescription.getText());
                 typeVoucherDao.insert(cat);
                 JOptionPane.showMessageDialog(btnSave, "Guardado correctamente");
                 cleanForm();
@@ -322,9 +322,9 @@ public class TypeVoucherView extends javax.swing.JPanel {
             btnSaveChanges.setVisible(true);
             try {
                 typeVoucher = typeVoucherDao.get(Integer.parseInt(tListTypeVoucher.getValueAt(fila, 0).toString()));
-                lblID.setText(String.valueOf(typeVoucher.id()));
-                txtTypeVoucher.setText(typeVoucher.name());
-                txtDescription.setText(typeVoucher.description());
+                lblID.setText(String.valueOf(typeVoucher.getId()));
+                txtTypeVoucher.setText(typeVoucher.getName());
+                txtDescription.setText(typeVoucher.getDescription());
             } catch (SQLException ex) {
                 Logger.getLogger(TypeVoucherView.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(this, "Error al eliminar: " +ex.getMessage());
@@ -384,10 +384,10 @@ public class TypeVoucherView extends javax.swing.JPanel {
                 JOptionPane.showConfirmDialog(tListTypeVoucher, "Debe seleccionar una fila");
             }else{
                 int estadoEliminacionDialog = JOptionPane.showConfirmDialog(btnDelete, 
-                        "Seguro que desea eliminar "+typeVoucher.name()+" ?",
+                        "Seguro que desea eliminar "+typeVoucher.getName()+" ?",
                         "Confirmar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if(estadoEliminacionDialog == 0){
-                    typeVoucherDao.delete(typeVoucher.id());
+                    typeVoucherDao.delete(typeVoucher.getId());
                     JOptionPane.showMessageDialog(btnDelete, "Se elimino correctamente la TypeVoucher: " + typeVoucher);
                     loadTypeVouchers();
                     cleanForm();

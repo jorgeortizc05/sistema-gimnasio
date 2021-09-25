@@ -27,9 +27,9 @@ public class TableModels {
         List<Category> items = categories;
         Object rowData[] = new Object[3];
         for (Category c : items) {
-            rowData[0] = c.id();
-            rowData[1] = c.name();
-            rowData[2] = c.description();
+            rowData[0] = c.getId();
+            rowData[1] = c.getName();
+            rowData[2] = c.getDescription();
             modelo.addRow(rowData);
         }
         return modelo;
@@ -74,9 +74,9 @@ public class TableModels {
         Object rowData[] = new Object[3];
         for (TypePerson c : items) {
             System.out.println(c);
-            rowData[0] = c.id();
-            rowData[1] = c.name();
-            rowData[2] = c.description();
+            rowData[0] = c.getId();
+            rowData[1] = c.getName();
+            rowData[2] = c.getDescription();
             modelo.addRow(rowData);
         }
         return modelo;
@@ -122,9 +122,9 @@ public class TableModels {
         Object rowData[] = new Object[3];
         for(TypeVoucher c: items){
             System.out.println(c);
-            rowData[0] = c.id();
-            rowData[1] = c.name();
-            rowData[2] = c.description();
+            rowData[0] = c.getId();
+            rowData[1] = c.getName();
+            rowData[2] = c.getDescription();
             modelo.addRow(rowData);
         }
         return modelo;

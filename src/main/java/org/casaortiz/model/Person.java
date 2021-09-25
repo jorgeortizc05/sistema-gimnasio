@@ -23,7 +23,7 @@ import lombok.ToString;
 @ToString
 public class Person {
 
-    private int id;
+    private Integer id;
     private String firstName;
     private String lastName;
     private String identificationId;
@@ -33,6 +33,6 @@ public class Person {
     private String phone;
     private String active;
     private String photo;
-    private int typePersonId;
+    private Integer typePersonId;
     
 }

@@ -452,7 +452,7 @@ public class PersonView extends javax.swing.JPanel {
                 person.setActive(lblActive.getText());
                 person.setPhoto(txtIdentificationId.getText());
                 TypePerson tp = (TypePerson) cbTypePeople.getSelectedItem();
-                person.setTypePersonId(tp.id());
+                person.setTypePersonId(tp.getId());
                 personDao.update(person);
                 JOptionPane.showMessageDialog(btnSave, "Cambios guardados correctamente");
                 cleanForm();
@@ -486,7 +486,7 @@ public class PersonView extends javax.swing.JPanel {
                 person.setActive("Y");
                 person.setPhoto(txtIdentificationId.getText());
                 TypePerson tp = (TypePerson) cbTypePeople.getSelectedItem();
-                person.setTypePersonId(tp.id());
+                person.setTypePersonId(tp.getId());
                 perBuss.savePerson(person);
                 JOptionPane.showMessageDialog(btnSave, "Guardado correctamente");
                 cleanForm();
@@ -630,6 +630,7 @@ public class PersonView extends javax.swing.JPanel {
     private void checkOldItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_checkOldItemStateChanged
         // TODO add your handling code here:
         TableModels.cleanTable(tListPeople);
+        loadSearchPeople(txtSearch.getText());
     }//GEN-LAST:event_checkOldItemStateChanged
 
     public void loadTypePeople() {

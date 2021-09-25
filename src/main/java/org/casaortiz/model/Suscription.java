@@ -21,7 +21,7 @@ import lombok.ToString;
 @ToString
 public class Suscription {
     
-    private int id;
+    private Integer id;
     private String receipt_number;
     private Date DateSuscription;
     private Date DateFrom;
@@ -30,7 +30,7 @@ public class Suscription {
     private Double discount;
     private Double total;
     private String comment;
-    private int personId;
-    private int typeSuscriptionId;
+    private Integer personId;
+    private Integer typeSuscriptionId;
     
 }

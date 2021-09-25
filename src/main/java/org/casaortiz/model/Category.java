@@ -4,6 +4,11 @@
  * and open the template in the editor.
  */
 package org.casaortiz.model;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 
 /**
  * Model Category
@@ -11,8 +16,18 @@ package org.casaortiz.model;
  * @since 31/08/2021
  * @version 0.0.1
  */
-public record Category(Integer id, String name, String description) {
-    public Category(String name, String description){
-        this(null,name,description);
-    }
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor //sin constructor
+@ToString
+public class Category {
+
+    private Integer id;
+    private String name;
+    private String description;
+
+
+
+
 }

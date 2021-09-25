@@ -45,8 +45,8 @@ public class CategoryDao implements ICrud<Category> {
         try {
 
             PreparedStatement st = conn.prepareStatement("insert into category (name, description) values (?,?)");
-            st.setString(1, item.name());
-            st.setString(2, item.description());
+            st.setString(1, item.getName());
+            st.setString(2, item.getDescription());
             st.execute();
             st.close();
         } catch (Exception e) {
@@ -70,9 +70,9 @@ public class CategoryDao implements ICrud<Category> {
         try {
             conn = connectionDBOracle.getConnection();
             PreparedStatement st = conn.prepareStatement("update category set name = ?, description = ? where id = ?");
-            st.setString(1, item.name());
-            st.setString(2, item.description());
-            st.setInt(3, item.id());
+            st.setString(1, item.getName());
+            st.setString(2, item.getDescription());
+            st.setInt(3, item.getId());
             st.execute();
             st.close();
         } catch (Exception e) {

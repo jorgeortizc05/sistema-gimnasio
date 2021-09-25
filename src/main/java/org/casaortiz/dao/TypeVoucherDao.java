@@ -44,8 +44,8 @@ public class TypeVoucherDao implements ICrud<TypeVoucher> {
         try {
 
             PreparedStatement st = conn.prepareStatement("insert into type_voucher (name, description) values (?,?)");
-            st.setString(1, item.name());
-            st.setString(2, item.description());
+            st.setString(1, item.getName());
+            st.setString(2, item.getDescription());
             st.execute();
             st.close();
         } catch (Exception e) {
@@ -69,9 +69,9 @@ public class TypeVoucherDao implements ICrud<TypeVoucher> {
         try {
             conn = connectionDBOracle.getConnection();
             PreparedStatement st = conn.prepareStatement("update Type_Voucher set name = ?, description = ? where id = ?");
-            st.setString(1, item.name());
-            st.setString(2, item.description());
-            st.setInt(3, item.id());
+            st.setString(1, item.getName());
+            st.setString(2, item.getDescription());
+            st.setInt(3, item.getId());
             st.execute();
             st.close();
         } catch (Exception e) {

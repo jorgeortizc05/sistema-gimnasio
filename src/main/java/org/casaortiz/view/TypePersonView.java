@@ -283,7 +283,7 @@ public class TypePersonView extends javax.swing.JPanel {
 
         try {
             if (!txtTypePerson.getText().equals("")) {
-                TypePerson cat = new TypePerson(txtTypePerson.getText(),txtDescription.getText());
+                TypePerson cat = new TypePerson(null,txtTypePerson.getText(),txtDescription.getText());
                 typePersonDao.insert(cat);
                 JOptionPane.showMessageDialog(btnSave, "Guardado correctamente");
                 cleanForm();
@@ -322,9 +322,9 @@ public class TypePersonView extends javax.swing.JPanel {
             btnSaveChanges.setVisible(true);
             try {
                 typePerson = typePersonDao.get(Integer.parseInt(tListTypePeople.getValueAt(fila, 0).toString()));
-                lblID.setText(String.valueOf(typePerson.id()));
-                txtTypePerson.setText(typePerson.name());
-                txtDescription.setText(typePerson.description());
+                lblID.setText(String.valueOf(typePerson.getId()));
+                txtTypePerson.setText(typePerson.getName());
+                txtDescription.setText(typePerson.getDescription());
             } catch (SQLException ex) {
                 Logger.getLogger(TypePersonView.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(this, "Error al eliminar: " + ex.getMessage());
@@ -384,10 +384,10 @@ public class TypePersonView extends javax.swing.JPanel {
                 JOptionPane.showConfirmDialog(tListTypePeople, "Debe seleccionar una fila");
             } else {
                 int estadoEliminacionDialog = JOptionPane.showConfirmDialog(btnDelete,
-                        "Seguro que desea eliminar " + typePerson.name() + " ?",
+                        "Seguro que desea eliminar " + typePerson.getName() + " ?",
                         "Confirmar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (estadoEliminacionDialog == 0) {
-                    typePersonDao.delete(typePerson.id());
+                    typePersonDao.delete(typePerson.getId());
                     JOptionPane.showMessageDialog(btnDelete, "Se elimino correctamente la TypePerson: " + typePerson);
                     loadTypePeople();
                     pv.loadTypePeople();

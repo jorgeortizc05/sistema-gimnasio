@@ -20,10 +20,10 @@ import lombok.ToString;
 @Data
 public class TypeSuscription {
 
-    private int id;
+    private Integer id;
     private String name;
-    private int num_days;
-    private double price;
+    private Integer num_days;
+    private Double price;
     private String description;
 
     public String toString() {
