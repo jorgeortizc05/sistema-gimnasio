@@ -36,8 +36,8 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
             typeSuscriptionDao = new TypeSuscriptionDao();
             suscriptionDao = new SuscriptionDao();
             person = _person;
-            lblNames.setText(person.firstName() + " " + person.lastName());
-            lblIdentificationId.setText(person.identificationId());
+            lblNames.setText(person.getFirstName() + " " + person.getLastName());
+            lblIdentificationId.setText(person.getIdentificationId());
             txtReceipt_number.setText(String.valueOf(suscriptionDao.getDateMaxReceiptNumber()+1));
             loadTypeSuscription();
             loadSuscriptionFromPerson();
@@ -396,7 +396,7 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
                     Date dateTo = calendar.getTime();
                     dDateTo.setDatoFecha(dateTo);
                 }else{//caso contrario pone la fecha maxima de las suscripciones de la persona
-                    Date fechaMaxima = suscriptionDao.getDateMaxFromPerson(person.id());
+                    Date fechaMaxima = suscriptionDao.getDateMaxFromPerson(person.getId());
                     dDateFrom.setDatoFecha(fechaMaxima);
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(fechaMaxima);
@@ -455,7 +455,7 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
             suscription.setDiscount(Double.parseDouble(txtDiscount.getText()));
             suscription.setTotal(Double.parseDouble(txtTotal.getText()));
             suscription.setComment(txtComment.getText());
-            suscription.setPersonId(person.id());
+            suscription.setPersonId(person.getId());
 
             TypeSuscription ts = (TypeSuscription) cbTypeSuscription.getSelectedItem();
             suscription.setTypeSuscriptionId(ts.getId());

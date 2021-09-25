@@ -311,16 +311,22 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
             loadPersonPerIdentificationId(identification_id);
             txtIdentificationId.setText("");
             Date hoy = new Date();
-            Date fechaMaxima = susDao.getDateMaxFromPerson(person.id());
+            Date fechaMaxima = susDao.getDateMaxFromPerson(person.getId());
             System.out.println("fechaMaxima = " + fechaMaxima);
-            int dias = (int) ((fechaMaxima.getTime() - hoy.getTime())/86400000);
+            int dias = (fechaMaxima == null) ? -1: (int) ((fechaMaxima.getTime() - hoy.getTime())/86400000);
             if(dias < 0){
                 lblWarning.setText("RENOVAR SUSCRIPCIÓN");
                 lblWarning.setForeground(Color.red);
                 lblRemainingDays.setText(dias+"");
                 lblRemainingDays.setForeground(Color.red);
+                if( dias == -1){
+                    lblWarning.setText("USTED NO DISPONE DE UNA SUSCRIPCIÓN");
+                    lblWarning.setForeground(Color.red);
+                    lblRemainingDays.setText("");
+                    lblRemainingDays.setForeground(Color.red);
+                }
             }else{
-                lblWarning.setText("BIENVENIDO "+person.firstName()+" "+person.lastName());
+                lblWarning.setText("BIENVENIDO "+person.getFirstName()+" "+person.getLastName());
                 lblWarning.setForeground(Color.BLACK);
                 lblRemainingDays.setText(dias+"");
                 lblRemainingDays.setForeground(Color.BLACK);
@@ -338,11 +344,11 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
     private void loadPersonPerIdentificationId(String identification_id){
         try {
             person = personDao.getPerIdentification_id(identification_id);
-            if(person.id() == 0){
+            if(person.getId() == 0){
                 JOptionPane.showMessageDialog(lblNames, "No existe esta persona");
             }else{
-                lblNames.setText(person.firstName() + " " + person.lastName());
-                loadPhotoPerson(person.photo() + ".png");
+                lblNames.setText(person.getFirstName() + " " + person.getLastName());
+                loadPhotoPerson(person.getPhoto() + ".png");
             }
            
         } catch (Exception ex) {

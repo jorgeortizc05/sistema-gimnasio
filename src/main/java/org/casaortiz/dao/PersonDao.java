@@ -44,17 +44,16 @@ public class PersonDao implements ICrud<Person> {
         try {
             PreparedStatement st = conn.prepareStatement("insert into person (first_name, last_name, identification_id, address, "
                     + "email, birthday, phone, active, photo, type_person_id) values (?,?,?,?,?,?,?,?,?,?)");
-            st.setString(1, item.firstName());
-            st.setString(2, item.lastName());
-            st.setString(3, item.identificationId());
-            st.setString(4, item.address());
-            st.setString(5, item.email());
-            //Verifico si la fecha que llega es nulo o no
-            st.setDate(6, ((item.birthday() == null) ? null : new java.sql.Date(item.birthday().getTime())));
-            st.setString(7, item.phone());
-            st.setString(8, item.active());
-            st.setString(9, item.photo());
-            st.setInt(10, item.typePersonId());
+            st.setString(1, item.getFirstName());
+            st.setString(2, item.getLastName());
+            st.setString(3, item.getIdentificationId());
+            st.setString(4, item.getAddress());
+            st.setString(5, item.getEmail());
+            st.setDate(6, ((item.getBirthday() == null) ? null : new java.sql.Date(item.getBirthday().getTime())));
+            st.setString(7, item.getPhone());
+            st.setString(8, item.getActive());
+            st.setString(9, item.getPhoto());
+            st.setInt(10, item.getTypePersonId());
             st.execute();
             st.close();
 
@@ -81,17 +80,19 @@ public class PersonDao implements ICrud<Person> {
             PreparedStatement st = conn.prepareStatement("UPDATE public.person\n"
                     + "SET first_name=?, last_name=?, identification_id=?, address=?, email=?, birthday=?, phone=?, active=?, photo=?, type_person_id=?\n"
                     + "WHERE id=?");
-            st.setString(1, item.firstName());
-            st.setString(2, item.lastName());
-            st.setString(3, item.identificationId());
-            st.setString(4, item.address());
-            st.setString(5, item.email());
-            st.setDate(6, ((item.birthday() == null) ? null : new java.sql.Date(item.birthday().getTime())));
-            st.setString(7, item.phone());
-            st.setString(8, item.active());
-            st.setString(9, item.photo());
-            st.setInt(10, item.typePersonId());
-            st.setInt(11, item.id());
+            
+            st.setString(1, item.getFirstName());
+            st.setString(2, item.getLastName());
+            st.setString(3, item.getIdentificationId());
+            st.setString(4, item.getAddress());
+            st.setString(5, item.getEmail());
+            st.setDate(6, ((item.getBirthday() == null) ? null : new java.sql.Date(item.getBirthday().getTime())));
+            st.setString(7, item.getPhone());
+            st.setString(8, item.getActive());
+            st.setString(9, item.getPhoto());
+            st.setInt(10, item.getTypePersonId());
+            st.setInt(11, item.getId());
+            
             st.execute();
             st.close();
 

@@ -38,8 +38,8 @@ public class Reportes {
                 JasperReport reporte;
                 connect = conector.getConnection();
                 Map<String, Object> parametros = new HashMap<String, Object>();
-                parametros.put("pv_cedula", person.identificationId());
-                parametros.put("pv_nombres", person.firstName()+" "+person.lastName());
+                parametros.put("pv_cedula", person.getIdentificationId());
+                parametros.put("pv_nombres", person.getFirstName()+" "+person.getLastName());
 
                 reporte = JasperCompileManager.compileReport(ubicacionJrxml);
                 JasperPrint jp = JasperFillManager.fillReport(reporte, parametros, connect);

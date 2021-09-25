@@ -227,7 +227,7 @@ public class SuscriptionDao implements ICrud<Suscription> {
         try {
             items = new ArrayList<Suscription>();
             conn = connectionDBPostgres.getConnection();
-            PreparedStatement st = conn.prepareStatement("select * from Suscription s where s.person_id = '" + p.id() + "' order by s.date_to desc");
+            PreparedStatement st = conn.prepareStatement("select * from Suscription s where s.person_id = '" + p.getId() + "' order by s.date_to desc");
             rs = st.executeQuery();
             while (rs.next()) {
                 item = new Suscription();
