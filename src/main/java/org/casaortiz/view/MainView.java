@@ -91,6 +91,7 @@ public class MainView extends javax.swing.JFrame {
         jMenu1.setText("Control Acceso");
         jMenu1.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
 
+        miCheckSuscription.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/system/check-30x30.png"))); // NOI18N
         miCheckSuscription.setText("Verificar Suscripción");
         miCheckSuscription.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -104,6 +105,7 @@ public class MainView extends javax.swing.JFrame {
         jMenu2.setText("Gestión de Clientes");
         jMenu2.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
 
+        miTypePerson.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/system/typeperson-30x30.png"))); // NOI18N
         miTypePerson.setText("Tipo de Clientes");
         miTypePerson.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -112,6 +114,7 @@ public class MainView extends javax.swing.JFrame {
         });
         jMenu2.add(miTypePerson);
 
+        miPerson.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/system/people-30x30.png"))); // NOI18N
         miPerson.setText("Clientes");
         miPerson.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -125,6 +128,7 @@ public class MainView extends javax.swing.JFrame {
         jMenu3.setText("Caja");
         jMenu3.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
 
+        miTypeVoucher.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/system/type-voucher-30x30.png"))); // NOI18N
         miTypeVoucher.setText("Tipo de Comprobante");
         miTypeVoucher.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -133,6 +137,7 @@ public class MainView extends javax.swing.JFrame {
         });
         jMenu3.add(miTypeVoucher);
 
+        miTypeSuscription.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/system/type-suscription-30x30.png"))); // NOI18N
         miTypeSuscription.setText("Tipo de Suscripción");
         miTypeSuscription.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -141,6 +146,7 @@ public class MainView extends javax.swing.JFrame {
         });
         jMenu3.add(miTypeSuscription);
 
+        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/system/metodo-de-pago-30x30.png"))); // NOI18N
         jMenuItem1.setText("Forma de Pago");
         jMenu3.add(jMenuItem1);
 
@@ -149,6 +155,7 @@ public class MainView extends javax.swing.JFrame {
         miInventario.setText("Inventarios");
         miInventario.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
 
+        miCategory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/system/category-30x30.png"))); // NOI18N
         miCategory.setText("Categoría");
         miCategory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

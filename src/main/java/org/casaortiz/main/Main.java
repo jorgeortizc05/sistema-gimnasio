@@ -30,6 +30,8 @@ public class Main {
                 try {
                     // Set cross-platform Java L&F (also called "Metal")
                     UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+                    //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+
                     //UIManager.setLookAndFeel( new FlatLightLaf());
                     //UIManager.setLookAndFeel(new FlatDarkLaf());
                     //UIManager.setLookAndFeel( new FlatIntelliJLaf() );
