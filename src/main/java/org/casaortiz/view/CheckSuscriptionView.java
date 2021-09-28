@@ -41,7 +41,7 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
     private void addImageButtons() {
         btnGeneratorCard.setIcon(new ButtonsColors().addIconButton(FileLocation.pathIconBtnGenerator));
         btnAddSuscription.setIcon(new ButtonsColors().addIconButton(FileLocation.pathIconBtnAdd));
-        btnSaveChanges.setIcon(new ButtonsColors().addIconButton(FileLocation.pathIconBtnEdit));
+        btnEdit.setIcon(new ButtonsColors().addIconButton(FileLocation.pathIconBtnEdit));
         lblSearch.setIcon(new ButtonsColors().addIconButton(FileLocation.pathIconBtnSearch));
     }
 
@@ -62,7 +62,7 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         lblRemainingDays = new javax.swing.JLabel();
         btnAddSuscription = new javax.swing.JButton();
-        btnSaveChanges = new javax.swing.JButton();
+        btnEdit = new javax.swing.JButton();
         btnGeneratorCard = new javax.swing.JButton();
         txtSearch = new javax.swing.JTextField();
         lblSearch = new javax.swing.JLabel();
@@ -108,11 +108,16 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
             }
         });
 
-        btnSaveChanges.setBackground(new java.awt.Color(194, 60, 61));
-        btnSaveChanges.setFont(new java.awt.Font("Dialog", 1, 20)); // NOI18N
-        btnSaveChanges.setForeground(new java.awt.Color(255, 255, 255));
-        btnSaveChanges.setText("EDITAR");
-        btnSaveChanges.setPreferredSize(new java.awt.Dimension(280, 39));
+        btnEdit.setBackground(new java.awt.Color(194, 60, 61));
+        btnEdit.setFont(new java.awt.Font("Dialog", 1, 20)); // NOI18N
+        btnEdit.setForeground(new java.awt.Color(255, 255, 255));
+        btnEdit.setText("EDITAR");
+        btnEdit.setPreferredSize(new java.awt.Dimension(280, 39));
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
 
         btnGeneratorCard.setBackground(new java.awt.Color(194, 60, 61));
         btnGeneratorCard.setFont(new java.awt.Font("Dialog", 1, 20)); // NOI18N
@@ -143,7 +148,7 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
                             .addComponent(lblWarning, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblNames, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnSaveChanges, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnAddSuscription, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -168,7 +173,7 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
                                 .addGap(4, 4, 4)))
                         .addGap(77, 77, 77)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnSaveChanges, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnAddSuscription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnGeneratorCard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -213,7 +218,7 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
         });
         jScrollPane2.setViewportView(tListPeople);
 
-        checkOld.setText("Antiguos(Mayores a 3 meses)");
+        checkOld.setText("Antiguos(Mayores a 3 meses) o Sin Suscripciones");
         checkOld.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 checkOldItemStateChanged(evt);
@@ -271,14 +276,13 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
 
     private void loadSearchPeople(String text) {
         try {
-            if(checkOld.isSelected()){
+            if (checkOld.isSelected()) {
                 loadTable(personDao.searchList(text));
-            }
-            else{
+            } else {
                 //busca solo usuarios activos de 3 meses
                 loadTable(personDao.searchListOnlyActive3Month(text));
             }
-                
+
         } catch (Exception ex) {
             Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "Error al buscar: " + ex.getMessage());
@@ -313,22 +317,22 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
             Date hoy = new Date();
             Date fechaMaxima = susDao.getDateMaxFromPerson(person.getId());
             System.out.println("fechaMaxima = " + fechaMaxima);
-            int dias = (fechaMaxima == null) ? -1: (int) ((fechaMaxima.getTime() - hoy.getTime())/86400000);
-            if(dias < 0){
+            int dias = (fechaMaxima == null) ? -1 : (int) ((fechaMaxima.getTime() - hoy.getTime()) / 86400000);
+            if (dias < 0) {
                 lblWarning.setText("RENOVAR SUSCRIPCIÓN");
                 lblWarning.setForeground(Color.red);
-                lblRemainingDays.setText(dias+"");
+                lblRemainingDays.setText(dias + "");
                 lblRemainingDays.setForeground(Color.red);
-                if( dias == -1){
+                if (dias == -1) {
                     lblWarning.setText("USTED NO DISPONE DE UNA SUSCRIPCIÓN");
                     lblWarning.setForeground(Color.red);
                     lblRemainingDays.setText("");
                     lblRemainingDays.setForeground(Color.red);
                 }
-            }else{
-                lblWarning.setText("BIENVENIDO "+person.getFirstName()+" "+person.getLastName());
+            } else {
+                lblWarning.setText("BIENVENIDO " + person.getFirstName() + " " + person.getLastName());
                 lblWarning.setForeground(Color.BLACK);
-                lblRemainingDays.setText(dias+"");
+                lblRemainingDays.setText(dias + "");
                 lblRemainingDays.setForeground(Color.BLACK);
             }
         } catch (Exception ex) {
@@ -340,21 +344,21 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
             lblRemainingDays.setForeground(Color.red);
         }
     }
-    
-    private void loadPersonPerIdentificationId(String identification_id){
+
+    private void loadPersonPerIdentificationId(String identification_id) {
         try {
             person = personDao.getPerIdentification_id(identification_id);
-            if(person.getId() == 0){
+            if (person.getId() == 0) {
                 JOptionPane.showMessageDialog(lblNames, "No existe esta persona");
-            }else{
+            } else {
                 lblNames.setText(person.getFirstName() + " " + person.getLastName());
                 loadPhotoPerson(person.getPhoto() + ".png");
             }
-           
+
         } catch (Exception ex) {
             Logger.getLogger(CheckSuscriptionView.class.getName()).log(Level.SEVERE, null, ex);
         }
-            
+
     }
 
     private void loadPhotoPerson(String name) {
@@ -371,9 +375,8 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
 
     private void btnGeneratorCardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGeneratorCardActionPerformed
         // TODO add your handling code here:
-        int fila = tListPeople.getSelectedRow();
-        if (fila == -1) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar una fila");
+        if (!(person instanceof Person)) {
+            JOptionPane.showMessageDialog(this, "Debe cargar un cliente");
         } else {
             var reporte = new Reportes();
             reporte.generarTarjetaGimnasio(person);
@@ -383,19 +386,20 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
 
     private void btnAddSuscriptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSuscriptionActionPerformed
         // TODO add your handling code here:
-        if (person instanceof Person) {
-            var suscriptionViewJD = new SuscriptionViewJD(mainView, true, person);
-            suscriptionViewJD.setVisible(true);
-        } else {
+        System.out.println(person instanceof Person);
+        if (!(person instanceof Person)) {
             JOptionPane.showMessageDialog(btnAddSuscription, "Primero debes cargar el cliente");
+        } else {
+            var suscriptionViewJD = new SuscriptionViewJD(mainView, true, person, this);
+            suscriptionViewJD.setVisible(true);
         }
     }//GEN-LAST:event_btnAddSuscriptionActionPerformed
 
     private void txtIdentificationIdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdentificationIdKeyPressed
         // TODO add your handling code here:
-        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             checkSuscription(txtIdentificationId.getText());
-           
+
         }
     }//GEN-LAST:event_txtIdentificationIdKeyPressed
 
@@ -411,11 +415,21 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
         loadItemFromTable();
     }//GEN-LAST:event_checkOldItemStateChanged
 
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        // TODO add your handling code here:
+        if (!(person instanceof Person)) {
+            JOptionPane.showMessageDialog(this, "Debe cargar un cliente");
+        } else {
+            mainView.getjTabbedPane1().setSelectedComponent(mainView.getPersonView(person));
+
+        }
+    }//GEN-LAST:event_btnEditActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSuscription;
+    private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnGeneratorCard;
-    private javax.swing.JButton btnSaveChanges;
     private javax.swing.JCheckBox checkOld;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;

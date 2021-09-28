@@ -79,7 +79,7 @@ public class SuscriptionDao implements ICrud<Suscription> {
         Connection conn = null;
         try {
             conn = connectionDBPostgres.getConnection();
-            PreparedStatement st = conn.prepareStatement("update Suscription set date_suscription=?, date_from=?, date_to=?, price=?, discount=?, total=?, comment=?, person_id=?, type_suscription_id=? where id = ?");
+            PreparedStatement st = conn.prepareStatement("update Suscription set receipt_number=?, date_suscription=?, date_from=?, date_to=?, price=?, discount=?, total=?, comment=?, person_id=?, type_suscription_id=? where id = ?");
             st.setString(1, item.getReceipt_number());
             st.setDate(2, new java.sql.Date(item.getDateSuscription().getTime()));
             st.setDate(3, new java.sql.Date(item.getDateFrom().getTime()));

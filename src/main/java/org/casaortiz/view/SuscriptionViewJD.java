@@ -17,6 +17,7 @@ import org.casaortiz.dao.TypeSuscriptionDao;
 import org.casaortiz.model.Person;
 import org.casaortiz.model.Suscription;
 import org.casaortiz.model.TypeSuscription;
+import org.casaortiz.view.components.ButtonsColors;
 import org.casaortiz.view.components.TableModels;
 
 /**
@@ -26,24 +27,38 @@ import org.casaortiz.view.components.TableModels;
 public class SuscriptionViewJD extends javax.swing.JDialog {
 
     private Person person;
+    private Suscription suscription;
     private TypeSuscriptionDao typeSuscriptionDao;
     private SuscriptionDao suscriptionDao;
+    private CheckSuscriptionView checkSuscriptionView;
     List<Suscription> suscriptions = null;
-    public SuscriptionViewJD(java.awt.Frame parent, boolean modal, Person _person) {
+
+    public SuscriptionViewJD(java.awt.Frame parent, boolean modal, Person _person, CheckSuscriptionView _checkSuscriptionView) {
         super(parent, modal);
         try {
             initComponents();
+            checkSuscriptionView = _checkSuscriptionView;
             typeSuscriptionDao = new TypeSuscriptionDao();
             suscriptionDao = new SuscriptionDao();
             person = _person;
             lblNames.setText(person.getFirstName() + " " + person.getLastName());
             lblIdentificationId.setText(person.getIdentificationId());
-            txtReceipt_number.setText(String.valueOf(suscriptionDao.getDateMaxReceiptNumber()+1));
+            txtReceipt_number.setText(String.valueOf(suscriptionDao.getDateMaxReceiptNumber() + 1));
             loadTypeSuscription();
             loadSuscriptionFromPerson();
         } catch (Exception ex) {
             Logger.getLogger(SuscriptionViewJD.class.getName()).log(Level.SEVERE, null, ex);
         }
+        addImageButtons();
+        btnSaveChanges.setVisible(false);
+        btnDelete.setVisible(false);
+    }
+
+    private void addImageButtons() {
+        btnDelete.setIcon(new ButtonsColors().addIconButton(FileLocation.pathIconBtnDelete));
+        btnSave.setIcon(new ButtonsColors().addIconButton(FileLocation.pathIconBtnSave));
+        btnCleanForm.setIcon(new ButtonsColors().addIconButton(FileLocation.pathIconBtnClean));
+        btnSaveChanges.setIcon(new ButtonsColors().addIconButton(FileLocation.pathIconBtnEdit));
     }
 
     private void loadSuscriptionFromPerson() {
@@ -58,7 +73,7 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
 
     private void loadTable(List<Suscription> suscription) {
 
-        tSuscription.setModel(TableModels.getModelSuscription(tSuscription, suscription));
+        tListSuscription.setModel(TableModels.getModelSuscription(tListSuscription, suscription));
     }
 
     public void loadTypeSuscription() {
@@ -69,7 +84,7 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
             }
         } catch (Exception ex) {
             Logger.getLogger(SuscriptionViewJD.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(tSuscription, "Error al cargar tipo de suscripciones: " + ex.getMessage());
+            JOptionPane.showMessageDialog(tListSuscription, "Error al cargar tipo de suscripciones: " + ex.getMessage());
         }
 
     }
@@ -79,7 +94,7 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tSuscription = new javax.swing.JTable();
+        tListSuscription = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtReceipt_number = new javax.swing.JTextField();
@@ -100,6 +115,8 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         cbTypeSuscription = new javax.swing.JComboBox<>();
+        jLabel13 = new javax.swing.JLabel();
+        lblID = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
         lblIdentificationId = new javax.swing.JLabel();
@@ -108,12 +125,20 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
         jLabel16 = new javax.swing.JLabel();
         lblDays = new javax.swing.JLabel();
         btnSave = new javax.swing.JButton();
+        btnSaveChanges = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
+        btnCleanForm = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "Historial Suscripciones", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 11))); // NOI18N
 
-        tSuscription.setModel(new javax.swing.table.DefaultTableModel(
+        tListSuscription.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -129,7 +154,12 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
                 return types [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(tSuscription);
+        tListSuscription.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tListSuscriptionMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tListSuscription);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "Suscripción", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 11))); // NOI18N
 
@@ -202,6 +232,9 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
             }
         });
 
+        jLabel13.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        jLabel13.setText("ID:");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -216,7 +249,8 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
                     .addComponent(jLabel5)
                     .addComponent(jLabel6)
                     .addComponent(jLabel7)
-                    .addComponent(jLabel8))
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel13))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtComment)
@@ -234,13 +268,19 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
                             .addComponent(txtTotal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
                             .addComponent(txtDiscount, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(txtPrice, javax.swing.GroupLayout.Alignment.TRAILING)))
-                    .addComponent(cbTypeSuscription, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(cbTypeSuscription, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lblID, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtReceipt_number, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -342,6 +382,35 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
             }
         });
 
+        btnSaveChanges.setBackground(new java.awt.Color(53, 152, 219));
+        btnSaveChanges.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        btnSaveChanges.setForeground(new java.awt.Color(255, 255, 255));
+        btnSaveChanges.setText("Guardar Cambios");
+        btnSaveChanges.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveChangesActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setBackground(new java.awt.Color(212, 105, 89));
+        btnDelete.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        btnDelete.setForeground(new java.awt.Color(255, 255, 255));
+        btnDelete.setText("Eliminar");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
+        btnCleanForm.setBackground(new java.awt.Color(252, 246, 214));
+        btnCleanForm.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        btnCleanForm.setText("Limpiar Formulario");
+        btnCleanForm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCleanFormActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -353,7 +422,14 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSave))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnSave)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnSaveChanges)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnDelete)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnCleanForm)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 566, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -368,7 +444,11 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSave))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnSave)
+                            .addComponent(btnSaveChanges)
+                            .addComponent(btnDelete)
+                            .addComponent(btnCleanForm)))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 574, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(203, Short.MAX_VALUE))
         );
@@ -388,14 +468,14 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
         if (dDateFrom.getDatoFecha() == null) {
             try {
                 //Si no tiene suscripciones de la persona pone la fecha de hoy
-                if(suscriptions == null){
+                if (suscriptions == null) {
                     dDateFrom.setDatoFecha(dateFrom);
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(dateFrom);
                     calendar.add(Calendar.DAY_OF_YEAR, item.getNum_days());//sumo los dias desde la fecha de hoy
                     Date dateTo = calendar.getTime();
                     dDateTo.setDatoFecha(dateTo);
-                }else{//caso contrario pone la fecha maxima de las suscripciones de la persona
+                } else {//caso contrario pone la fecha maxima de las suscripciones de la persona
                     Date fechaMaxima = suscriptionDao.getDateMaxFromPerson(person.getId());
                     dDateFrom.setDatoFecha(fechaMaxima);
                     Calendar calendar = Calendar.getInstance();
@@ -404,8 +484,7 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
                     Date dateTo = calendar.getTime();
                     dDateTo.setDatoFecha(dateTo);
                 }
-                
-               
+
             } catch (Exception ex) {
                 Logger.getLogger(SuscriptionViewJD.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -472,14 +551,122 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        // TODO add your handling code here:
+        checkSuscriptionView.loadItemFromTable();
+    }//GEN-LAST:event_formWindowClosed
+
+    private void tListSuscriptionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tListSuscriptionMouseClicked
+        // TODO add your handling code here:
+        loadItemFromTable();
+    }//GEN-LAST:event_tListSuscriptionMouseClicked
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
+        try {
+            int fila = tListSuscription.getSelectedRow();
+            if (fila == -1) {
+                JOptionPane.showConfirmDialog(tListSuscription, "Debe seleccionar una fila");
+            } else {
+                int estadoEliminacionDialog = JOptionPane.showConfirmDialog(btnDelete,
+                        "Seguro que desea eliminar " + suscription + " ?",
+                        "Confirmar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (estadoEliminacionDialog == 0) {
+                    suscriptionDao.delete(suscription.getId());
+                    JOptionPane.showMessageDialog(btnDelete, "Se elimino correctamente la suscripción: " + suscription);
+                    loadSuscriptionFromPerson();
+                    cleanForm();
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(btnDelete, "Error al eliminar la categoria: " + suscription + " Error: " + ex.getMessage());
+        } catch (Exception ex) {
+            Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(btnDelete, "Error al eliminar la categoria: " + suscription + " Error: " + ex.getMessage());
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnSaveChangesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveChangesActionPerformed
+        // TODO add your handling code here:
+        try {
+            var s = new Suscription();
+            s.setId(Integer.valueOf(lblID.getText()));
+            s.setReceipt_number(txtReceipt_number.getText());
+            s.setDateSuscription(new Date());
+            s.setDateFrom(dDateFrom.getDatoFecha());
+            s.setDateTo(dDateTo.getDatoFecha());
+            s.setPrice(Double.parseDouble(txtPrice.getText()));
+            s.setDiscount(Double.parseDouble(txtDiscount.getText()));
+            s.setTotal(Double.parseDouble(txtTotal.getText()));
+            s.setComment(txtComment.getText());
+            s.setPersonId(person.getId());
+
+            TypeSuscription ts = (TypeSuscription) cbTypeSuscription.getSelectedItem();
+            s.setTypeSuscriptionId(ts.getId());
+
+            suscriptionDao.update(s);
+            JOptionPane.showMessageDialog(btnSaveChanges, "Se cuardo cambios correctamente");
+            cleanForm();
+            loadSuscriptionFromPerson();
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(btnSave, "SQLException: Error al Guardar Cambios: " + ex.toString());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(btnSave, "Exception: Error al Guardar Cambios: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnSaveChangesActionPerformed
+
+    private void btnCleanFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCleanFormActionPerformed
+        // TODO add your handling code here:
+        cleanForm();
+    }//GEN-LAST:event_btnCleanFormActionPerformed
+
+    private void loadItemFromTable() {
+        int fila = tListSuscription.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar una fila");
+        } else {
+            btnDelete.setVisible(true);
+            btnSave.setVisible(false);
+            btnSaveChanges.setVisible(true);
+            try {
+                suscription = suscriptionDao.get(Integer.parseInt(tListSuscription.getValueAt(fila, 0).toString()));
+
+                lblID.setText(suscription.getId() + "");
+                txtReceipt_number.setText(suscription.getReceipt_number());
+                var typeSuscription = typeSuscriptionDao.get(suscription.getTypeSuscriptionId());
+                cbTypeSuscription.setSelectedItem(typeSuscription);
+                dDateFrom.setDatoFecha(suscription.getDateFrom());
+                dDateTo.setDatoFecha(suscription.getDateTo());
+                txtPrice.setText(suscription.getPrice() + "");
+                txtDiscount.setText(suscription.getDiscount() + "");
+                txtTotal.setText(suscription.getTotal() + "");
+                txtComment.setText(suscription.getComment());
+            } catch (SQLException ex) {
+                Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, "Error al cargar: " + ex.getMessage());
+            } catch (Exception ex) {
+                Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, "Error al cargar: " + ex.getMessage());
+            }
+
+        }
+    }
+
     private void cleanForm() {
-        txtReceipt_number.setText("");
+        try {
+            txtReceipt_number.setText(String.valueOf(suscriptionDao.getDateMaxReceiptNumber() + 1));
+        } catch (Exception ex) {
+            Logger.getLogger(SuscriptionViewJD.class.getName()).log(Level.SEVERE, null, ex);
+        }
         dDateFrom.setDatoFecha(null);
         dDateTo.setDatoFecha(null);
-        txtPrice.setText("0.00");
-        txtDiscount.setText("0.00");
-        txtTotal.setText("0.00");
         txtComment.setText("");
+        cbTypeSuscription.setSelectedIndex(0);
+        btnSaveChanges.setVisible(false);
+        btnDelete.setVisible(false);
+        btnSave.setVisible(true);
     }
 
     private void calculateTotal() {
@@ -492,7 +679,10 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCleanForm;
+    private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnSaveChanges;
     private javax.swing.JComboBox<TypeSuscription> cbTypeSuscription;
     private rojeru_san.componentes.RSDateChooser dDateFrom;
     private rojeru_san.componentes.RSDateChooser dDateTo;
@@ -500,6 +690,7 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
@@ -514,9 +705,10 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblDays;
+    private javax.swing.JLabel lblID;
     private javax.swing.JLabel lblIdentificationId;
     private javax.swing.JLabel lblNames;
-    private javax.swing.JTable tSuscription;
+    private javax.swing.JTable tListSuscription;
     private javax.swing.JTextField txtComment;
     private javax.swing.JTextField txtDiscount;
     private javax.swing.JTextField txtPrice;

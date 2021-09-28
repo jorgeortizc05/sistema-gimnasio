@@ -11,8 +11,10 @@ import com.formdev.flatlaf.FlatLightLaf;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import org.casaortiz.model.Person;
 
 /**
  * JFrame VentanaPrincipal
@@ -29,6 +31,7 @@ public class MainView extends javax.swing.JFrame {
     private TypeSuscriptionView typeSuscriptionView;
     private PersonView personView;
     private CheckSuscriptionView checkSuscriptionView;
+    private AboutView aboutView;
     
     public MainView() {
         initComponents();
@@ -36,8 +39,9 @@ public class MainView extends javax.swing.JFrame {
         typePersonView = new TypePersonView(personView);
         typeVoucherView = new TypeVoucherView();
         typeSuscriptionView = new TypeSuscriptionView();
-        personView = new PersonView();
-        checkSuscriptionView = new CheckSuscriptionView(this);
+        aboutView = new AboutView();
+        personView = new PersonView(this);
+        checkSuscriptionView = new CheckSuscriptionView(this);//Para usar el JDialog
         
         
         jTabbedPane1.add(checkSuscriptionView);
@@ -46,8 +50,23 @@ public class MainView extends javax.swing.JFrame {
         jTabbedPane1.add(categoryView);
         jTabbedPane1.add(typePersonView);
         jTabbedPane1.add(typeVoucherView);
+        jTabbedPane1.add(aboutView);
         
     }
+
+    public JTabbedPane getjTabbedPane1() {
+        return jTabbedPane1;
+    }
+
+    public PersonView getPersonView(Person p) {
+        personView.loadDateFromCheckSuscriptionView(p, checkSuscriptionView);
+        return personView;
+    }
+
+    public CheckSuscriptionView getCheckSuscriptionView() {
+        return checkSuscriptionView;
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -73,6 +92,7 @@ public class MainView extends javax.swing.JFrame {
         miInventario = new javax.swing.JMenu();
         miCategory = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
+        miDeveloper = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("GIMNASIOSOLIZ");
@@ -168,6 +188,16 @@ public class MainView extends javax.swing.JFrame {
 
         jMenu4.setText("Acerca de");
         jMenu4.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+
+        miDeveloper.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/system/contact-us-20x20.png"))); // NOI18N
+        miDeveloper.setText("Desarrollador");
+        miDeveloper.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miDeveloperActionPerformed(evt);
+            }
+        });
+        jMenu4.add(miDeveloper);
+
         jMenuBar1.add(jMenu4);
 
         setJMenuBar(jMenuBar1);
@@ -209,6 +239,11 @@ public class MainView extends javax.swing.JFrame {
         // TODO add your handling code here:
         jTabbedPane1.setSelectedComponent(checkSuscriptionView);
     }//GEN-LAST:event_miCheckSuscriptionActionPerformed
+
+    private void miDeveloperActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDeveloperActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane1.setSelectedComponent(aboutView);
+    }//GEN-LAST:event_miDeveloperActionPerformed
 
     /**
      * @param args the command line arguments
@@ -253,6 +288,7 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JMenuItem miCategory;
     private javax.swing.JMenuItem miCheckSuscription;
+    private javax.swing.JMenuItem miDeveloper;
     private javax.swing.JMenu miInventario;
     private javax.swing.JMenuItem miPerson;
     private javax.swing.JMenuItem miTypePerson;

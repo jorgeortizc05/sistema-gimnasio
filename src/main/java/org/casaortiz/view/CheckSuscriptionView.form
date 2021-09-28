@@ -100,7 +100,7 @@
                               <Component id="lblWarning" alignment="0" min="-2" pref="700" max="-2" attributes="0"/>
                               <Component id="lblNames" alignment="0" min="-2" pref="700" max="-2" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
-                                  <Component id="btnSaveChanges" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btnEdit" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="btnAddSuscription" min="-2" pref="315" max="-2" attributes="0"/>
                               </Group>
@@ -134,7 +134,7 @@
                           </Group>
                           <EmptySpace min="-2" pref="77" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="btnSaveChanges" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnEdit" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="btnAddSuscription" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
@@ -219,7 +219,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddSuscriptionActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="btnSaveChanges">
+        <Component class="javax.swing.JButton" name="btnEdit">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="3d" green="3c" red="c2" type="rgb"/>
@@ -235,6 +235,9 @@
               <Dimension value="[280, 39]"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEditActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnGeneratorCard">
           <Properties>
@@ -330,7 +333,7 @@
     </Container>
     <Component class="javax.swing.JCheckBox" name="checkOld">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Antiguos(Mayores a 3 meses)"/>
+        <Property name="text" type="java.lang.String" value="Antiguos(Mayores a 3 meses) o Sin Suscripciones"/>
       </Properties>
       <Events>
         <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="checkOldItemStateChanged"/>

@@ -20,6 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JTabbedPane;
 import javax.swing.table.DefaultTableModel;
 import org.casaortiz.buss.PersonBuss;
 import org.casaortiz.dao.PersonDao;
@@ -44,18 +45,48 @@ public class PersonView extends javax.swing.JPanel {
     private Webcam webcam = null;
     private WebcamPanel panel = null;
     private boolean encendidoCamara = false;
-
-    public PersonView() {
+    private Boolean modoEdicion = false; //cuando edito desde checksuscription
+    private CheckSuscriptionView checkSuscriptionView;
+    private MainView mainView;
+    public PersonView(MainView _mainView) {
         initComponents();
         personDao = new PersonDao();
         typePersonDao = new TypePersonDao();
         perBuss = new PersonBuss();
+        mainView = _mainView;
         //person = new Person();
         loadPeople();
         loadTypePeople();
         btnSaveChanges.setVisible(false);
         btnDelete.setVisible(false);
         addImageButtons();
+    }
+
+    public void loadDateFromCheckSuscriptionView(Person _person, CheckSuscriptionView _chechSuscriptionView) {
+        person = _person;
+        try {
+            lblID.setText(String.valueOf(person.getId()));
+            txtFirstName.setText(person.getFirstName());
+            txtLastName.setText(person.getLastName());
+            txtIdentificationId.setText(person.getIdentificationId());
+            txtAddress.setText(person.getAddress());
+            txtEmail.setText(person.getEmail());
+            txtDate.setDatoFecha(person.getBirthday());
+            txtPhone.setText(person.getPhone());
+            lblActive.setText(person.getActive());
+            System.out.println("Foto: " + person.getPhoto());
+            loadPhotoPerson(person.getPhoto() + ".png");
+            TypePerson typePerson = typePersonDao.get(person.getTypePersonId());
+            cbTypePeople.getModel().setSelectedItem(typePerson);
+            txtIdentificationId.setEnabled(false);
+            btnDelete.setVisible(true);
+            btnSave.setVisible(false);
+            btnSaveChanges.setVisible(true);
+            modoEdicion = true;
+            checkSuscriptionView = _chechSuscriptionView;
+        } catch (Exception ex) {
+            Logger.getLogger(PersonView.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void addImageButtons() {
@@ -361,7 +392,7 @@ public class PersonView extends javax.swing.JPanel {
 
         lblSearch.setPreferredSize(new java.awt.Dimension(30, 30));
 
-        checkOld.setText("Antiguos(Mayores a 3 meses)");
+        checkOld.setText("Antiguos(Mayores a 3 meses) o Sin Suscripciones");
         checkOld.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 checkOldItemStateChanged(evt);
@@ -437,30 +468,44 @@ public class PersonView extends javax.swing.JPanel {
 
     private void btnSaveChangesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveChangesActionPerformed
         // TODO add your handling code here:
-        try {
-            if (!(txtFirstName.getText().equals("") || txtLastName.getText().equals("")
-                    || txtIdentificationId.getText().equals(""))) {
-                Person person = new Person();
-                person.setId(Integer.parseInt(lblID.getText()));
-                person.setFirstName(txtFirstName.getText());
-                person.setLastName(txtLastName.getText());
-                person.setIdentificationId(txtIdentificationId.getText());
-                person.setAddress(txtAddress.getText());
-                person.setEmail(txtEmail.getText());
-                person.setBirthday(txtDate.getDatoFecha());
-                person.setPhone(txtPhone.getText());
-                person.setActive(lblActive.getText());
-                person.setPhoto(txtIdentificationId.getText());
-                TypePerson tp = (TypePerson) cbTypePeople.getSelectedItem();
-                person.setTypePersonId(tp.getId());
-                personDao.update(person);
-                JOptionPane.showMessageDialog(btnSave, "Cambios guardados correctamente");
-                cleanForm();
-                loadPeople();
+        
+            if (modoEdicion) {//Si viene desde checkSuscription
+                update();
+                checkSuscriptionView.loadItemFromTable();
+                modoEdicion = false;
+                mainView.getjTabbedPane1().setSelectedComponent(mainView.getCheckSuscriptionView());
             } else {
-                JOptionPane.showMessageDialog(btnSave, "Nombres, Apellidos o Cédula no pueden estar vacios \n");
+                update();
             }
 
+        
+    }//GEN-LAST:event_btnSaveChangesActionPerformed
+    
+    public void update(){
+    try {
+        if (!(txtFirstName.getText().equals("") || txtLastName.getText().equals("")
+                        || txtIdentificationId.getText().equals(""))) {
+                    Person person = new Person();
+                    person.setId(Integer.parseInt(lblID.getText()));
+                    person.setFirstName(txtFirstName.getText());
+                    person.setLastName(txtLastName.getText());
+                    person.setIdentificationId(txtIdentificationId.getText());
+                    person.setAddress(txtAddress.getText());
+                    person.setEmail(txtEmail.getText());
+                    person.setBirthday(txtDate.getDatoFecha());
+                    person.setPhone(txtPhone.getText());
+                    person.setActive(lblActive.getText());
+                    person.setPhoto(txtIdentificationId.getText());
+                    TypePerson tp = (TypePerson) cbTypePeople.getSelectedItem();
+                    person.setTypePersonId(tp.getId());
+                    personDao.update(person);
+                    person = null;
+                    JOptionPane.showMessageDialog(btnSave, "Cambios guardados correctamente");
+                    cleanForm();
+                    loadPeople();
+                } else {
+                    JOptionPane.showMessageDialog(btnSave, "Nombres, Apellidos o Cédula no pueden estar vacios \n");
+                }
         } catch (SQLException ex) {
             Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(btnSave, "Error al guardar los cambios: " + ex.getMessage());
@@ -468,8 +513,8 @@ public class PersonView extends javax.swing.JPanel {
             Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(btnSave, "Error al guardar los cambios: " + ex.getMessage());
         }
-    }//GEN-LAST:event_btnSaveChangesActionPerformed
-
+    }
+    
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
         try {
@@ -488,6 +533,7 @@ public class PersonView extends javax.swing.JPanel {
                 TypePerson tp = (TypePerson) cbTypePeople.getSelectedItem();
                 person.setTypePersonId(tp.getId());
                 perBuss.savePerson(person);
+                person = null; //libero memoria
                 JOptionPane.showMessageDialog(btnSave, "Guardado correctamente");
                 cleanForm();
                 loadPeople();
@@ -517,6 +563,7 @@ public class PersonView extends javax.swing.JPanel {
         btnSaveChanges.setVisible(false);
         btnDelete.setVisible(false);
         lblPhoto.setIcon(null);
+        modoEdicion = false;
     }
 
     public void loadPeople() {
@@ -529,10 +576,9 @@ public class PersonView extends javax.swing.JPanel {
     }
 
     private void loadTable(List<Person> people) {
-        
+
         tListPeople.setModel(TableModels.getModelPerson(tListPeople, people));
-        
-        
+
     }
 
     private void cleanTable() {
@@ -553,7 +599,7 @@ public class PersonView extends javax.swing.JPanel {
                 panel.stop();
                 encendidoCamara = false;
                 loadPhotoPerson(txtIdentificationId.getText() + ".png");
-                
+
             }
 
         } catch (IOException ex) {
@@ -599,6 +645,7 @@ public class PersonView extends javax.swing.JPanel {
             btnDelete.setVisible(true);
             btnSave.setVisible(false);
             btnSaveChanges.setVisible(true);
+            modoEdicion = false;
             try {
                 person = personDao.get(Integer.parseInt(tListPeople.getValueAt(fila, 0).toString()));
                 lblID.setText(String.valueOf(person.getId()));
@@ -610,8 +657,8 @@ public class PersonView extends javax.swing.JPanel {
                 txtDate.setDatoFecha(person.getBirthday());
                 txtPhone.setText(person.getPhone());
                 lblActive.setText(person.getActive());
-                System.out.println("Foto: "+person.getPhoto());
-                loadPhotoPerson(person.getPhoto()+".png");
+                System.out.println("Foto: " + person.getPhoto());
+                loadPhotoPerson(person.getPhoto() + ".png");
                 TypePerson typePerson = typePersonDao.get(person.getTypePersonId());
                 cbTypePeople.getModel().setSelectedItem(typePerson);
                 txtIdentificationId.setEnabled(false);
@@ -647,13 +694,13 @@ public class PersonView extends javax.swing.JPanel {
 
     private void loadSearchPeople(String text) {
         try {
-            if(checkOld.isSelected()){
+            if (checkOld.isSelected()) {
                 loadTable(personDao.searchList(text));
-            }else{
+            } else {
                 //busca solo usuarios activos de 3 meses
                 loadTable(personDao.searchListOnlyActive3Month(text));
             }
-            
+
         } catch (Exception ex) {
             Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "Error al buscar: " + ex.getMessage());
@@ -681,7 +728,7 @@ public class PersonView extends javax.swing.JPanel {
                 });
             }
         } else {
-            
+
             webcam.open();
             panel.start();
         }
