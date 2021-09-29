@@ -8,17 +8,31 @@ package org.casaortiz.view;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import org.casaortiz.model.Person;
+import org.casaortiz.view.components.CopiaSeguridadDB;
 
 /**
- * JFrame VentanaPrincipal
- * Llama a todos los paneles
+ * JFrame VentanaPrincipal Llama a todos los paneles
+ *
  * @author Ing. Jorge Luis Ortiz Cáceres
  * @since 31/08/2021
  * @version 0.0.1
@@ -32,7 +46,7 @@ public class MainView extends javax.swing.JFrame {
     private PersonView personView;
     private CheckSuscriptionView checkSuscriptionView;
     private AboutView aboutView;
-    
+
     public MainView() {
         initComponents();
         categoryView = new CategoryView();
@@ -42,8 +56,7 @@ public class MainView extends javax.swing.JFrame {
         aboutView = new AboutView();
         personView = new PersonView(this);
         checkSuscriptionView = new CheckSuscriptionView(this);//Para usar el JDialog
-        
-        
+
         jTabbedPane1.add(checkSuscriptionView);
         jTabbedPane1.add(typeSuscriptionView);
         jTabbedPane1.add(personView);
@@ -51,7 +64,7 @@ public class MainView extends javax.swing.JFrame {
         jTabbedPane1.add(typePersonView);
         jTabbedPane1.add(typeVoucherView);
         jTabbedPane1.add(aboutView);
-        
+
     }
 
     public JTabbedPane getjTabbedPane1() {
@@ -66,7 +79,6 @@ public class MainView extends javax.swing.JFrame {
     public CheckSuscriptionView getCheckSuscriptionView() {
         return checkSuscriptionView;
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -91,6 +103,8 @@ public class MainView extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         miInventario = new javax.swing.JMenu();
         miCategory = new javax.swing.JMenuItem();
+        mBackup = new javax.swing.JMenu();
+        miBackup = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         miDeveloper = new javax.swing.JMenuItem();
 
@@ -186,6 +200,19 @@ public class MainView extends javax.swing.JFrame {
 
         jMenuBar1.add(miInventario);
 
+        mBackup.setText("Copia Seguridad");
+        mBackup.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+
+        miBackup.setText("Realizar una copia");
+        miBackup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miBackupActionPerformed(evt);
+            }
+        });
+        mBackup.add(miBackup);
+
+        jMenuBar1.add(mBackup);
+
         jMenu4.setText("Acerca de");
         jMenu4.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
 
@@ -210,7 +237,7 @@ public class MainView extends javax.swing.JFrame {
         // TODO add your handling code here:
         jTabbedPane1.setSelectedComponent(categoryView);
         categoryView.loadCategories();
-        
+
     }//GEN-LAST:event_miCategoryActionPerformed
 
     private void miTypePersonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miTypePersonActionPerformed
@@ -245,16 +272,21 @@ public class MainView extends javax.swing.JFrame {
         jTabbedPane1.setSelectedComponent(aboutView);
     }//GEN-LAST:event_miDeveloperActionPerformed
 
+    private void miBackupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miBackupActionPerformed
+        CopiaSeguridadDB.copiaSeguridad(this, FileLocation.pathPgDumpExeLinux);
+
+    }//GEN-LAST:event_miBackupActionPerformed
+
     /**
      * @param args the command line arguments
      */
     /*public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+/* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        /*try {
+     */
+ /*try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -270,12 +302,11 @@ public class MainView extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(MainView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }*/
-        //</editor-fold>
-        //</editor-fold>
+//</editor-fold>
+//</editor-fold>
 
-        /* Create and display the form */
-        
-    //}
+    /* Create and display the form */
+//}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
@@ -286,6 +317,8 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JMenu mBackup;
+    private javax.swing.JMenuItem miBackup;
     private javax.swing.JMenuItem miCategory;
     private javax.swing.JMenuItem miCheckSuscription;
     private javax.swing.JMenuItem miDeveloper;

@@ -23,5 +23,7 @@ public class FileLocation {
     public static String pathIconBtnAdd = "/icons/system/add.png";
     public static String pathIconBtnGenerator = "/icons/system/generator.png";
     public static String pathReports = "reports/";
+    public static String pathRootProject = System.getProperty("user.dir")+"/";
+    public static String pathPgDumpExeLinux = "/usr/bin/pg_dump";
 
 }
