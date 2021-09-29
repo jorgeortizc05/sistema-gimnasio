@@ -26,6 +26,7 @@ public class FileLocation {
     public static String pathRootProject = System.getProperty("user.dir") + "/";
     public static String pathBackupDB = pathRootProject+"DB/";
     //public static String pathPgDumpExeLinux = "/usr/bin/pg_dump";
-    public static String pathPgDumpExeWin = "/Program Files/PostgreSQL/13/bin/pg_dump.exe";
+    //public static String pathPgDumpExeWin = "/Program Files/PostgreSQL/13/bin/pg_dump.exe";
+    public static String pathPgDumpExeWin = "/Program Files/PostgreSQL/11/bin/pg_dump.exe";
 
 }

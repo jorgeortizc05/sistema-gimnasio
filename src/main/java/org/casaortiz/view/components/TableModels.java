@@ -5,6 +5,7 @@
  */
 package org.casaortiz.view.components;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -104,11 +105,13 @@ public class TableModels {
         DefaultTableModel modelo = (DefaultTableModel) table.getModel();
         List<Suscription> items = suscriptions;
         Object rowData[] = new Object[4];
+        String pattern = "dd/MM/yyyy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         for(Suscription c: items){
             System.out.println(c);
             rowData[0] = c.getId();
-            rowData[1] = c.getDateFrom();
-            rowData[2] = c.getDateTo();
+            rowData[1] = simpleDateFormat.format(c.getDateFrom());
+            rowData[2] = simpleDateFormat.format(c.getDateTo());
             rowData[3] = c.getTotal();
             modelo.addRow(rowData);
         }

@@ -45,7 +45,8 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
             lblIdentificationId.setText(person.getIdentificationId());
             txtReceipt_number.setText(String.valueOf(suscriptionDao.getDateMaxReceiptNumber() + 1));
             loadTypeSuscription();
-            loadSuscriptionFromPerson();
+            
+            //loadDateAndCalculateTotal();
         } catch (Exception ex) {
             Logger.getLogger(SuscriptionViewJD.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -109,7 +110,6 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
         txtTotal = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         txtComment = new javax.swing.JTextField();
-        dDateFrom = new rojeru_san.componentes.RSDateChooser();
         dDateTo = new rojeru_san.componentes.RSDateChooser();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
@@ -117,6 +117,7 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
         cbTypeSuscription = new javax.swing.JComboBox<>();
         jLabel13 = new javax.swing.JLabel();
         lblID = new javax.swing.JLabel();
+        dDateFrom = new rojeru_san.componentes.RSDateChooser();
         jPanel2 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
         lblIdentificationId = new javax.swing.JLabel();
@@ -203,17 +204,6 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
         jLabel8.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         jLabel8.setText("Observaciones:");
 
-        dDateFrom.setColorBackground(new java.awt.Color(0, 0, 0));
-        dDateFrom.setColorForeground(new java.awt.Color(0, 0, 0));
-        dDateFrom.setFormatoFecha("dd/MM/yyyy");
-        dDateFrom.setPlaceholder("");
-        dDateFrom.setPreferredSize(new java.awt.Dimension(240, 19));
-        dDateFrom.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                dDateFromMouseReleased(evt);
-            }
-        });
-
         dDateTo.setColorBackground(new java.awt.Color(0, 0, 0));
         dDateTo.setColorForeground(new java.awt.Color(0, 0, 0));
         dDateTo.setFormatoFecha("dd/MM/yyyy");
@@ -235,6 +225,12 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
         jLabel13.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         jLabel13.setText("ID:");
 
+        dDateFrom.setColorBackground(new java.awt.Color(0, 0, 0));
+        dDateFrom.setColorForeground(new java.awt.Color(0, 0, 0));
+        dDateFrom.setFormatoFecha("dd/MM/yyyy");
+        dDateFrom.setPlaceholder("");
+        dDateFrom.setPreferredSize(new java.awt.Dimension(240, 19));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -255,7 +251,6 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtComment)
                     .addComponent(txtReceipt_number)
-                    .addComponent(dDateFrom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(dDateTo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -271,7 +266,8 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
                     .addComponent(cbTypeSuscription, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(lblID, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(dDateFrom, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -459,16 +455,22 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
 
     private void cbTypeSuscriptionItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbTypeSuscriptionItemStateChanged
         // TODO add your handling code here:
+        loadSuscriptionFromPerson();//Por alguna razon, se carga primero mi combobox antes que el constructor
+        loadDateAndCalculateTotal();
+    }//GEN-LAST:event_cbTypeSuscriptionItemStateChanged
+
+    private void loadDateAndCalculateTotal(){
         var item = (TypeSuscription) cbTypeSuscription.getSelectedItem();
         txtPrice.setText(String.valueOf(item.getPrice()));
-        var dateFrom = new Date();
+        
         //Validaciones para facilitar al usuario al suscribirse con la fecha y
         //suma la fecha segun el elemento seleccionado en el tipo de suscripcion
         //Si el campo dDateFrom esta vacio pone la de hoy o el max
         if (dDateFrom.getDatoFecha() == null) {
             try {
                 //Si no tiene suscripciones de la persona pone la fecha de hoy
-                if (suscriptions == null) {
+                if (suscriptions == null || suscriptions.size() == 0) {
+                    var dateFrom = new Date();
                     dDateFrom.setDatoFecha(dateFrom);
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(dateFrom);
@@ -477,12 +479,25 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
                     dDateTo.setDatoFecha(dateTo);
                 } else {//caso contrario pone la fecha maxima de las suscripciones de la persona
                     Date fechaMaxima = suscriptionDao.getDateMaxFromPerson(person.getId());
-                    dDateFrom.setDatoFecha(fechaMaxima);
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(fechaMaxima);
-                    calendar.add(Calendar.DAY_OF_YEAR, item.getNum_days());//sumo los dias desde la fecha de hoy
-                    Date dateTo = calendar.getTime();
-                    dDateTo.setDatoFecha(dateTo);
+                    if(fechaMaxima.before(new Date())){
+                        dDateFrom.setDatoFecha(new Date());
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(new Date());
+                        calendar.add(Calendar.DAY_OF_YEAR, item.getNum_days());//sumo los dias desde la fecha de hoy
+                        Date dateTo = calendar.getTime();
+                        dDateTo.setDatoFecha(dateTo);
+                    }else{
+                        Calendar calendar1 = Calendar.getInstance();
+                        calendar1.setTime(fechaMaxima);
+                        Date dateFromm = calendar1.getTime();
+                        dDateFrom.setDatoFecha(dateFromm);
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(fechaMaxima);
+                        calendar.add(Calendar.DAY_OF_YEAR, item.getNum_days());//sumo los dias desde la fecha de hoy
+                        Date dateTo = calendar.getTime();
+                        dDateTo.setDatoFecha(dateTo);
+                    }
+                    
                 }
 
             } catch (Exception ex) {
@@ -497,8 +512,8 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
         }
 
         calculateTotal();
-    }//GEN-LAST:event_cbTypeSuscriptionItemStateChanged
-
+    }
+    
     private void txtDiscountKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDiscountKeyReleased
         // TODO add your handling code here:
         if (txtDiscount.getText().equals("")) {
@@ -510,39 +525,28 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
 
     }//GEN-LAST:event_txtDiscountKeyReleased
 
-    private void dDateFromMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dDateFromMouseReleased
-        // TODO add your handling code here:
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(dDateFrom.getDatoFecha());
-        calendar.add(Calendar.DAY_OF_YEAR, 7);//sumo los dias desde la fecha de hoy
-        Date dateTo = calendar.getTime();
-        dDateTo.setDatoFecha(dateTo);
-
-        System.out.println("cambio");
-    }//GEN-LAST:event_dDateFromMouseReleased
-
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
 
         try {
-            var suscription = new Suscription();
-            suscription.setReceipt_number(txtReceipt_number.getText());
-            suscription.setDateSuscription(new Date());
-            suscription.setDateFrom(dDateFrom.getDatoFecha());
-            suscription.setDateTo(dDateTo.getDatoFecha());
-            suscription.setPrice(Double.parseDouble(txtPrice.getText()));
-            suscription.setDiscount(Double.parseDouble(txtDiscount.getText()));
-            suscription.setTotal(Double.parseDouble(txtTotal.getText()));
-            suscription.setComment(txtComment.getText());
-            suscription.setPersonId(person.getId());
+            var s = new Suscription();
+            s.setReceipt_number(txtReceipt_number.getText());
+            s.setDateSuscription(new Date());
+            s.setDateFrom(dDateFrom.getDatoFecha());
+            s.setDateTo(dDateTo.getDatoFecha());
+            s.setPrice(Double.parseDouble(txtPrice.getText()));
+            s.setDiscount(Double.parseDouble(txtDiscount.getText()));
+            s.setTotal(Double.parseDouble(txtTotal.getText()));
+            s.setComment(txtComment.getText());
+            s.setPersonId(person.getId());
 
             TypeSuscription ts = (TypeSuscription) cbTypeSuscription.getSelectedItem();
-            suscription.setTypeSuscriptionId(ts.getId());
+            s.setTypeSuscriptionId(ts.getId());
 
-            suscriptionDao.insert(suscription);
+            suscriptionDao.insert(s);
             JOptionPane.showMessageDialog(btnSave, "Guardado correctamente");
-            cleanForm();
             loadSuscriptionFromPerson();
+            cleanForm();
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(btnSave, "SQLException: Error al guardar: " + ex.toString());
@@ -607,8 +611,8 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
 
             suscriptionDao.update(s);
             JOptionPane.showMessageDialog(btnSaveChanges, "Se cuardo cambios correctamente");
-            cleanForm();
             loadSuscriptionFromPerson();
+            cleanForm();
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(btnSave, "SQLException: Error al Guardar Cambios: " + ex.toString());
@@ -660,8 +664,10 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
         } catch (Exception ex) {
             Logger.getLogger(SuscriptionViewJD.class.getName()).log(Level.SEVERE, null, ex);
         }
+        lblID.setText("");
         dDateFrom.setDatoFecha(null);
         dDateTo.setDatoFecha(null);
+        loadDateAndCalculateTotal();
         txtComment.setText("");
         cbTypeSuscription.setSelectedIndex(0);
         btnSaveChanges.setVisible(false);

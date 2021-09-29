@@ -144,7 +144,7 @@ public class SuscriptionDao implements ICrud<Suscription> {
                 item.setId(rs.getInt("id"));
                 item.setReceipt_number(rs.getString("receipt_number"));
                 item.setDateSuscription(rs.getDate("date_suscription"));
-                item.setDateFrom(rs.getDate("date_suscription"));
+                item.setDateFrom(rs.getDate("date_from"));
                 item.setDateTo(rs.getDate("date_to"));
                 item.setPrice(rs.getDouble("price"));
                 item.setDiscount(rs.getDouble("discount"));
@@ -188,7 +188,7 @@ public class SuscriptionDao implements ICrud<Suscription> {
                 item.setId(rs.getInt("id"));
                 item.setReceipt_number(rs.getString("receipt_number"));
                 item.setDateSuscription(rs.getDate("date_suscription"));
-                item.setDateFrom(rs.getDate("date_suscription"));
+                item.setDateFrom(rs.getDate("date_from"));
                 item.setDateTo(rs.getDate("date_to"));
                 item.setPrice(rs.getDouble("price"));
                 item.setDiscount(rs.getDouble("discount"));
@@ -234,7 +234,7 @@ public class SuscriptionDao implements ICrud<Suscription> {
                 item.setId(rs.getInt("id"));
                 item.setReceipt_number(rs.getString("receipt_number"));
                 item.setDateSuscription(rs.getDate("date_suscription"));
-                item.setDateFrom(rs.getDate("date_suscription"));
+                item.setDateFrom(rs.getDate("date_from"));
                 item.setDateTo(rs.getDate("date_to"));
                 item.setPrice(rs.getDouble("price"));
                 item.setDiscount(rs.getDouble("discount"));
@@ -284,7 +284,7 @@ public class SuscriptionDao implements ICrud<Suscription> {
         try {
             int maxReceiptNumber = 0;
             conn = connectionDBPostgres.getConnection();
-            PreparedStatement st = conn.prepareStatement("select max(s.receipt_number::INTEGER) as maxReceiptNumber\n"
+            PreparedStatement st = conn.prepareStatement("select max(s.receipt_number::integer) as maxReceiptNumber\n"
                     + "from suscription s");
             result = st.executeQuery();
             if (result.next()) {

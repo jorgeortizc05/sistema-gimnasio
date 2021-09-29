@@ -330,7 +330,7 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
                     lblRemainingDays.setForeground(Color.red);
                 }
             } else {
-                lblWarning.setText("BIENVENIDO " + person.getFirstName() + " " + person.getLastName());
+                lblWarning.setText("BIENVENIDO");
                 lblWarning.setForeground(Color.BLACK);
                 lblRemainingDays.setText(dias + "");
                 lblRemainingDays.setForeground(Color.BLACK);
