@@ -14,10 +14,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import org.casaortiz.view.FileLocation;
 
 /**
@@ -32,7 +34,8 @@ public class CopiaSeguridadDB {
         Process p;
         ProcessBuilder pb;
         rt = Runtime.getRuntime();
-        String fileBackup = FileLocation.pathRootProject+"gimnasio"+ new Date()+".backup";
+        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd-HHmmss");
+        String fileBackup = FileLocation.pathBackupDB+"gimnasio"+ ft.format(new Date())+".backup";
         pb = new ProcessBuilder(
                 pathPgDump,
                 "--host", "localhost",
@@ -64,12 +67,12 @@ public class CopiaSeguridadDB {
                 File fileToSave = fileChooser.getSelectedFile();
                 System.out.println("Save as file: " + fileToSave.getAbsolutePath());
                 Path in = Paths.get(fileBackup);
-                Path path = Paths.get(fileToSave.getAbsolutePath()+new Date()+".backup");
+                Path path = Paths.get(fileToSave.getAbsolutePath()+ft.format(new Date())+".backup");
                 CopyOption[] options = new CopyOption[] { StandardCopyOption.REPLACE_EXISTING,
 				StandardCopyOption.COPY_ATTRIBUTES };
                 Files.copy(in, path, options);
+                JOptionPane.showMessageDialog(null, "Copia de seguridad fue satisfactorio");
             }
-
         } catch (IOException | InterruptedException e) {
             System.out.println(e.getMessage());
         }

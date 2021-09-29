@@ -273,7 +273,7 @@ public class MainView extends javax.swing.JFrame {
     }//GEN-LAST:event_miDeveloperActionPerformed
 
     private void miBackupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miBackupActionPerformed
-        CopiaSeguridadDB.copiaSeguridad(this, FileLocation.pathPgDumpExeLinux);
+        CopiaSeguridadDB.copiaSeguridad(this, FileLocation.pathPgDumpExeWin);
 
     }//GEN-LAST:event_miBackupActionPerformed
 
