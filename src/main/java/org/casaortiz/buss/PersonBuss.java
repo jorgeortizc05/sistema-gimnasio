@@ -24,4 +24,10 @@ public class PersonBuss {
        item.setLastName((item.getLastName().trim().replaceAll(" +", " ")).toUpperCase());
        perDao.insert(item);
    }
+   
+   public void updatePerson(Person item) throws Exception{
+       item.setFirstName((item.getFirstName().trim().replaceAll(" +", " ")).toUpperCase());
+       item.setLastName((item.getLastName().trim().replaceAll(" +", " ")).toUpperCase());
+       perDao.update(item);
+   }
 }

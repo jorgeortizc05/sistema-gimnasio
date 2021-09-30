@@ -513,7 +513,7 @@ public class PersonView extends javax.swing.JPanel {
                 person.setPhoto(txtIdentificationId.getText());
                 TypePerson tp = (TypePerson) cbTypePeople.getSelectedItem();
                 person.setTypePersonId(tp.getId());
-                personDao.update(person);
+                perBuss.updatePerson(person);
                 person = null;
                 JOptionPane.showMessageDialog(btnSave, "Cambios guardados correctamente");
                 cleanForm();
