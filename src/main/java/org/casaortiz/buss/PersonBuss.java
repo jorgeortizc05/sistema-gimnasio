@@ -20,8 +20,8 @@ public class PersonBuss {
    }
    
    public void savePerson(Person item) throws Exception{
-       item.setFirstName(item.getFirstName().toUpperCase());
-       item.setLastName(item.getLastName().toUpperCase());
+       item.setFirstName((item.getFirstName().trim().replaceAll(" +", " ")).toUpperCase());
+       item.setLastName((item.getLastName().trim().replaceAll(" +", " ")).toUpperCase());
        perDao.insert(item);
    }
 }

@@ -48,6 +48,7 @@ public class PersonView extends javax.swing.JPanel {
     private Boolean modoEdicion = false; //cuando edito desde checksuscription
     private CheckSuscriptionView checkSuscriptionView;
     private MainView mainView;
+
     public PersonView(MainView _mainView) {
         initComponents();
         personDao = new PersonDao();
@@ -444,9 +445,7 @@ public class PersonView extends javax.swing.JPanel {
         // TODO add your handling code here:
         try {
             int fila = tListPeople.getSelectedRow();
-            if (fila == -1) {
-                JOptionPane.showConfirmDialog(tListPeople, "Debe seleccionar una fila");
-            } else {
+            if (modoEdicion) {
                 int estadoEliminacionDialog = JOptionPane.showConfirmDialog(btnDelete,
                         "Seguro que desea eliminar " + person + " ?",
                         "Confirmar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -456,7 +455,23 @@ public class PersonView extends javax.swing.JPanel {
                     loadPeople();
                     cleanForm();
                 }
+                modoEdicion = false;
+            } else {
+                if (fila == -1) {
+                    JOptionPane.showConfirmDialog(tListPeople, "Debe seleccionar una fila");
+                } else {
+                    int estadoEliminacionDialog = JOptionPane.showConfirmDialog(btnDelete,
+                            "Seguro que desea eliminar " + person + " ?",
+                            "Confirmar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    if (estadoEliminacionDialog == 0) {
+                        personDao.delete(person.getId());
+                        JOptionPane.showMessageDialog(btnDelete, "Se elimino correctamente la categoria: " + person);
+                        loadPeople();
+                        cleanForm();
+                    }
+                }
             }
+
         } catch (SQLException ex) {
             Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(btnDelete, "Error al eliminar la categoria: " + person + " Error: " + ex.getMessage());
@@ -468,44 +483,44 @@ public class PersonView extends javax.swing.JPanel {
 
     private void btnSaveChangesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveChangesActionPerformed
         // TODO add your handling code here:
-        
-            if (modoEdicion) {//Si viene desde checkSuscription
-                update();
-                checkSuscriptionView.loadItemFromTable();
-                modoEdicion = false;
-                mainView.getjTabbedPane1().setSelectedComponent(mainView.getCheckSuscriptionView());
-            } else {
-                update();
-            }
 
-        
+        if (modoEdicion) {//Si viene desde checkSuscription
+            update();
+            checkSuscriptionView.loadItemFromTable();
+            modoEdicion = false;
+            mainView.getjTabbedPane1().setSelectedComponent(mainView.getCheckSuscriptionView());
+        } else {
+            update();
+        }
+
+
     }//GEN-LAST:event_btnSaveChangesActionPerformed
-    
-    public void update(){
-    try {
-        if (!(txtFirstName.getText().equals("") || txtLastName.getText().equals("")
-                        || txtIdentificationId.getText().equals(""))) {
-                    Person person = new Person();
-                    person.setId(Integer.parseInt(lblID.getText()));
-                    person.setFirstName(txtFirstName.getText());
-                    person.setLastName(txtLastName.getText());
-                    person.setIdentificationId(txtIdentificationId.getText());
-                    person.setAddress(txtAddress.getText());
-                    person.setEmail(txtEmail.getText());
-                    person.setBirthday(txtDate.getDatoFecha());
-                    person.setPhone(txtPhone.getText());
-                    person.setActive(lblActive.getText());
-                    person.setPhoto(txtIdentificationId.getText());
-                    TypePerson tp = (TypePerson) cbTypePeople.getSelectedItem();
-                    person.setTypePersonId(tp.getId());
-                    personDao.update(person);
-                    person = null;
-                    JOptionPane.showMessageDialog(btnSave, "Cambios guardados correctamente");
-                    cleanForm();
-                    loadPeople();
-                } else {
-                    JOptionPane.showMessageDialog(btnSave, "Nombres, Apellidos o Cédula no pueden estar vacios \n");
-                }
+
+    public void update() {
+        try {
+            if (!(txtFirstName.getText().equals("") || txtLastName.getText().equals("")
+                    || txtIdentificationId.getText().equals(""))) {
+                Person person = new Person();
+                person.setId(Integer.parseInt(lblID.getText()));
+                person.setFirstName(txtFirstName.getText());
+                person.setLastName(txtLastName.getText());
+                person.setIdentificationId(txtIdentificationId.getText());
+                person.setAddress(txtAddress.getText());
+                person.setEmail(txtEmail.getText());
+                person.setBirthday(txtDate.getDatoFecha());
+                person.setPhone(txtPhone.getText());
+                person.setActive(lblActive.getText());
+                person.setPhoto(txtIdentificationId.getText());
+                TypePerson tp = (TypePerson) cbTypePeople.getSelectedItem();
+                person.setTypePersonId(tp.getId());
+                personDao.update(person);
+                person = null;
+                JOptionPane.showMessageDialog(btnSave, "Cambios guardados correctamente");
+                cleanForm();
+                loadPeople();
+            } else {
+                JOptionPane.showMessageDialog(btnSave, "Nombres, Apellidos o Cédula no pueden estar vacios \n");
+            }
         } catch (SQLException ex) {
             Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(btnSave, "Error al guardar los cambios: " + ex.getMessage());
@@ -514,7 +529,7 @@ public class PersonView extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(btnSave, "Error al guardar los cambios: " + ex.getMessage());
         }
     }
-    
+
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
         try {
