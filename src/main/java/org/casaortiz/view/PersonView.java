@@ -451,7 +451,7 @@ public class PersonView extends javax.swing.JPanel {
                         "Confirmar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (estadoEliminacionDialog == 0) {
                     personDao.delete(person.getId());
-                    JOptionPane.showMessageDialog(btnDelete, "Se elimino correctamente la categoria: " + person);
+                    JOptionPane.showMessageDialog(btnDelete, "Se elimino correctamente la persona: " + person);
                     loadPeople();
                     cleanForm();
                 }
@@ -465,7 +465,7 @@ public class PersonView extends javax.swing.JPanel {
                             "Confirmar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                     if (estadoEliminacionDialog == 0) {
                         personDao.delete(person.getId());
-                        JOptionPane.showMessageDialog(btnDelete, "Se elimino correctamente la categoria: " + person);
+                        JOptionPane.showMessageDialog(btnDelete, "Se elimino correctamente la persona: " + person);
                         loadPeople();
                         cleanForm();
                     }
@@ -586,7 +586,7 @@ public class PersonView extends javax.swing.JPanel {
             loadTable(personDao.searchListOnlyActive3Month(""));
         } catch (Exception ex) {
             Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, "Error al obtener datos de categoria: " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, "Error al obtener datos de personas: " + ex.getMessage());
         }
     }
 

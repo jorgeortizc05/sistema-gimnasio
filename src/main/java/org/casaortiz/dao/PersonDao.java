@@ -241,6 +241,7 @@ public class PersonDao implements ICrud<Person> {
      * @throws Exception
      */
     public List<Person> searchList(String texto) throws Exception {
+        texto = ((texto.trim().replaceAll(" ", "")).toUpperCase());
         Connection conn = null;
         ResultSet rs = null;
         List<Person> items;
@@ -248,27 +249,28 @@ public class PersonDao implements ICrud<Person> {
         try {
             items = new ArrayList<Person>();
             conn = connectionDBOracle.getConnection();
-            PreparedStatement st = conn.prepareStatement("select * from person where upper(first_name ||' '|| last_name "
-                    + "||' '||identification_id) like upper('%" + texto + "%')");
+            PreparedStatement st = conn.prepareStatement("select * from person where upper(first_name||last_name||identification_id) like upper('%"+texto+"%')");
             rs = st.executeQuery();
             while (rs.next()) {
                 item = new Person(rs.getInt("id"), rs.getString("first_name"), rs.getString("last_name"), rs.getString("identification_id"),
                         rs.getString("address"), rs.getString("email"), rs.getDate("birthday"), rs.getString("phone"), rs.getString("active"),
                         rs.getString("photo"), rs.getInt("type_person_id"));
+                System.out.println(item);
                 items.add(item);
             }
             rs.close();
             return items;
         } catch (Exception e) {
-            System.out.println("Error al obtener People: " + e.getMessage());
+            System.out.println("Error al obtener Personas: " + e.getMessage());
             connectionDBOracle.closeConnection(conn);
-            throw new Exception("Error al obtener People: \n" + e.getMessage());
+            throw new Exception("Error al obtener Personas: \n" + e.getMessage());
         } finally {
             connectionDBOracle.closeConnection(conn);
         }
     }
 
     public List<Person> searchListOnlyActive3Month(String texto) throws Exception {
+        texto = ((texto.trim().replaceAll(" ", "")).toUpperCase());
         Connection conn = null;
         ResultSet rs = null;
         List<Person> items;
@@ -276,8 +278,8 @@ public class PersonDao implements ICrud<Person> {
         try {
             items = new ArrayList<Person>();
             conn = connectionDBOracle.getConnection();
-            PreparedStatement st = conn.prepareStatement("select * from person p where upper(first_name ||' '|| last_name "
-                    + "||' '||identification_id) like upper('%" + texto + "%') and DATE_PART('month', AGE(now(), (select max(s2.date_to) from suscription s2 where s2.person_id = p.id))) <= 3\n"
+            PreparedStatement st = conn.prepareStatement("select * from person p where upper(first_name || last_name "
+                    + "||identification_id) like upper('%" + texto + "%') and DATE_PART('month', AGE(now(), (select max(s2.date_to) from suscription s2 where s2.person_id = p.id))) <= 3\n"
                     + "and DATE_PART('year',  AGE(now(), (select max(s2.date_to) from suscription s2 where s2.person_id = p.id))) < 1");
             rs = st.executeQuery();
             while (rs.next()) {

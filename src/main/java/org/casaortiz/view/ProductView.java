@@ -8,30 +8,41 @@ package org.casaortiz.view;
 import org.casaortiz.view.components.ButtonsColors;
 import org.casaortiz.view.components.TableModels;
 import java.awt.Color;
+import java.awt.Image;
+import java.io.File;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import org.casaortiz.dao.CategoryDao;
+import org.casaortiz.dao.ProductDao;
 import org.casaortiz.model.Category;
+import org.casaortiz.model.Product;
 
 /**
- * JPanel CategoryView Para manejar el CRUD de category
+ * JPanel ProductView Para manejar el CRUD de Product
  *
  * @author Ing. Jorge Luis Ortiz Cáceres
  * @since 31/08/2021
  * @version 0.0.1
  */
-public class CategoryView extends javax.swing.JPanel{
+public class ProductView extends javax.swing.JPanel{
     
     private CategoryDao catDao;
-    
     private Category category;
     
-    public CategoryView() {
+    private ProductDao prodDao;
+    private Product product;
+    
+    public ProductView() {
         initComponents();
         catDao = new CategoryDao();
+        prodDao = new ProductDao();
+        loadProducts();
         loadCategories();
         btnSaveChanges.setVisible(false);
         btnDelete.setVisible(false);
@@ -56,14 +67,14 @@ public class CategoryView extends javax.swing.JPanel{
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tListCategories = new javax.swing.JTable();
+        tListProducts = new javax.swing.JTable();
         txtSearch = new javax.swing.JTextField();
         lblSearch = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         lblID = new javax.swing.JLabel();
-        txtCategory = new javax.swing.JTextField();
+        txtProduct = new javax.swing.JTextField();
         txtDescription = new javax.swing.JTextField();
         btnSave = new javax.swing.JButton();
         btnSaveChanges = new javax.swing.JButton();
@@ -73,23 +84,31 @@ public class CategoryView extends javax.swing.JPanel{
         lblWarning = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        txtPrice = new javax.swing.JTextField();
+        txtSerial = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        cbCategory = new javax.swing.JComboBox<>();
+        lblFoto = new javax.swing.JLabel();
+        btnSelectImageProduct = new javax.swing.JButton();
 
-        setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "CATEGORIA", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 11))); // NOI18N
+        setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "PRODUCTO", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 11))); // NOI18N
         setPreferredSize(new java.awt.Dimension(1266, 500));
 
-        tListCategories.setModel(new javax.swing.table.DefaultTableModel(
+        tListProducts.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID", "Categoría", "Descripción"
+                "ID", "Categoría", "Descripción", "Price", "Serial", "Photo", "category"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false, false, true, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -100,20 +119,21 @@ public class CategoryView extends javax.swing.JPanel{
                 return canEdit [columnIndex];
             }
         });
-        tListCategories.getTableHeader().setReorderingAllowed(false);
-        tListCategories.addMouseListener(new java.awt.event.MouseAdapter() {
+        tListProducts.getTableHeader().setReorderingAllowed(false);
+        tListProducts.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tListCategoriesMouseClicked(evt);
+                tListProductsMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tListCategories);
-        if (tListCategories.getColumnModel().getColumnCount() > 0) {
-            tListCategories.getColumnModel().getColumn(0).setResizable(false);
-            tListCategories.getColumnModel().getColumn(0).setPreferredWidth(5);
-            tListCategories.getColumnModel().getColumn(1).setResizable(false);
-            tListCategories.getColumnModel().getColumn(1).setPreferredWidth(300);
-            tListCategories.getColumnModel().getColumn(2).setResizable(false);
-            tListCategories.getColumnModel().getColumn(2).setPreferredWidth(300);
+        jScrollPane1.setViewportView(tListProducts);
+        if (tListProducts.getColumnModel().getColumnCount() > 0) {
+            tListProducts.getColumnModel().getColumn(0).setResizable(false);
+            tListProducts.getColumnModel().getColumn(1).setResizable(false);
+            tListProducts.getColumnModel().getColumn(2).setResizable(false);
+            tListProducts.getColumnModel().getColumn(3).setResizable(false);
+            tListProducts.getColumnModel().getColumn(4).setResizable(false);
+            tListProducts.getColumnModel().getColumn(5).setResizable(false);
+            tListProducts.getColumnModel().getColumn(6).setResizable(false);
         }
 
         txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -176,10 +196,29 @@ public class CategoryView extends javax.swing.JPanel{
         jScrollPane2.setViewportView(lblWarning);
 
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
-        jLabel2.setText("Categoría:");
+        jLabel2.setText("Producto:");
 
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         jLabel3.setText("Descripción:");
+
+        jLabel4.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        jLabel4.setText("Precio:");
+
+        jLabel5.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        jLabel5.setText("Serial:");
+
+        jLabel6.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        jLabel6.setText("Categoría:");
+
+        lblFoto.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "Foto", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 12))); // NOI18N
+        lblFoto.setPreferredSize(new java.awt.Dimension(400, 300));
+
+        btnSelectImageProduct.setText("Elegir Imágen");
+        btnSelectImageProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSelectImageProductActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -188,6 +227,26 @@ public class CategoryView extends javax.swing.JPanel{
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLabel6)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(cbCategory, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel1)
+                                .addComponent(jLabel2)
+                                .addComponent(jLabel3)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jLabel4)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                                .addComponent(jLabel5))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtSerial, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lblID, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnSave)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -196,19 +255,12 @@ public class CategoryView extends javax.swing.JPanel{
                         .addComponent(btnDelete)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnCleanForm))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addGap(0, 0, 0)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblID, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(30, 30, 30)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(btnSelectImageProduct, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -218,20 +270,37 @@ public class CategoryView extends javax.swing.JPanel{
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtProduct, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addGap(24, 24, 24)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(txtSerial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6)
+                    .addComponent(cbCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(42, 42, 42)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSaveChanges)
                     .addComponent(btnSave)
                     .addComponent(btnCleanForm)
                     .addComponent(btnDelete))
-                .addGap(0, 26, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnSelectImageProduct)
+                .addContainerGap())
             .addComponent(jScrollPane2)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(lblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -257,34 +326,37 @@ public class CategoryView extends javax.swing.JPanel{
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(60, 60, 60)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * Call CategoryDao.insert() Envia datos para guardar una category
+     * Call ProductDao.insert() Envia datos para guardar una Product
      *
      * @param evt - ActionPerformed: Al hacer clic en btnSave
      */
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
         try {
-            if (!txtCategory.getText().equals("")) {
-                Category cat = new Category(null,txtCategory.getText(),txtDescription.getText());
-                catDao.insert(cat);
+            if (!txtProduct.getText().equals("")) {
+                var category = (Category) cbCategory.getSelectedItem();
+                Product prod = new Product(null,txtProduct.getText(),txtDescription.getText(),
+                Double.parseDouble(txtPrice.getText()), txtSerial.getText(), "ninguna", category.getId());
+                prodDao.insert(prod);
                 JOptionPane.showMessageDialog(btnSave, "Guardado correctamente");
                 cleanForm();
-                loadCategories();
+                loadProducts();
             } else {
-                lblWarning.setText("Categoría no puede estar vacio");
+                lblWarning.setText("Producto no puede estar vacio");
+                lblWarning.setText("Precio solo acepta números");
                 lblWarning.setForeground(Color.red);
             }
 
@@ -305,18 +377,18 @@ public class CategoryView extends javax.swing.JPanel{
      */
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
         // TODO add your handling code here:
-        loadSearchCategories(txtSearch.getText());
+        loadSearchProducts(txtSearch.getText());
         /*tListCategories.setRowSelectionInterval(0, 0); //Selecciona la primera fila
         loadItemFromTable();*/ 
     }//GEN-LAST:event_txtSearchKeyReleased
 
-    private void tListCategoriesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tListCategoriesMouseClicked
+    private void tListProductsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tListProductsMouseClicked
         // TODO add your handling code here:
         loadItemFromTable();
-    }//GEN-LAST:event_tListCategoriesMouseClicked
+    }//GEN-LAST:event_tListProductsMouseClicked
 
     private void loadItemFromTable(){
-        int fila = tListCategories.getSelectedRow();
+        int fila = tListProducts.getSelectedRow();
         if (fila == -1) {
             JOptionPane.showMessageDialog(this, "Debe seleccionar una fila");
         } else {
@@ -324,16 +396,21 @@ public class CategoryView extends javax.swing.JPanel{
             btnSave.setVisible(false);
             btnSaveChanges.setVisible(true);
             try {
-                category = catDao.get(Integer.parseInt(tListCategories.getValueAt(fila, 0).toString()));
-                lblID.setText(String.valueOf(category.getId()));
-                txtCategory.setText(category.getName());
-                txtDescription.setText(category.getDescription());
+                product = prodDao.get(Integer.parseInt(tListProducts.getValueAt(fila, 0).toString()));
+                lblID.setText(String.valueOf(product.getId()));
+                txtProduct.setText(product.getName());
+                txtDescription.setText(product.getDescription());
+                txtPrice.setText(product.getPrice()+"");
+                txtSerial.setText(product.getSerial());
+                Category cat = catDao.get(product.getCategoryId());
+                cbCategory.setSelectedItem(cat);
+                
             } catch (SQLException ex) {
-                Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ProductView.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(this, "Error al eliminar: " + ex.getMessage());
                 lblWarning.setText("SQLException: Error al guardar: " + ex.toString());
             } catch (Exception ex) {
-                Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ProductView.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(this, "Error al eliminar: " + ex.getMessage());
                 lblWarning.setText("Exception: Error al guardar: " + ex.toString());
             }
@@ -341,31 +418,33 @@ public class CategoryView extends javax.swing.JPanel{
         }
     }
     /**
-     * Call CategoryDao.update(Category cat) Envia datos para actualizar una
-     * category
+     * Call ProductDao.update(Product cat) Envia datos para actualizar una
+     * Product
      *
      * @param evt - ActionPerformed: Al hacer clic en btnSaveChanges
      */
     private void btnSaveChangesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveChangesActionPerformed
         // TODO add your handling code here:
         try {
-            if (!txtCategory.getText().equals("")) {
-                Category cat = new Category(Integer.parseInt(lblID.getText()),txtCategory.getText(),txtDescription.getText());
-                catDao.update(cat);
+            if (!txtProduct.getText().equals("")) {
+                var category = (Category) cbCategory.getSelectedItem();
+                Product prod = new Product(Integer.parseInt(lblID.getText()),txtProduct.getText(),txtDescription.getText(),
+                Double.parseDouble(txtPrice.getText()), txtSerial.getText(), "ninguna", category.getId());
+                prodDao.update(prod);
                 JOptionPane.showMessageDialog(btnSave, "Cambios guardados correctamente");
                 cleanForm();
-                loadCategories();
+                loadProducts();
             } else {
-                lblWarning.setText("Categoría no puede estar vacio");
+                lblWarning.setText("Product no puede estar vacio");
                 lblWarning.setForeground(Color.red);
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ProductView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(btnSave, "Error al guardar los cambios: " + ex.getMessage());
             lblWarning.setText("SQLException: Error al guardar los cambios: " + ex.toString());
         } catch (Exception ex) {
-            Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ProductView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(btnSave, "Error al guardar los cambios: " + ex.getMessage());
             lblWarning.setText("Exception: Error al guardar los cambios: " + ex.toString());
         }
@@ -384,74 +463,138 @@ public class CategoryView extends javax.swing.JPanel{
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
         try {
-            int fila = tListCategories.getSelectedRow();
+            int fila = tListProducts.getSelectedRow();
             if (fila == -1) {
-                JOptionPane.showConfirmDialog(tListCategories, "Debe seleccionar una fila");
+                JOptionPane.showConfirmDialog(tListProducts, "Debe seleccionar una fila");
             } else {
                 int estadoEliminacionDialog = JOptionPane.showConfirmDialog(btnDelete,
-                        "Seguro que desea eliminar " + category.getName() + " ?",
+                        "Seguro que desea eliminar " + product.getName() + " ?",
                         "Confirmar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (estadoEliminacionDialog == 0) {
-                    catDao.delete(category.getId());
-                    JOptionPane.showMessageDialog(btnDelete, "Se elimino correctamente la categoria: " + category);
-                    loadCategories();
+                    prodDao.delete(product.getId());
+                    JOptionPane.showMessageDialog(btnDelete, "Se elimino correctamente el producto: " + product);
+                    loadProducts();
                     cleanForm();
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(btnDelete, "Error al eliminar la categoria: " + category + " Error: " + ex.getMessage());
-            lblWarning.setText("Error al eliminar la categoria: " + category + " Error: " + ex.getMessage());
+            Logger.getLogger(ProductView.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(btnDelete, "Error al eliminar el producto: " + product + " Error: " + ex.getMessage());
+            lblWarning.setText("Error al eliminar el producto: " + product + " Error: " + ex.getMessage());
         } catch (Exception ex) {
-            Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(btnDelete, "Error al eliminar la categoria: " + category + " Error: " + ex.getMessage());
-            lblWarning.setText("Error al eliminar la categoria: " + category + " Error: " + ex.getMessage());
+            Logger.getLogger(ProductView.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(btnDelete, "Error al eliminar el producto: " + product + " Error: " + ex.getMessage());
+            lblWarning.setText("Error al eliminar el producto: " + product + " Error: " + ex.getMessage());
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
+    private void btnSelectImageProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectImageProductActionPerformed
+        // TODO add your handling code here:
+        selectImageProduct();
+    }//GEN-LAST:event_btnSelectImageProductActionPerformed
+
+    public void selectImageProduct(){
+        JFileChooser fc;
+        File file;
+        File dest;
+        fc = new JFileChooser();
+        fc.setDialogTitle("Elegir foto o imagen de producto");
+        if(fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
+            file = fc.getSelectedFile();
+            try {
+                String nombreImg = file.getName();
+                System.out.println(nombreImg);
+                if (nombreImg.endsWith(".jpg")
+                        || nombreImg.endsWith(".png")
+                        || nombreImg.endsWith(".bmp")
+                        || nombreImg.endsWith(".jpeg")) {
+                    UUID uuid = UUID.randomUUID();
+                    String codigoImagen = uuid.toString();
+                    dest = new File(System.getProperty("user.dir") + "/photos/producto/" + codigoImagen);
+                    //this.imagen= (dest.getName());
+                    loadImageSrc(file.getAbsolutePath());
+
+            }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error abriendo fichero");
+            }
+        }
+    }
+    
+    private void loadImageSrc(String name) {
+
+        try {
+            String string = name;
+            
+            Image img = new ImageIcon(string).getImage();
+            
+            //Me permite redimensionar la imagen para que se adapte al jLabel
+            ImageIcon ii = new ImageIcon(img.getScaledInstance(400, 300, Image.SCALE_SMOOTH));
+
+            lblFoto.setIcon(ii);
+            lblFoto.validate();
+            lblFoto.repaint();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
     /**
      * Vacia datos del jTable tListCategories
      */
     private void cleanTable() {
-        tListCategories.setModel(TableModels.cleanTable(tListCategories));
+        tListProducts.setModel(TableModels.cleanTable(tListProducts));
     }
 
     /**
-     * Call CategoryDao.getCategories() Recupera datos categories y lo carga al
+     * Call ProductDao.getCategories() Recupera datos categories y lo carga al
      * jTable
      */
+    public void loadProducts() {
+        try {
+            loadTable(prodDao.getList());
+        } catch (Exception ex) {
+            Logger.getLogger(ProductView.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Error al obtener datos de productos: " + ex.getMessage());
+            lblWarning.setText("Error al obtener datos de productos: " + ex.getMessage());
+        }
+    }
+    
     public void loadCategories() {
         try {
-            loadTable(catDao.getList());
+            cbCategory.removeAllItems();
+            for (Category cat : catDao.getList()) {
+                cbCategory.addItem(cat);
+            }
         } catch (Exception ex) {
-            Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, "Error al obtener datos de categoria: " + ex.getMessage());
-            lblWarning.setText("Error al obtener datos de categoria: " + ex.getMessage());
+            Logger.getLogger(PersonView.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     /**
-     * Obtiene datos de CategoryDao.searchCategories(text) y lo carga al jTable
+     * Obtiene datos de ProductDao.searchCategories(text) y lo carga al jTable
      *
      * @param text
      */
-    private void loadSearchCategories(String text) {
+    private void loadSearchProducts(String text) {
         try {
-            loadTable(catDao.searchList(text));
+            loadTable(prodDao.searchList(text));
         } catch (Exception ex) {
-            Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ProductView.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "Error al buscar: " + ex.getMessage());
             lblWarning.setText("Error al buscar: " + ex.getMessage());
         }
     }
 
     /**
-     * Template para cargar datos al jTable tListCategories
+     * Template para cargar datos al jTable tListProducts
      *
-     * @param List<Category>
+     * @param List<Product>
      */
-    private void loadTable(List<Category> categories) {
-        tListCategories.setModel(TableModels.getModelCategories(tListCategories, categories));
+    private void loadTable(List<Product> products) {
+        tListProducts.setModel(TableModels.getModelProducts(tListProducts, products));
         
     }
     /**
@@ -460,8 +603,10 @@ public class CategoryView extends javax.swing.JPanel{
     private void cleanForm() {
         lblID.setText("");
         lblWarning.setText("");
-        txtCategory.setText("");
+        txtProduct.setText("");
         txtDescription.setText("");
+        txtPrice.setText("");
+        txtSerial.setText("");
         btnSave.setVisible(true);
         btnSaveChanges.setVisible(false);
         btnDelete.setVisible(false);
@@ -472,19 +617,27 @@ public class CategoryView extends javax.swing.JPanel{
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSaveChanges;
+    private javax.swing.JButton btnSelectImageProduct;
+    private javax.swing.JComboBox<Category> cbCategory;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JLabel lblFoto;
     private javax.swing.JLabel lblID;
     private javax.swing.JLabel lblSearch;
     private javax.swing.JTextArea lblWarning;
-    private javax.swing.JTable tListCategories;
-    private javax.swing.JTextField txtCategory;
+    private javax.swing.JTable tListProducts;
     private javax.swing.JTextField txtDescription;
+    private javax.swing.JTextField txtPrice;
+    private javax.swing.JTextField txtProduct;
     private javax.swing.JTextField txtSearch;
+    private javax.swing.JTextField txtSerial;
     // End of variables declaration//GEN-END:variables
 }

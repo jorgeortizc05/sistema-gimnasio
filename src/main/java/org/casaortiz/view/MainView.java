@@ -45,6 +45,7 @@ public class MainView extends javax.swing.JFrame {
     private TypeSuscriptionView typeSuscriptionView;
     private PersonView personView;
     private CheckSuscriptionView checkSuscriptionView;
+    private ProductView productView;
     private AboutView aboutView;
 
     public MainView() {
@@ -53,6 +54,7 @@ public class MainView extends javax.swing.JFrame {
         typePersonView = new TypePersonView(personView);
         typeVoucherView = new TypeVoucherView();
         typeSuscriptionView = new TypeSuscriptionView();
+        productView = new ProductView();
         aboutView = new AboutView();
         personView = new PersonView(this);
         checkSuscriptionView = new CheckSuscriptionView(this);//Para usar el JDialog
@@ -63,6 +65,7 @@ public class MainView extends javax.swing.JFrame {
         jTabbedPane1.add(categoryView);
         jTabbedPane1.add(typePersonView);
         jTabbedPane1.add(typeVoucherView);
+        jTabbedPane1.add(productView);
         jTabbedPane1.add(aboutView);
 
     }
@@ -103,6 +106,7 @@ public class MainView extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         miInventario = new javax.swing.JMenu();
         miCategory = new javax.swing.JMenuItem();
+        miProducts = new javax.swing.JMenuItem();
         mBackup = new javax.swing.JMenu();
         miBackup = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
@@ -122,6 +126,7 @@ public class MainView extends javax.swing.JFrame {
 
         getContentPane().add(jScrollPane1, "card2");
 
+        jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/system/check-30x30.png"))); // NOI18N
         jMenu1.setText("Control Acceso");
         jMenu1.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
 
@@ -136,6 +141,7 @@ public class MainView extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
+        jMenu2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/system/people-30x30.png"))); // NOI18N
         jMenu2.setText("Gestión de Clientes");
         jMenu2.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
 
@@ -159,6 +165,7 @@ public class MainView extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu2);
 
+        jMenu3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/system/caja-registradora-30x30.png"))); // NOI18N
         jMenu3.setText("Caja");
         jMenu3.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
 
@@ -186,6 +193,7 @@ public class MainView extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu3);
 
+        miInventario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/system/inventario-30x30.png"))); // NOI18N
         miInventario.setText("Inventarios");
         miInventario.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
 
@@ -198,11 +206,22 @@ public class MainView extends javax.swing.JFrame {
         });
         miInventario.add(miCategory);
 
+        miProducts.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/system/productos-30x30.png"))); // NOI18N
+        miProducts.setText("Productos");
+        miProducts.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miProductsActionPerformed(evt);
+            }
+        });
+        miInventario.add(miProducts);
+
         jMenuBar1.add(miInventario);
 
+        mBackup.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/system/backup-copy-30x30.png"))); // NOI18N
         mBackup.setText("Copia Seguridad");
         mBackup.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
 
+        miBackup.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/system/backup-copy-30x30.png"))); // NOI18N
         miBackup.setText("Realizar una copia");
         miBackup.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -213,6 +232,7 @@ public class MainView extends javax.swing.JFrame {
 
         jMenuBar1.add(mBackup);
 
+        jMenu4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/system/contact-us-20x20.png"))); // NOI18N
         jMenu4.setText("Acerca de");
         jMenu4.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
 
@@ -277,6 +297,13 @@ public class MainView extends javax.swing.JFrame {
 
     }//GEN-LAST:event_miBackupActionPerformed
 
+    private void miProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miProductsActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane1.setSelectedComponent(productView);
+        productView.loadProducts();
+        productView.loadCategories();
+    }//GEN-LAST:event_miProductsActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -324,6 +351,7 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JMenuItem miDeveloper;
     private javax.swing.JMenu miInventario;
     private javax.swing.JMenuItem miPerson;
+    private javax.swing.JMenuItem miProducts;
     private javax.swing.JMenuItem miTypePerson;
     private javax.swing.JMenuItem miTypeSuscription;
     private javax.swing.JMenuItem miTypeVoucher;

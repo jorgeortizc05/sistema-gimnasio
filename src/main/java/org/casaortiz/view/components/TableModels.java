@@ -11,6 +11,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import org.casaortiz.model.Category;
 import org.casaortiz.model.Person;
+import org.casaortiz.model.Product;
 import org.casaortiz.model.Suscription;
 import org.casaortiz.model.TypePerson;
 import org.casaortiz.model.TypeSuscription;
@@ -25,9 +26,8 @@ public class TableModels {
     public static DefaultTableModel getModelCategories(JTable table, List<Category> categories){
         cleanTable(table);
         DefaultTableModel modelo = (DefaultTableModel) table.getModel();
-        List<Category> items = categories;
         Object rowData[] = new Object[3];
-        for (Category c : items) {
+        for (Category c : categories) {
             rowData[0] = c.getId();
             rowData[1] = c.getName();
             rowData[2] = c.getDescription();
@@ -36,12 +36,28 @@ public class TableModels {
         return modelo;
     }
     
+    public static DefaultTableModel getModelProducts(JTable table, List<Product> products){
+        cleanTable(table);
+        DefaultTableModel modelo = (DefaultTableModel) table.getModel();
+        Object rowData[] = new Object[7];
+        for (Product prod : products) {
+            rowData[0] = prod.getId();
+            rowData[1] = prod.getName();
+            rowData[2] = prod.getDescription();
+            rowData[3] = prod.getPrice();
+            rowData[4] = prod.getSerial();
+            rowData[5] = prod.getPhoto();
+            rowData[6] = prod.getCategoryId();
+            modelo.addRow(rowData);
+        }
+        return modelo;
+    }
+    
     public static DefaultTableModel getModelPerson(JTable table, List<Person> people){
         cleanTable(table);
         DefaultTableModel modelo = (DefaultTableModel) table.getModel();
-        List<Person> items = people;
         Object rowData[] = new Object[6];
-        for (Person p : items) {
+        for (Person p : people) {
             rowData[0] = p.getId();
             rowData[1] = p.getFirstName();
             rowData[2] = p.getLastName();
@@ -71,9 +87,8 @@ public class TableModels {
     public static DefaultTableModel getModelTypePerson(JTable table, List<TypePerson> typePeople){
         cleanTable(table);
         DefaultTableModel modelo = (DefaultTableModel) table.getModel();
-        List<TypePerson> items = typePeople;
         Object rowData[] = new Object[3];
-        for (TypePerson c : items) {
+        for (TypePerson c : typePeople) {
             System.out.println(c);
             rowData[0] = c.getId();
             rowData[1] = c.getName();
@@ -86,9 +101,8 @@ public class TableModels {
     public static DefaultTableModel getModelTypeSuscription(JTable table, List<TypeSuscription> typeSuscriptions){
         cleanTable(table);
         DefaultTableModel modelo = (DefaultTableModel) table.getModel();
-        List<TypeSuscription> items = typeSuscriptions;
         Object rowData[] = new Object[5];
-        for(TypeSuscription ts: items){
+        for(TypeSuscription ts: typeSuscriptions){
             System.out.println(ts);
             rowData[0] = ts.getId();
             rowData[1] = ts.getName();
@@ -103,11 +117,10 @@ public class TableModels {
     public static DefaultTableModel getModelSuscription(JTable table, List<Suscription> suscriptions){
         cleanTable(table);
         DefaultTableModel modelo = (DefaultTableModel) table.getModel();
-        List<Suscription> items = suscriptions;
         Object rowData[] = new Object[4];
         String pattern = "dd/MM/yyyy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        for(Suscription c: items){
+        for(Suscription c: suscriptions){
             System.out.println(c);
             rowData[0] = c.getId();
             rowData[1] = simpleDateFormat.format(c.getDateFrom());
@@ -121,9 +134,8 @@ public class TableModels {
     public static DefaultTableModel getModelTypeVoucher(JTable table, List<TypeVoucher> typeVouchers){
         cleanTable(table);
         DefaultTableModel modelo = (DefaultTableModel) table.getModel();
-        List<TypeVoucher> items = typeVouchers;
         Object rowData[] = new Object[3];
-        for(TypeVoucher c: items){
+        for(TypeVoucher c: typeVouchers){
             System.out.println(c);
             rowData[0] = c.getId();
             rowData[1] = c.getName();
