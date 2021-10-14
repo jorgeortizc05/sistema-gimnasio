@@ -9,6 +9,8 @@ import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -402,10 +404,36 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
         // TODO add your handling code here:
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             checkSuscription(txtIdentificationId.getText());
+            
+            advertising();
+            
 
         }
     }//GEN-LAST:event_txtIdentificationIdKeyPressed
-
+    
+    /**
+     * Activa la publicidad en check suscription despues de 3 minutos de
+     * Inactividad
+     */
+    private void advertising(){
+        Timer timer = new Timer();
+        TimerTask tarea = new TimerTask() {
+            @Override
+            public void run() {
+                cleanForm();
+                lblPhoto.setIcon(new Images().addIconForAdvertising(FileLocation.pathIconP1));
+            }
+        };
+        timer.schedule(tarea, 180000);
+    }
+    
+    private void cleanForm(){
+        lblNames.setText("");
+        lblWarning.setText("");
+        lblRemainingDays.setText("0");
+        lblPhoto.setIcon(null);
+    }
+    
     private void checkOldItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_checkOldItemStateChanged
         // TODO add your handling code here:
         TableModels.cleanTable(tListPeople);

@@ -30,4 +30,23 @@ public class Images {
         ImageIcon ii = new ImageIcon(img.getScaledInstance(640, 480, Image.SCALE_SMOOTH));
         return ii;
     }
+    
+    //Para mostrar publicidad en el checkSuscription
+    public ImageIcon addIconForAdvertising(String pathIcon){
+        ImageIcon iconBtn = createImageIconForAdvertising(pathIcon);
+        return iconBtn;
+    }
+    
+    private ImageIcon createImageIconForAdvertising(String path) {
+        URL imgURL = getClass().getResource(path);
+
+        if (imgURL != null) {
+            Image img = new ImageIcon(imgURL).getImage();
+            return new ImageIcon(img.getScaledInstance(640, 480, Image.SCALE_SMOOTH));
+        } else {
+            System.err.println("Couldn't find file: " + path);
+            System.out.println("imgURL = " + imgURL.getPath());
+            return null;
+        }
+    }
 }
