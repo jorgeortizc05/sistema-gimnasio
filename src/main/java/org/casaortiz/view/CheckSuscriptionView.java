@@ -30,7 +30,7 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
     private Person person;
     private MainView mainView;
     private SuscriptionDao susDao;
-    private boolean iniciarTimer = true; //Para activar el adversiting
+    private boolean isAdversiting = false; //Para activar el adversiting
     public CheckSuscriptionView(MainView _mainView) {
         initComponents();
         personDao = new PersonDao();
@@ -277,6 +277,10 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
             loadItemFromTable();
         }
         
+        if(!isAdversiting){
+                advertising();
+            }
+        
     }//GEN-LAST:event_txtSearchKeyReleased
 
     private void loadSearchPeople(String text) {
@@ -302,6 +306,9 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
 
     private void tListPeopleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tListPeopleMouseClicked
         loadItemFromTable();
+        if(!isAdversiting){
+                advertising();
+            }
     }//GEN-LAST:event_tListPeopleMouseClicked
 
     public void loadItemFromTable() {
@@ -375,6 +382,9 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
         // TODO add your handling code here:
         if (evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN) {
             loadItemFromTable();
+            if(!isAdversiting){
+                advertising();
+            }
         }
     }//GEN-LAST:event_tListPeopleKeyReleased
 
@@ -405,7 +415,7 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             checkSuscription(txtIdentificationId.getText());
             
-            if(iniciarTimer){
+            if(!isAdversiting){
                 advertising();
             }
             
@@ -419,19 +429,20 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
      * Inactividad
      */
     private void advertising(){
-        iniciarTimer = false;
-        System.out.println("iniciarTimer = " + iniciarTimer);
+        isAdversiting = true;
+        System.out.println("iniciarTimer = " + isAdversiting);
         Timer timer = new Timer();
         TimerTask tarea = new TimerTask() {
             @Override
             public void run() {
                 cleanForm();
                 lblPhoto.setIcon(new Images().addIconForAdvertising(FileLocation.pathIconP1));
-                iniciarTimer = true;
-                System.out.println("iniciarTimer = " + iniciarTimer);
+                isAdversiting = false;
+                System.out.println("iniciarTimer = " + isAdversiting);
             }
         };
-        timer.schedule(tarea, 180000);
+        //timer.schedule(tarea, 180000);//miliseconds 3 minutes
+        timer.schedule(tarea, 8000);//8 seconds
     }
     
     private void cleanForm(){
