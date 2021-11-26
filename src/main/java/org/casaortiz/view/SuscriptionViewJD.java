@@ -17,6 +17,7 @@ import org.casaortiz.dao.TypeSuscriptionDao;
 import org.casaortiz.model.Person;
 import org.casaortiz.model.Suscription;
 import org.casaortiz.model.TypeSuscription;
+import org.casaortiz.model.TypeSuscriptionSuscriptionR;
 import org.casaortiz.view.components.ButtonsColors;
 import org.casaortiz.view.components.TableModels;
 
@@ -32,6 +33,7 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
     private SuscriptionDao suscriptionDao;
     private CheckSuscriptionView checkSuscriptionView;
     List<Suscription> suscriptions = null;
+    List<TypeSuscriptionSuscriptionR> typeSuscriptionSuscriptionRs = null;
 
     public SuscriptionViewJD(java.awt.Frame parent, boolean modal, Person _person, CheckSuscriptionView _checkSuscriptionView) {
         super(parent, modal);
@@ -64,15 +66,16 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
 
     private void loadSuscriptionFromPerson() {
         try {
-            suscriptions = suscriptionDao.getListSuscriptionFromPerson(person);
-            loadTable(suscriptions);
+            //suscriptions = suscriptionDao.getListSuscriptionFromPerson(person);
+            typeSuscriptionSuscriptionRs = suscriptionDao.getListSuscriptionFromPerson(person);
+            loadTable(typeSuscriptionSuscriptionRs);
         } catch (Exception ex) {
             Logger.getLogger(SuscriptionViewJD.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "Error al obtener datos de suscripciones de las personas: " + ex.getMessage());
         }
     }
 
-    private void loadTable(List<Suscription> suscription) {
+    private void loadTable(List<TypeSuscriptionSuscriptionR> suscription) throws Exception {
 
         tListSuscription.setModel(TableModels.getModelSuscription(tListSuscription, suscription));
     }
@@ -144,11 +147,11 @@ public class SuscriptionViewJD extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Id", "Fecha Desde", "Fecha Hasta", "Importe Total"
+                "Id", "Fecha Desde", "Fecha Hasta", "Importe Total", "Tipo Susc."
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {

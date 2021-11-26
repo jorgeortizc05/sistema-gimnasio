@@ -30,7 +30,7 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
     private Person person;
     private MainView mainView;
     private SuscriptionDao susDao;
-
+    private boolean iniciarTimer = true; //Para activar el adversiting
     public CheckSuscriptionView(MainView _mainView) {
         initComponents();
         personDao = new PersonDao();
@@ -405,7 +405,10 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             checkSuscription(txtIdentificationId.getText());
             
-            advertising();
+            if(iniciarTimer){
+                advertising();
+            }
+            
             
 
         }
@@ -416,12 +419,16 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
      * Inactividad
      */
     private void advertising(){
+        iniciarTimer = false;
+        System.out.println("iniciarTimer = " + iniciarTimer);
         Timer timer = new Timer();
         TimerTask tarea = new TimerTask() {
             @Override
             public void run() {
                 cleanForm();
                 lblPhoto.setIcon(new Images().addIconForAdvertising(FileLocation.pathIconP1));
+                iniciarTimer = true;
+                System.out.println("iniciarTimer = " + iniciarTimer);
             }
         };
         timer.schedule(tarea, 180000);
@@ -432,6 +439,7 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
         lblWarning.setText("");
         lblRemainingDays.setText("0");
         lblPhoto.setIcon(null);
+        person = null;
     }
     
     private void checkOldItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_checkOldItemStateChanged

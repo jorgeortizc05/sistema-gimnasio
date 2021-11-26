@@ -16,6 +16,7 @@ import java.util.List;
 import org.casaortiz.db.ConnectionDBPostgres;
 import org.casaortiz.model.Person;
 import org.casaortiz.model.Suscription;
+import org.casaortiz.model.TypeSuscriptionSuscriptionR;
 
 /**
  * CRUD a Suscription
@@ -219,7 +220,55 @@ public class SuscriptionDao implements ICrud<Suscription> {
      * @throws SQLException
      * @throws Exception
      */
-    public List<Suscription> getListSuscriptionFromPerson(Person p) throws SQLException, Exception {
+    public List<TypeSuscriptionSuscriptionR> getListSuscriptionFromPerson(Person p) throws SQLException, Exception {
+        Connection conn = null;
+        ResultSet rs = null;
+        List<TypeSuscriptionSuscriptionR> items;
+        TypeSuscriptionSuscriptionR item;
+        try {
+            items = new ArrayList<TypeSuscriptionSuscriptionR>();
+            conn = connectionDBPostgres.getConnection();
+            //PreparedStatement st = conn.prepareStatement("select s.id, receipt_number, date_suscription, date_from, date_to, s.price, discount, total, \"comment\", person_id, type_suscription_id, ts.id as id_type_sus, ts.\"name\" as name_type_sus, ts.num_days as num_days_type_sus,ts.price price_type_sus,ts.description desciption_type_sus from Suscription s, type_suscription ts where ts.id = s.type_suscription_id and s.person_id = " + p.getId() + " order by s.date_to desc");
+            PreparedStatement st = conn.prepareStatement("""
+                                                         select s.id, receipt_number, date_suscription, date_from, date_to, s.price, discount, total, \"comment\", person_id, type_suscription_id, 
+                                                         ts.id as id_type_sus, ts.\"name\" as name_type_sus, ts.num_days as num_days_type_sus,ts.price price_type_sus,ts.description desciption_type_sus 
+                                                         from Suscription s, type_suscription ts 
+                                                         where ts.id = s.type_suscription_id and s.person_id = '"""
+                                                         +  p.getId() + "'order by s.date_to desc");
+            rs = st.executeQuery();
+            while (rs.next()) {
+                item = new TypeSuscriptionSuscriptionR();
+                item.setId(rs.getInt("id"));
+                item.setReceipt_number(rs.getString("receipt_number"));
+                item.setDateSuscription(rs.getDate("date_suscription"));
+                item.setDateFrom(rs.getDate("date_from"));
+                item.setDateTo(rs.getDate("date_to"));
+                item.setPrice(rs.getDouble("price"));
+                item.setDiscount(rs.getDouble("discount"));
+                item.setTotal(rs.getDouble("total"));
+                item.setComment(rs.getString("comment"));
+                item.setPersonId(rs.getInt("person_id"));
+                item.setTypeSuscriptionId(rs.getInt("type_suscription_id"));
+                item.setIdTypeSus(rs.getInt("id_type_sus"));
+                item.setNameTypeSus(rs.getString("name_type_sus"));
+                item.setNum_daysTypeSus(rs.getInt("num_days_type_sus"));
+                item.setPriceTypeSus(rs.getDouble("price_type_sus"));
+                item.setDescriptionTypeSus(rs.getString("desciption_type_sus"));
+                items.add(item);
+            }
+            rs.close();
+            return items;
+        } catch (Exception e) {
+            System.out.println("Error al obtener Suscriptions: " + e.getMessage());
+            rs.close();
+            connectionDBPostgres.closeConnection(conn);
+            throw new Exception("Error al obtener Suscriptions: \n" + e.getMessage());
+        } finally {
+            rs.close();
+            connectionDBPostgres.closeConnection(conn);
+        }
+    }
+    /*public List<Suscription> getListSuscriptionFromPerson(Person p) throws SQLException, Exception {
         Connection conn = null;
         ResultSet rs = null;
         List<Suscription> items;
@@ -255,7 +304,7 @@ public class SuscriptionDao implements ICrud<Suscription> {
             rs.close();
             connectionDBPostgres.closeConnection(conn);
         }
-    }
+    }*/
 
     public Date getDateMaxFromPerson(int idPersona) throws Exception {
         Connection conn = null;

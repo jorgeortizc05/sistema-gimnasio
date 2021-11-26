@@ -9,12 +9,14 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import org.casaortiz.dao.TypeSuscriptionDao;
 import org.casaortiz.model.Category;
 import org.casaortiz.model.Person;
 import org.casaortiz.model.Product;
 import org.casaortiz.model.Suscription;
 import org.casaortiz.model.TypePerson;
 import org.casaortiz.model.TypeSuscription;
+import org.casaortiz.model.TypeSuscriptionSuscriptionR;
 import org.casaortiz.model.TypeVoucher;
 
 /**
@@ -22,7 +24,6 @@ import org.casaortiz.model.TypeVoucher;
  * @author jorge
  */
 public class TableModels {
-    
     public static DefaultTableModel getModelCategories(JTable table, List<Category> categories){
         cleanTable(table);
         DefaultTableModel modelo = (DefaultTableModel) table.getModel();
@@ -114,18 +115,18 @@ public class TableModels {
         return modelo;
     }
     
-    public static DefaultTableModel getModelSuscription(JTable table, List<Suscription> suscriptions){
+    public static DefaultTableModel getModelSuscription(JTable table, List<TypeSuscriptionSuscriptionR> suscriptions) throws Exception{
         cleanTable(table);
         DefaultTableModel modelo = (DefaultTableModel) table.getModel();
-        Object rowData[] = new Object[4];
+        Object rowData[] = new Object[5];
         String pattern = "dd/MM/yyyy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        for(Suscription c: suscriptions){
-            System.out.println(c);
+        for(TypeSuscriptionSuscriptionR c: suscriptions){
             rowData[0] = c.getId();
             rowData[1] = simpleDateFormat.format(c.getDateFrom());
             rowData[2] = simpleDateFormat.format(c.getDateTo());
             rowData[3] = c.getTotal();
+            rowData[4] = c.getNameTypeSus();
             modelo.addRow(rowData);
         }
         return modelo;
