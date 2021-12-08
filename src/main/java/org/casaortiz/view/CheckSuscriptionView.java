@@ -441,8 +441,8 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
                 System.out.println("iniciarTimer = " + isAdversiting);
             }
         };
-        //timer.schedule(tarea, 180000);//miliseconds 3 minutes
-        timer.schedule(tarea, 8000);//8 seconds
+        timer.schedule(tarea, 180000);//miliseconds 3 minutes
+        //timer.schedule(tarea, 8000);//8 seconds
     }
     
     private void cleanForm(){

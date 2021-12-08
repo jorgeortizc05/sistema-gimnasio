@@ -14,6 +14,7 @@ import java.io.File;
 public class FileLocation {
 
     public static String pathImagePerson = "photos/persona/";
+    public static String pathImageProducts = "photos/products/";
     public static String pathIconBtnSave = "/icons/system/save.png";
     public static String pathIconBtnDelete = "/icons/system/delete.png";
     public static String pathIconBtnClean = "/icons/system/clean.png";

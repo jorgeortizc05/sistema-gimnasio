@@ -36,14 +36,19 @@ public class ProductDao implements ICrud<Product> {
         conn = connectionDBOracle.getConnection();
         try {
 
-            PreparedStatement st = conn.prepareStatement("insert into Product (name, description, price, serial, photo, category_id) values (?,?,?,?,?,?)");
+            PreparedStatement st = conn.prepareStatement("insert into Product (name, description, price, serial, photo, category_id) values (?,?,?,?,?,?) RETURNING ID");
             st.setString(1, item.getName());
             st.setString(2, item.getDescription());
             st.setDouble(3, item.getPrice());
             st.setString(4, item.getSerial());
             st.setString(5, item.getPhoto());
             st.setInt(6, item.getCategoryId());
-            st.execute();
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                item.setId(rs.getInt(1));//recupero mi id autogenerado y seteo
+                //System.out.println("Inserted ID -" + item.getId()); // display inserted record
+            }
+            rs.close();
             st.close();
         } catch (Exception e) {
             connectionDBOracle.closeConnection(conn);

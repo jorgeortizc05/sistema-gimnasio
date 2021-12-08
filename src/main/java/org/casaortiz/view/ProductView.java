@@ -17,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import org.casaortiz.dao.CategoryDao;
 import org.casaortiz.dao.ProductDao;
@@ -37,6 +38,9 @@ public class ProductView extends javax.swing.JPanel{
     
     private ProductDao prodDao;
     private Product product;
+    
+    
+    private File file;
     
     public ProductView() {
         initComponents();
@@ -354,6 +358,12 @@ public class ProductView extends javax.swing.JPanel{
                 JOptionPane.showMessageDialog(btnSave, "Guardado correctamente");
                 cleanForm();
                 loadProducts();
+                //copio la imagen elegida por jChooseFile y guardo en mi carpeta products
+                //El id lo seteo en ProductDaoInsert
+                if(file instanceof File){
+                    Images.copyImages(file.getAbsoluteFile(), new File(FileLocation.pathImageProducts+prod.getId()+".png"));
+                }
+                
             } else {
                 lblWarning.setText("Producto no puede estar vacio");
                 lblWarning.setText("Precio solo acepta números");
@@ -404,7 +414,7 @@ public class ProductView extends javax.swing.JPanel{
                 txtSerial.setText(product.getSerial());
                 Category cat = catDao.get(product.getCategoryId());
                 cbCategory.setSelectedItem(cat);
-                
+                Images.loadImageSrc(FileLocation.pathImageProducts+product.getId()+".png", lblFoto);
             } catch (SQLException ex) {
                 Logger.getLogger(ProductView.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(this, "Error al eliminar: " + ex.getMessage());
@@ -495,7 +505,6 @@ public class ProductView extends javax.swing.JPanel{
 
     public void selectImageProduct(){
         JFileChooser fc;
-        File file;
         File dest;
         fc = new JFileChooser();
         fc.setDialogTitle("Elegir foto o imagen de producto");
@@ -510,9 +519,9 @@ public class ProductView extends javax.swing.JPanel{
                         || nombreImg.endsWith(".jpeg")) {
                     UUID uuid = UUID.randomUUID();
                     String codigoImagen = uuid.toString();
-                    dest = new File(System.getProperty("user.dir") + "/photos/producto/" + codigoImagen);
+                    //dest = new File(System.getProperty("user.dir") + "/photos/producto/" + codigoImagen);
                     //this.imagen= (dest.getName());
-                    loadImageSrc(file.getAbsolutePath());
+                    Images.loadImageSrc(file.getAbsolutePath(), lblFoto);
 
             }
 
@@ -523,23 +532,7 @@ public class ProductView extends javax.swing.JPanel{
         }
     }
     
-    private void loadImageSrc(String name) {
-
-        try {
-            String string = name;
-            
-            Image img = new ImageIcon(string).getImage();
-            
-            //Me permite redimensionar la imagen para que se adapte al jLabel
-            ImageIcon ii = new ImageIcon(img.getScaledInstance(400, 300, Image.SCALE_SMOOTH));
-
-            lblFoto.setIcon(ii);
-            lblFoto.validate();
-            lblFoto.repaint();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    
     
     /**
      * Vacia datos del jTable tListCategories
@@ -602,6 +595,7 @@ public class ProductView extends javax.swing.JPanel{
      */
     private void cleanForm() {
         lblID.setText("");
+        lblFoto.setIcon(null);
         lblWarning.setText("");
         txtProduct.setText("");
         txtDescription.setText("");
