@@ -7,8 +7,11 @@ package org.casaortiz.view;
 
 import java.awt.Color;
 import java.awt.event.KeyEvent;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
@@ -324,6 +327,7 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
 
     private void checkSuscription(String identification_id) {
         try {
+            
             loadPersonPerIdentificationId(identification_id);
             txtIdentificationId.setText("");
             Date hoy = new Date();
@@ -333,7 +337,11 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
             if (dias < 0) {
                 lblWarning.setText("RENOVAR SUSCRIPCIÓN");
                 lblWarning.setForeground(Color.red);
-                lblRemainingDays.setText(dias + "");
+                //calculo mis dias
+                
+                //lblRemainingDays.setText(formatDateForCheckSuscription(dias));
+                //lblRemainingDays.setText(dias + "");
+                lblRemainingDays.setText("No te quedan días");
                 lblRemainingDays.setForeground(Color.red);
                 if (dias == -1) {
                     lblWarning.setText("USTED NO DISPONE DE UNA SUSCRIPCIÓN");
@@ -355,6 +363,19 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
             lblRemainingDays.setText("0");
             lblRemainingDays.setForeground(Color.red);
         }
+    }
+    
+    /**
+     * Genera un formato de numeros a letras en la fecha
+     * @param days - dias restantes de la suscripcion
+     * @return - Enero, febrero, etc
+     */
+    private String formatDateForCheckSuscription(int days){
+        Calendar c = Calendar.getInstance();
+        long day = (1000 * 60 * 60 * 24); // 24 hours in milliseconds
+        long time = day * days; // for example, 39 days
+        c.setTimeInMillis(time);
+        return c.getDisplayName(Calendar.MONTH, Calendar.LONG, new Locale("es")) + "";
     }
 
     private void loadPersonPerIdentificationId(String identification_id) {
