@@ -7,6 +7,7 @@ package org.casaortiz.main;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.Image;
 import java.net.URL;
 import java.sql.SQLException;
@@ -29,21 +30,15 @@ public class Main {
             public void run() {
                 try {
                     // Set cross-platform Java L&F (also called "Metal")
-                    UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+                    //UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
                     //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 
-                    //UIManager.setLookAndFeel( new FlatLightLaf());
+                    UIManager.setLookAndFeel( new FlatLightLaf());
                     //UIManager.setLookAndFeel(new FlatDarkLaf());
                     //UIManager.setLookAndFeel( new FlatIntelliJLaf() );
 
                 } catch (UnsupportedLookAndFeelException e) {
                     // handle exception
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InstantiationException ex) {
-                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IllegalAccessException ex) {
-                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 /*catch (ClassNotFoundException ex) {
                     Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
