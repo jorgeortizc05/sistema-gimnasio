@@ -298,4 +298,36 @@ public class PersonDao implements ICrud<Person> {
             connectionDBOracle.closeConnection(conn);
         }
     }
+    
+    public List<Person> loadSuscriptionExpiredFor3days() throws Exception {
+        Connection conn = null;
+        ResultSet rs = null;
+        List<Person> items;
+        Person item;
+        try {
+            items = new ArrayList<Person>();
+            conn = connectionDBOracle.getConnection();
+            PreparedStatement st = conn.prepareStatement("select * from person p\n" +
+            "where upper(first_name || last_name ||identification_id) like upper('%%')\n" +
+            "and DATE_PART('day', AGE(now(), (select max(s2.date_to) from suscription s2 where s2.person_id = p.id))) > 0\n" +
+            "and DATE_PART('day', AGE(now(), (select max(s2.date_to) from suscription s2 where s2.person_id = p.id))) <= 3\n" +
+            "and DATE_PART('month', AGE(now(), (select max(s2.date_to) from suscription s2 where s2.person_id = p.id))) <= 1\n" +
+            "and DATE_PART('year',  AGE(now(), (select max(s2.date_to) from suscription s2 where s2.person_id = p.id))) < 1");
+            rs = st.executeQuery();
+            while (rs.next()) {
+                item = new Person(rs.getInt("id"), rs.getString("first_name"), rs.getString("last_name"), rs.getString("identification_id"),
+                        rs.getString("address"), rs.getString("email"), rs.getDate("birthday"), rs.getString("phone"), rs.getString("active"),
+                        rs.getString("photo"), rs.getInt("type_person_id"));
+                items.add(item);
+            }
+            rs.close();
+            return items;
+        } catch (SQLException e) {
+            System.out.println("Error al obtener People: " + e.getMessage());
+            connectionDBOracle.closeConnection(conn);
+            throw new Exception("Error al obtener People: \n" + e.getMessage());
+        } finally {
+            connectionDBOracle.closeConnection(conn);
+        }
+    }
 }

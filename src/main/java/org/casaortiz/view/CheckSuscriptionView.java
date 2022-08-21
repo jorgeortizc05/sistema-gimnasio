@@ -40,6 +40,7 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
         susDao = new SuscriptionDao();
         mainView = _mainView;
         addImageButtons();
+        loadPeopleSuscriptionExpiredFor3Days();
 
     }
 
@@ -74,6 +75,10 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
         jScrollPane2 = new javax.swing.JScrollPane();
         tListPeople = new javax.swing.JTable();
         checkOld = new javax.swing.JCheckBox();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tListSuscriptionsExpired = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        btnUpdateSuscriptionsExpired = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(1381, 668));
 
@@ -194,7 +199,6 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
 
         lblSearch.setPreferredSize(new java.awt.Dimension(30, 30));
 
-        tListPeople.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
         tListPeople.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -230,23 +234,71 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
             }
         });
 
+        tListSuscriptionsExpired.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Cédula", "Nombre", "Apellido", "Teléfono"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        tListSuscriptionsExpired.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tListSuscriptionsExpiredMouseClicked(evt);
+            }
+        });
+        tListSuscriptionsExpired.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tListSuscriptionsExpiredKeyReleased(evt);
+            }
+        });
+        jScrollPane3.setViewportView(tListSuscriptionsExpired);
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel1.setText("Suscripciones vencidas");
+
+        btnUpdateSuscriptionsExpired.setText("Actualizar");
+        btnUpdateSuscriptionsExpired.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateSuscriptionsExpiredActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtIdentificationId)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 554, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(checkOld)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane2))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 439, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(checkOld)
+                                .addGap(125, 125, 125)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(2, 2, 2)
+                                .addComponent(btnUpdateSuscriptionsExpired)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 517, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -261,9 +313,14 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(lblSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(checkOld))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(checkOld)
+                        .addComponent(jLabel1)
+                        .addComponent(btnUpdateSuscriptionsExpired)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -300,10 +357,24 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Error al buscar: " + ex.getMessage());
         }
     }
+    
+    private void loadPeopleSuscriptionExpiredFor3Days() {
+        try {
+            loadTableSuscriptionExpired(personDao.loadSuscriptionExpiredFor3days());
+
+        } catch (Exception ex) {
+            Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Error al buscar: " + ex.getMessage());
+        }
+    }
 
     private void loadTable(List<Person> people) {
 
         tListPeople.setModel(TableModels.getModelPersonForCheckSuscription(tListPeople, people));
+    }
+    
+    private void loadTableSuscriptionExpired(List<Person> people){
+        tListSuscriptionsExpired.setModel(TableModels.getModelPersonForCheckSuscription(tListSuscriptionsExpired, people));
     }
 
 
@@ -322,6 +393,17 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Debe seleccionar una fila");
         } else {
             checkSuscription(tListPeople.getValueAt(fila, 0).toString());
+        }
+    }
+    
+    public void loadItemFromTableOfSuscriptionExpired() {
+        // TODO add your handling code here:
+        //seleccionarItemTabla();
+        int fila = tListSuscriptionsExpired.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar una fila");
+        } else {
+            checkSuscription(tListSuscriptionsExpired.getValueAt(fila, 0).toString());
         }
     }
 
@@ -496,21 +578,49 @@ public class CheckSuscriptionView extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnEditActionPerformed
 
+    private void tListSuscriptionsExpiredMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tListSuscriptionsExpiredMouseClicked
+        // TODO add your handling code here:
+        loadItemFromTableOfSuscriptionExpired();
+        if(!isAdversiting){
+                advertising();
+            }
+    }//GEN-LAST:event_tListSuscriptionsExpiredMouseClicked
+
+    private void tListSuscriptionsExpiredKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tListSuscriptionsExpiredKeyReleased
+        // TODO add your handling code here:
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN) {
+            loadItemFromTableOfSuscriptionExpired();
+            if(!isAdversiting){
+                advertising();
+            }
+        }
+    }//GEN-LAST:event_tListSuscriptionsExpiredKeyReleased
+
+    private void btnUpdateSuscriptionsExpiredActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateSuscriptionsExpiredActionPerformed
+        // TODO add your handling code here:
+        loadPeopleSuscriptionExpiredFor3Days();
+    }//GEN-LAST:event_btnUpdateSuscriptionsExpiredActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSuscription;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnGeneratorCard;
+    private javax.swing.JButton btnUpdateSuscriptionsExpired;
     private javax.swing.JCheckBox checkOld;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblNames;
     private javax.swing.JLabel lblPhoto;
     private javax.swing.JLabel lblRemainingDays;
     private javax.swing.JLabel lblSearch;
     private javax.swing.JLabel lblWarning;
     private javax.swing.JTable tListPeople;
+    private javax.swing.JTable tListSuscriptionsExpired;
     private javax.swing.JTextField txtIdentificationId;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
