@@ -47,17 +47,17 @@ public class AboutView extends javax.swing.JPanel {
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("SOBRE NOSOTROS");
 
-        jLabel4.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("CASA ORTIZ");
+        jLabel4.setText("CASA ORTIZ INC.");
 
         jLabel5.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("0983457699");
+        jLabel5.setText("0992461997");
 
         jLabel6.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("jorgeortizc05@gmail.com");
+        jLabel6.setText("jorgeortizc06@gmail.com");
 
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/system/whatsapp-128x128.png"))); // NOI18N
 
@@ -105,9 +105,8 @@ public class AboutView extends javax.swing.JPanel {
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel8)
-                                .addComponent(jLabel9))
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel9)
                             .addComponent(jLabel7)))
                     .addComponent(jLabel1))
                 .addContainerGap(454, Short.MAX_VALUE))
