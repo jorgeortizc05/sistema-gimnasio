@@ -11,6 +11,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import org.casaortiz.dao.TypeSuscriptionDao;
 import org.casaortiz.model.Category;
+import org.casaortiz.model.Notes;
 import org.casaortiz.model.Person;
 import org.casaortiz.model.Product;
 import org.casaortiz.model.Suscription;
@@ -49,6 +50,18 @@ public class TableModels {
             rowData[4] = prod.getSerial();
             rowData[5] = prod.getPhoto();
             rowData[6] = prod.getCategoryId();
+            modelo.addRow(rowData);
+        }
+        return modelo;
+    }
+    
+    public static DefaultTableModel getModelNotes(JTable table, List<Notes> notes){
+        cleanTable(table);
+        DefaultTableModel modelo = (DefaultTableModel) table.getModel();
+        Object rowData[] = new Object[2];
+        for (Notes n : notes) {
+            rowData[0] = n.getId();
+            rowData[1] = n.getName();
             modelo.addRow(rowData);
         }
         return modelo;

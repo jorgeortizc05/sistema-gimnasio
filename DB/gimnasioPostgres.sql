@@ -120,6 +120,12 @@ drop table if exists company cascade;
 		primary key(id),
 		foreign key (city_id) references city (id)
 	);
+	
+	create table notes(
+		id serial not null,
+		name varchar(1000),
+		primary key(id)
+	);
 
 	---------------Datos--------------------------------
 	---parameter---
