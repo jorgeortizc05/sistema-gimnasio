@@ -56,12 +56,10 @@ public class PersonDao implements ICrud<Person> {
             st.setInt(10, item.getTypePersonId());
             st.execute();
             st.close();
-
+            connectionDBOracle.closeConnection(conn);
         } catch (Exception e) {
             connectionDBOracle.closeConnection(conn);
             throw new Exception("Error al insertar Person: \n" + e.getMessage());
-        } finally {
-            connectionDBOracle.closeConnection(conn);
         }
     }
 
@@ -118,11 +116,10 @@ public class PersonDao implements ICrud<Person> {
             PreparedStatement st = conn.prepareStatement("delete from Person where id = " + id);
             st.executeUpdate();
             st.close();
+            connectionDBOracle.closeConnection(conn);
         } catch (Exception e) {
             connectionDBOracle.closeConnection(conn);
             throw new Exception(e.getMessage());
-        } finally {
-            connectionDBOracle.closeConnection(conn);
         }
     }
 
@@ -150,15 +147,13 @@ public class PersonDao implements ICrud<Person> {
                         rs.getString("photo"), rs.getInt("type_person_id"));
             }
             rs.close();
+            connectionDBOracle.closeConnection(conn);
             return item;
         } catch (Exception e) {
             System.out.println("Error al obtener la Person: " + e.getMessage());
             connectionDBOracle.closeConnection(conn);
             rs.close();
             throw new Exception("Error al obtener la Person: \n" + e.getMessage());
-        } finally {
-            rs.close();
-            connectionDBOracle.closeConnection(conn);
         }
     }
 
@@ -184,15 +179,13 @@ public class PersonDao implements ICrud<Person> {
                         rs.getString("photo"), rs.getInt("type_person_id"));
             }
             rs.close();
+            connectionDBOracle.closeConnection(conn);
             return item;
         } catch (Exception e) {
             System.out.println("Error al obtener la Person: " + e.getMessage());
             connectionDBOracle.closeConnection(conn);
             rs.close();
             throw new Exception("Error al obtener la Person: \n" + e.getMessage());
-        } finally {
-            rs.close();
-            connectionDBOracle.closeConnection(conn);
         }
     }
 
@@ -220,15 +213,13 @@ public class PersonDao implements ICrud<Person> {
                 items.add(item);
             }
             rs.close();
+            connectionDBOracle.closeConnection(conn);
             return items;
         } catch (Exception e) {
-            System.out.println("Error al obtener People: " + e.getMessage());
+            System.out.println("Error al obtener Personas: " + e.getMessage());
             rs.close();
             connectionDBOracle.closeConnection(conn);
-            throw new Exception("Error al obtener People: \n" + e.getMessage());
-        } finally {
-            rs.close();
-            connectionDBOracle.closeConnection(conn);
+            throw new Exception("Error al obtener Personas: \n" + e.getMessage());
         }
     }
 
@@ -259,13 +250,12 @@ public class PersonDao implements ICrud<Person> {
                 items.add(item);
             }
             rs.close();
+            connectionDBOracle.closeConnection(conn);
             return items;
         } catch (Exception e) {
             System.out.println("Error al obtener Personas: " + e.getMessage());
             connectionDBOracle.closeConnection(conn);
             throw new Exception("Error al obtener Personas: \n" + e.getMessage());
-        } finally {
-            connectionDBOracle.closeConnection(conn);
         }
     }
 
@@ -289,13 +279,12 @@ public class PersonDao implements ICrud<Person> {
                 items.add(item);
             }
             rs.close();
+            connectionDBOracle.closeConnection(conn);
             return items;
         } catch (Exception e) {
             System.out.println("Error al obtener People: " + e.getMessage());
             connectionDBOracle.closeConnection(conn);
             throw new Exception("Error al obtener People: \n" + e.getMessage());
-        } finally {
-            connectionDBOracle.closeConnection(conn);
         }
     }
     
@@ -321,13 +310,12 @@ public class PersonDao implements ICrud<Person> {
                 items.add(item);
             }
             rs.close();
+            connectionDBOracle.closeConnection(conn);
             return items;
         } catch (SQLException e) {
             System.out.println("Error al obtener People: " + e.getMessage());
             connectionDBOracle.closeConnection(conn);
             throw new Exception("Error al obtener People: \n" + e.getMessage());
-        } finally {
-            connectionDBOracle.closeConnection(conn);
         }
     }
 }

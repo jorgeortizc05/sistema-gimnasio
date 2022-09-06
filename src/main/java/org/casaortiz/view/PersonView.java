@@ -474,10 +474,10 @@ public class PersonView extends javax.swing.JPanel {
 
         } catch (SQLException ex) {
             Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(btnDelete, "Error al eliminar la categoria: " + person + " Error: " + ex.getMessage());
+            JOptionPane.showMessageDialog(btnDelete, "Error al eliminar la persona: " + person + " Error: " + ex.getMessage());
         } catch (Exception ex) {
             Logger.getLogger(CategoryView.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(btnDelete, "Error al eliminar la categoria: " + person + " Error: " + ex.getMessage());
+            JOptionPane.showMessageDialog(btnDelete, "Error al eliminar la persona: " + person.getFirstName()+" "+person.getLastName() + " debido a que esta persona tiene suscripciones realizadas.");
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
 

@@ -51,12 +51,12 @@ public class MainView extends javax.swing.JFrame {
     public MainView() {
         initComponents();
         categoryView = new CategoryView();
-        typePersonView = new TypePersonView(personView);
         typeVoucherView = new TypeVoucherView();
         typeSuscriptionView = new TypeSuscriptionView();
         productView = new ProductView();
         aboutView = new AboutView();
         personView = new PersonView(this);
+        typePersonView = new TypePersonView(personView);
         checkSuscriptionView = new CheckSuscriptionView(this);//Para usar el JDialog
 
         jTabbedPane1.add(checkSuscriptionView);

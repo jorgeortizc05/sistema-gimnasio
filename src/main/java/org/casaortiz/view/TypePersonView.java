@@ -30,14 +30,14 @@ public class TypePersonView extends javax.swing.JPanel {
     private TypePerson typePerson;
     private PersonView pv;
 
-    public TypePersonView(PersonView ppv) {
+    public TypePersonView(PersonView pv) {
         initComponents();
         typePersonDao = new TypePersonDao();
         loadTypePeople();
         btnSaveChanges.setVisible(false);
         btnDelete.setVisible(false);
-        this.pv = ppv;
         addImageButtons();
+        this.pv = pv; //Me permite actualizar en la vista de la persona
     }
 
     private void addImageButtons() {
@@ -289,8 +289,9 @@ public class TypePersonView extends javax.swing.JPanel {
                 cleanForm();
                 this.loadTypePeople();
                 pv.loadTypePeople();
+                loadTypePeople();
             } else {
-                lblWarning.setText("TypePerson no puede estar vacio");
+                lblWarning.setText("Tipo de Persona no puede estar vacio");
                 lblWarning.setForeground(Color.red);
             }
 
